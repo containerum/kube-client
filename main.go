@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"git.containerum.net/ch/rest-client/pkg/cmd"
+	"git.containerum.net/ch/kube-client/pkg/cmd"
 )
 
 var (
