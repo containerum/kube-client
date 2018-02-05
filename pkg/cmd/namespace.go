@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"git.containerum.net/ch/rest-client/pkg/model"
+	"git.containerum.net/ch/kube-client/pkg/model"
 )
 
 //ListOptions -
