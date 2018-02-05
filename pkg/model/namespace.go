@@ -1,8 +1,8 @@
 package model
 
 type Namespace struct {
-	Name      string    `json:"name"`
-	Owner     *string   `json:"owner_id,omitempty"`
+	Name      string    `json:"name" binding:"required"`
+	Owner     *string   `json:"owner,omitempty"`
 	Resources Resources `json:"resources"`
 }
 
