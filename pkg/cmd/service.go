@@ -22,6 +22,7 @@ func (client *Client) GetService(namespace, serviceName string) (model.Service, 
 	if err != nil {
 		return model.Service{}, err
 	}
+
 	return *resp.Result().(*model.Service), nil
 }
 
@@ -37,5 +38,6 @@ func (client *Client) GetServiceList(namespace string) ([]model.Service, error) 
 	if err != nil {
 		return nil, err
 	}
+
 	return *resp.Result().(*[]model.Service), nil
 }
