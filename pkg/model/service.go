@@ -1,9 +1,5 @@
 package model
 
-import (
-	"k8s.io/apimachinery/pkg/util/intstr"
-)
-
 type Protocol string
 
 const (
@@ -16,10 +12,10 @@ const (
 // TargetPort is an int32 or IANA_SVC_NAME
 // Protocol is TCP or UDP
 type ServicePort struct {
-	Name       string             `json:"name"`
-	Port       uint32             `json:"port"`
-	TargetPort intstr.IntOrString `json:"target_port"`
-	Protocol   Protocol           `json:"protocol"`
+	Name       string   `json:"name"`
+	Port       uint32   `json:"port"`
+	TargetPort uint32   `json:"target_port"`
+	Protocol   Protocol `json:"protocol"`
 }
 
 // Service is an user friendly kebernetes service representation
