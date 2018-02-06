@@ -10,7 +10,7 @@ const (
 )
 
 // GetService -- consume namespace id and srvice name
-// returns Service or uninitialized Service struct AND error
+// returns Service OR uninitialized Service struct AND error
 func (client *Client) GetService(namespace, serviceName string) (model.Service, error) {
 	resp, err := client.Request.
 		SetResult(model.Service{}).
@@ -25,6 +25,8 @@ func (client *Client) GetService(namespace, serviceName string) (model.Service, 
 	return *resp.Result().(*model.Service), nil
 }
 
+// GetServiceList -- consume namespace name
+// returns slice of Services OR nil slice AND error
 func (client *Client) GetServiceList(namespace string) ([]model.Service, error) {
 	resp, err := client.Request.
 		SetResult([]model.Service).
