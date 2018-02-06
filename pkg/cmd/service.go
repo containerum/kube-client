@@ -5,7 +5,8 @@ import (
 )
 
 const (
-	getService = "/namespaces/{namespace}/services/{service}"
+	getService     = "/namespaces/{namespace}/services/{service}"
+	getServiceList = "/namespaces/{namespace}/services"
 )
 
 // GetService -- consume namespace id and srvice name
@@ -22,4 +23,17 @@ func (client *Client) GetService(namespace, serviceName string) (model.Service, 
 		return model.Service{}, err
 	}
 	return *resp.Result().(*model.Service), nil
+}
+
+func (client *Client) GetServiceList(namespace string) ([]model.Service, error) {
+	resp, err := client.Request.
+		SetResult([]model.Service).
+		SetPathParams(map[string]string{
+			"namespace": namespace,
+		}).
+		Get(client.serverURL + getServiceList)
+	if err != nil {
+		return nil, err
+	}
+	return *resp.Result().([]model.Service), nil
 }
