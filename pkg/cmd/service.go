@@ -37,5 +37,5 @@ func (client *Client) GetServiceList(namespace string) ([]model.Service, error) 
 	if err != nil {
 		return nil, err
 	}
-	return resp.Result().([]model.Service), nil
+	return *resp.Result().(*[]model.Service), nil
 }
