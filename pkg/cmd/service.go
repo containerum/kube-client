@@ -29,7 +29,7 @@ func (client *Client) GetService(namespace, serviceName string) (model.Service, 
 // returns slice of Services OR nil slice AND error
 func (client *Client) GetServiceList(namespace string) ([]model.Service, error) {
 	resp, err := client.Request.
-		SetResult([]model.Service).
+		SetResult([]model.Service{}).
 		SetPathParams(map[string]string{
 			"namespace": namespace,
 		}).
