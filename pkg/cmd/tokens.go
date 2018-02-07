@@ -12,6 +12,8 @@ const (
 	userAgent     = "kube-client"
 )
 
+// CheckToken -- consumes JWT token, user fingerprint and IP
+// returns user access data: list of namespaces and list of volumes
 func (client *Client) CheckToken(token, userFingerprint string, clientIP net.IP) (auth.CheckTokenResponse, error) {
 	resp, err := client.Request.
 		SetPathParams(map[string]string{
