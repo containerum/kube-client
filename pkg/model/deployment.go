@@ -28,3 +28,7 @@ type DeploymentStatus struct {
 	UnavailableReplicas int   `json:"unavailable_replicas"`
 	UpdatedReplicas     int   `json:"updated_replicas"`
 }
+
+type UpdateReplicas struct {
+	Replicas int `json:"replicas" binding:"required"`
+}

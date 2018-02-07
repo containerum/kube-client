@@ -44,3 +44,8 @@ type Port struct {
 	Port     int32   `json:"containerPort" binding:"required"`
 	Protocol string  `json:"protocol" binding:"required"`
 }
+
+type UpdateImage struct {
+	ContainerName string `json:"container" binding:"required"`
+	Image         string `json:"image" binding:"required"`
+}
