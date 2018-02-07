@@ -3,7 +3,8 @@ package cmd
 import (
 	"net"
 
-	"git.containerum.net/ch/json-types/user-manager"
+	"git.containerum.net/ch/json-types/auth"
+	user "git.containerum.net/ch/json-types/user-manager"
 )
 
 const (
@@ -11,18 +12,19 @@ const (
 	userAgent     = "kube-client"
 )
 
-func (client *Client) CheckToken(token, userFingerprint string, clientIP net.IP) (interface{}, error) {
+func (client *Client) CheckToken(token, userFingerprint string, clientIP net.IP) (auth.CheckTokenResponse, error) {
 	resp, err := client.Request.
 		SetPathParams(map[string]string{
 			"access_token": token,
-		}).SetHeaders(map[string]string{
-		"X-User-Fingerprint": userFingerprint,
-		user.ClientIPHeader:  clientIP.String(),
-		user.UserAgentHeader: userAgent,
-	}).Get(client.serverURL + getCheckToken)
-	resp.Result()
+		}).
+		SetResult(auth.CheckTokenResponse{}).
+		SetHeaders(map[string]string{
+			"X-User-Fingerprint": userFingerprint,
+			user.ClientIPHeader:  clientIP.String(),
+			user.UserAgentHeader: userAgent,
+		}).Get(client.serverURL + getCheckToken)
 	if err != nil {
-		return nil, err
+		return auth.CheckTokenResponse{}, err
 	}
-	return nil, nil
+	return *resp.Result().(*auth.CheckTokenResponse), nil
 }
