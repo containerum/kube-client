@@ -7,7 +7,7 @@ import (
 
 const (
 	getCheckToken  = "/token/{access_token}"
-	getExtendToken = "/token/{access_token}"
+	getExtendToken = "/token/{refresh_token}"
 	userAgent      = "kube-client"
 )
 
@@ -36,7 +36,7 @@ func (client *Client) CheckToken(token, userFingerprint string) (auth.CheckToken
 func (client *Client) ExtendToken(refreshToken, userFingerprint string) (auth.ExtendTokenResponse, error) {
 	resp, err := client.Request.
 		SetPathParams(map[string]string{
-			"access_token": refreshToken,
+			"refresh_token": refreshToken,
 		}).
 		SetResult(auth.ExtendTokenResponse{}).
 		SetHeaders(map[string]string{
