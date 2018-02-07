@@ -14,7 +14,8 @@ const (
 )
 
 // CheckToken -- consumes JWT token, user fingerprint and IP
-// returns user access data: list of namespaces and list of volumes
+// If they're correct returns user access data:
+// list of namespaces and list of volumes OR uninitialized structure AND error
 func (client *Client) CheckToken(token, userFingerprint string, clientIP net.IP) (auth.CheckTokenResponse, error) {
 	resp, err := client.Request.
 		SetPathParams(map[string]string{
