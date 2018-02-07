@@ -32,6 +32,9 @@ func (client *Client) CheckToken(token, userFingerprint string, clientIP net.IP)
 	return *resp.Result().(*auth.CheckTokenResponse), nil
 }
 
+// ExtendToken -- consumes refresh JWT token and user fingerprint
+// If they're correct returns new extended access and refresh token OR void tokens AND error.
+// Old access and refresh token become inactive.
 func (client *Client) ExtendToken(refreshToken, userFingerprint string) (auth.ExtendTokenResponse, error) {
 	resp, err := client.Request.
 		SetPathParams(map[string]string{
