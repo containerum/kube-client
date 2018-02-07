@@ -19,9 +19,9 @@ func (client *Client) CheckToken(token, userFingerprint string, clientIP net.IP)
 		}).
 		SetResult(auth.CheckTokenResponse{}).
 		SetHeaders(map[string]string{
-			"X-User-Fingerprint": userFingerprint,
-			user.ClientIPHeader:  clientIP.String(),
-			user.UserAgentHeader: userAgent,
+			user.FingerprintHeader: userFingerprint,
+			user.ClientIPHeader:    clientIP.String(),
+			user.UserAgentHeader:   userAgent,
 		}).Get(client.serverURL + getCheckToken)
 	if err != nil {
 		return auth.CheckTokenResponse{}, err
