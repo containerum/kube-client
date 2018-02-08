@@ -12,12 +12,15 @@ type Deployment struct {
 }
 
 type DeploymentVolume struct {
-	GlusterFS struct {
-		Endpoint string `json:"endpoint" binding:"required"`
-		Path     string `json:"path" binding:"required"`
-	} `json:"glusterfs" binding:"required"`
 	Name string `json:"name" binding:"required"`
+	GlusterFS GlusterFS `json:"glusterfs" binding:"required"`
 }
+
+type GlusterFS struct {
+	Endpoint string `json:"endpoint" binding:"required"`
+	Path     string `json:"path" binding:"required"`
+}
+
 
 type DeploymentStatus struct {
 	Created             int64 `json:"created_at"`
