@@ -15,7 +15,7 @@ type Service struct {
 	IP        []string      `json:"ip" binding:"required"`
 	Domain    string        `json:"domain, omitempty"`
 	Type      string        `json:"type, omitempty"`
-	Ports     []ServicePort `json:"ports, omitempty"`
+	Ports     []ServicePort `json:"ports" binding:"required"`
 }
 
 type ServicePort struct {
