@@ -12,9 +12,9 @@ type Service struct {
 	Owner     string        `json:"owner" binding:"required"`
 	CreatedAt int64         `json:"created_at, omitempty"`
 	Deploy    string        `json:"deploy" binding:"required"`
-	IP        []string      `json:"ip" omitempty"`
+	IP        []string      `json:"ip" binding:"required"`
 	Domain    string        `json:"domain, omitempty"`
-	Type      string        `json:"type" binding:"required"`
+	Type      string        `json:"type, omitempty"`
 	Ports     []ServicePort `json:"ports, omitempty"`
 }
 
