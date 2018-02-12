@@ -60,6 +60,9 @@ func (client *Client) ResourceGetNamespace(namespace, userID string) (model.Reso
 	return *resp.Result().(*model.ResourceNamespace), nil
 }
 
+// ResourceGetNamespaceList -- consumes a page number parameter,
+// amount of namespaces per page and optional userID,
+// returns a slice of Namespaces OR a nil slice AND an error
 func (client *Client) ResourceGetNamespaceList(page, perPage uint64, userID string) ([]model.ResourceNamespace, error) {
 	req := client.Request.
 		SetQueryParams(map[string]string{
