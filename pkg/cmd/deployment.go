@@ -7,7 +7,10 @@ import (
 const (
 	deploymentPath  = "/namespaces/{namespace}/deployments/{deployment}"
 	deploymentsPath = "/namespaces/{namespace}/deployments"
-	imagePath       = "/namespace/{namespace}/deployment/{deployment}/image"
+
+	resourceDeploymentPath = "/namespace/{namespace}/deployment/{deployment}"
+	resourceImagePath      = resourceDeploymentPath + "/image"
+	resourceReplicasPath   = resourceDeploymentPath + "/replicas"
 )
 
 // GetDeployment -- consumes a namespace and a deployment names,
@@ -58,6 +61,25 @@ func (client *Client) SetContainerImage(namespace, deployment string, containerI
 			"namespace":  namespace,
 			"deployment": deployment,
 		}).SetBody(containerImage).
-		Put(client.resourceServiceAddr + imagePath)
+		Put(client.resourceServiceAddr + resourceImagePath)
+	return err
+}
+
+func (client *Client) ReplaceDeployment(namespace string, deployment model.Deployment) error {
+	_, err := client.Request.
+		SetPathParams(map[string]string{
+			"namespace":  namespace,
+			"deployment": deployment.Name,
+		}).SetBody(deployment).
+		Put(client.resourceServiceAddr + resourceDeploymentPath)
+	return err
+}
+
+func (client *Client) SetReplicas(namespace, deployment string, replicas int) error {
+	_, err := client.Request.SetPathParams(map[string]string{
+		"namespace":  namespace,
+		"deployment": deployment,
+	}).SetBody(model.UpdateReplicas{replicas}).
+		Put(client.resourceServiceAddr + resourceReplicasPath)
 	return err
 }
