@@ -68,3 +68,19 @@ func (client *Client) DeleteService(namespace, serviceName string) error {
 		}).Delete(client.serverURL + servicePath)
 	return err
 }
+
+// UpdateService -- consumes a namespace, a service data,
+// returns an ipdated Service OR an uninitialized Service AND an error
+func (client *Client) UpdateService(namespace string, service model.Service) (model.Service, error) {
+	resp, err := client.Request.
+		SetResult(model.Service{}).
+		SetBody(service).
+		SetPathParams(map[string]string{
+			"namespace": namespace,
+			"service":   service.Name,
+		}).Put(client.serverURL + servicePath)
+	if err != nil {
+		return model.Service{}, err
+	}
+	return *resp.Result().(*model.Service), nil
+}
