@@ -53,3 +53,14 @@ func (client *Client) DeleteDeployment(namespace, deployment, userID, userRole s
 	}).Delete(client.resourceServiceAddr + resourceDeploymentPath)
 	return err
 }
+
+// CreateDeployment -- consumes a namespace, an user ID and a Role,
+// returns nil if OK
+func (client *Client) CreateDeployment(namespace string, deployment model.Deployment) error {
+	_, err := client.Request.
+		SetPathParams(map[string]string{
+			"namespace": namespace,
+		}).SetBody(deployment).
+		Post(client.resourceServiceAddr + "/namespace/{namespace}/deployment")
+	return err
+}
