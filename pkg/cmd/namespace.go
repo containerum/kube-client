@@ -16,11 +16,11 @@ const (
 )
 
 //GetNamespaceList return namespace list. Can use query filters: owner
-func (c *Client) GetNamespaceList(queries map[string]string) ([]model.Namespace, error) {
-	resp, err := c.Request.
+func (client *Client) GetNamespaceList(queries map[string]string) ([]model.Namespace, error) {
+	resp, err := client.Request.
 		SetQueryParams(queries).
 		SetResult([]model.Namespace{}).
-		Get(c.serverURL + getNamespaceList)
+		Get(client.serverURL + getNamespaceList)
 	if err != nil {
 		return []model.Namespace{}, err
 	}
@@ -28,12 +28,12 @@ func (c *Client) GetNamespaceList(queries map[string]string) ([]model.Namespace,
 }
 
 //GetNamespace return namespace by Name
-func (c *Client) GetNamespace(ns string) (model.Namespace, error) {
-	resp, err := c.Request.SetResult(model.Namespace{}).
+func (client *Client) GetNamespace(ns string) (model.Namespace, error) {
+	resp, err := client.Request.SetResult(model.Namespace{}).
 		SetPathParams(map[string]string{
 			"namespace": ns,
 		}).
-		Get(c.serverURL + getNamespace)
+		Get(client.serverURL + getNamespace)
 	if err != nil {
 		return model.Namespace{}, err
 	}
