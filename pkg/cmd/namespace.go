@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"strconv"
+
 	"git.containerum.net/ch/kube-client/pkg/model"
 )
 
@@ -10,9 +12,10 @@ type ListOptions struct {
 }
 
 const (
-	getNamespace         = "/namespaces/{namespace}"
-	getNamespaceList     = "/namespaces"
-	serviceNamespacePath = "/namespace/{namespace}"
+	getNamespace          = "/namespaces/{namespace}"
+	getNamespaceList      = "/namespaces"
+	serviceNamespacePath  = "/namespace/{namespace}"
+	serviceNamespacesPath = "/namespace"
 )
 
 //GetNamespaceList return namespace list. Can use query filters: owner
@@ -55,4 +58,20 @@ func (client *Client) ResourceGetNamespace(namespace, userID string) (model.Reso
 		return model.ResourceNamespace{}, nil
 	}
 	return *resp.Result().(*model.ResourceNamespace), nil
+}
+
+func (client *Client) ResourceGetNamespaceList(page, perPage uint64, userID string) ([]model.ResourceNamespace, error) {
+	req := client.Request.
+		SetQueryParams(map[string]string{
+			"page":     strconv.FormatUint(page, 10),
+			"per_page": strconv.FormatUint(perPage, 10),
+		}).SetResult([]model.ResourceNamespace{})
+	if userID != "" {
+		req.SetQueryParam("user-id", userID)
+	}
+	resp, err := req.Get(client.resourceServiceAddr + serviceNamespacesPath)
+	if err != nil {
+		return nil, err
+	}
+	return *resp.Result().(*[]model.ResourceNamespace), nil
 }
