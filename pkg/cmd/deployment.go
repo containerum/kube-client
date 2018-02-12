@@ -7,6 +7,7 @@ import (
 const (
 	deploymentPath  = "/namespaces/{namespace}/deployments/{deployment}"
 	deploymentsPath = "/namespaces/{namespace}/deployments"
+	imagePath       = "/namespace/{namespace}/deployment/{deployment}/image"
 )
 
 // GetDeployment -- consumes a namespace and a deployment names,
@@ -48,5 +49,15 @@ func (client *Client) CreateDeployment(namespace, userID, userRole string) error
 		model.HeaderUserID:   userID,
 		model.HeaderUserRole: userRole,
 	}).Post(client.resourceServiceAddr + deploymentsPath)
+	return err
+}
+
+func (client *Client) SetContainerImage(namespace, deployment string, containerImage model.ContainerImage) error {
+	_, err := client.Request.
+		SetPathParams(map[string]string{
+			"namespace":  namespace,
+			"deployment": deployment,
+		}).SetBody(containerImage).
+		Put(client.resourceServiceAddr + imagePath)
 	return err
 }
