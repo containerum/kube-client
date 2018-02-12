@@ -40,13 +40,11 @@ func (client *Client) GetDeploymentList(namespace string) ([]model.Deployment, e
 
 // CreateDeployment -- consumes a namespace, an user ID and a Role,
 // returns nil if OK
-func (client *Client) CreateDeployment(namespace, userID, userRole string) error {
+func (client *Client) CreateDeployment(namespace string, deployment model.Deployment) error {
 	_, err := client.Request.
 		SetPathParams(map[string]string{
 			"namespace": namespace,
-		}).SetHeaders(map[string]string{
-		model.HeaderUserID:   userID,
-		model.HeaderUserRole: userRole,
-	}).Post(client.resourceServiceAddr + deploymentsPath)
+		}).SetBody(deployment).
+		Post(client.resourceServiceAddr + "/namespace/{namespace}/deployment")
 	return err
 }
