@@ -40,6 +40,8 @@ func (c *Client) GetNamespace(ns string) (model.Namespace, error) {
 	return *resp.Result().(*model.Namespace), nil
 }
 
+// ResourceGetNamespace -- consumes a namespace and an optional user ID
+// returns a namespace data OR an error
 func (client *Client) ResourceGetNamespace(namespace, userID string) (model.ResourceNamespace, error) {
 	req := client.Request.
 		SetPathParams(map[string]string{
