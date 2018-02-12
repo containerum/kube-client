@@ -32,7 +32,7 @@ func deploymentCreationTest(client *cmd.Client) func(*testing.T) {
 	return func(test *testing.T) {
 		err := client.CreateDeployment(testNamespace, newFakeDeployment(test))
 		if err != nil {
-			test.Logf("error while deployment creation: %v", err)
+			test.Fatalf("error while deployment creation: %v", err)
 		}
 	}
 }
