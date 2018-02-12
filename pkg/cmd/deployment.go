@@ -53,12 +53,12 @@ func (client *Client) CreateDeployment(namespace string, deployment model.Deploy
 	return err
 }
 
-func (client *Client) SetContainerImage(namespace, deployment string, containerImage model.ContainerImage) error {
+func (client *Client) SetContainerImage(namespace, deployment string, updateImage model.UpdateImage) error {
 	_, err := client.Request.
 		SetPathParams(map[string]string{
 			"namespace":  namespace,
 			"deployment": deployment,
-		}).SetBody(containerImage).
+		}).SetBody(updateImage).
 		Put(client.resourceServiceAddr + resourceImagePath)
 	return err
 }
