@@ -25,8 +25,3 @@ type Limits struct {
 	CPU    string `json:"cpu" binding:"required"`
 	Memory string `json:"memory" binding:"required"`
 }
-
-type ContainerImage struct {
-	ContainerName string `json:"container_name"`
-	Image         string `json:"image"`
-}
