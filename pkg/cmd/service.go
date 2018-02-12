@@ -56,3 +56,15 @@ func (client *Client) CreateService(namespace string, service model.Service) (mo
 	}
 	return *resp.Result().(*model.Service), nil
 }
+
+// DeleteService -- consumes a namespace, a servicce name,
+// returns error in case of problem
+func (client *Client) DeleteService(namespace, serviceName string) error {
+	// TODO: check if errors with code > 399 are stored in err
+	_, err := client.Request.
+		SetPathParams(map[string]string{
+			"namespace": namespace,
+			"service":   serviceName,
+		}).Delete(client.serverURL + servicePath)
+	return err
+}
