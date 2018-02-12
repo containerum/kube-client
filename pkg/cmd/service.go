@@ -5,8 +5,8 @@ import (
 )
 
 const (
-	getService     = "/namespaces/{namespace}/services/{service}"
-	getServiceList = "/namespaces/{namespace}/services"
+	servicePath  = "/namespaces/{namespace}/services/{service}"
+	servicesPath = "/namespaces/{namespace}/services"
 )
 
 // GetService -- consume namespace id and srvice name
@@ -18,7 +18,7 @@ func (client *Client) GetService(namespace, serviceName string) (model.Service, 
 			"namespace": namespace,
 			"service":   serviceName,
 		}).
-		Get(client.serverURL + getService)
+		Get(client.serverURL + servicePath)
 	if err != nil {
 		return model.Service{}, err
 	}
@@ -34,10 +34,23 @@ func (client *Client) GetServiceList(namespace string) ([]model.Service, error) 
 		SetPathParams(map[string]string{
 			"namespace": namespace,
 		}).
-		Get(client.serverURL + getServiceList)
+		Get(client.serverURL + servicesPath)
 	if err != nil {
 		return nil, err
 	}
 
 	return *resp.Result().(*[]model.Service), nil
+}
+
+func (client *Client) CreateService(namespace string, service model.Service) (model.Service, error) {
+	resp, err := client.Request.
+		SetResult(model.Service{}).
+		SetBody(service).
+		SetPathParams(map[string]string{
+			"namespace": namespace,
+		}).Post(client.serverURL + servicesPath)
+	if err != nil {
+		return model.Service{}, err
+	}
+	return *resp.Result().(*model.Service), nil
 }
