@@ -23,3 +23,17 @@ func (client *Client) GetDeployment(namespace, deployment string) (model.Deploym
 	}
 	return *resp.Result().(*model.Deployment), nil
 }
+
+// GetDeployments -- consumes a namespace and a deployment names,
+// returns a list of Deployments OR nil slice AND an error
+func (client *Client) GetDeploymentList(namespace string) ([]model.Deployment, error) {
+	resp, err := client.Request.
+		SetPathParams(map[string]string{
+			"namespace": namespace,
+		}).SetResult([]model.Deployment{}).
+		Get(client.serverURL + deploymentsPath)
+	if err != nil {
+		return nil, err
+	}
+	return *resp.Result().(*[]model.Deployment), nil
+}
