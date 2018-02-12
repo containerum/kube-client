@@ -7,7 +7,7 @@ import (
 
 const (
 	deploymentPath         = "/namespaces/{namespace}/deployments/{deployment}"
-	deploymentsPath        = "/namespaces/{namespace}/deployments"
+	kubeAPIdeploymentsPath = "/namespaces/{namespace}/deployments"
 	resourceDeploymentPath = "namespace/{namespace}/deployment/{deployment}"
 )
 
@@ -33,7 +33,7 @@ func (client *Client) GetDeploymentList(namespace string) ([]model.Deployment, e
 		SetPathParams(map[string]string{
 			"namespace": namespace,
 		}).SetResult([]model.Deployment{}).
-		Get(client.serverURL + deploymentsPath)
+		Get(client.serverURL + kubeAPIdeploymentsPath)
 	if err != nil {
 		return nil, err
 	}
