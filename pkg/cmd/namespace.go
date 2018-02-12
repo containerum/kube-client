@@ -10,8 +10,9 @@ type ListOptions struct {
 }
 
 const (
-	getNamespace     = "/namespaces/{namespace}"
-	getNamespaceList = "/namespaces"
+	getNamespace         = "/namespaces/{namespace}"
+	getNamespaceList     = "/namespaces"
+	serviceNamespacePath = "/namespace/{namespace}"
 )
 
 //GetNamespaceList return namespace list. Can use query filters: owner
@@ -37,4 +38,19 @@ func (c *Client) GetNamespace(ns string) (model.Namespace, error) {
 		return model.Namespace{}, err
 	}
 	return *resp.Result().(*model.Namespace), nil
+}
+
+func (client *Client) ResourceGetNamespace(namespace, userID string) (model.ResourceNamespace, error) {
+	req := client.Request.
+		SetPathParams(map[string]string{
+			"namespace": namespace,
+		}).SetResult(model.ResourceNamespace{})
+	if userID != "" {
+		req.SetQueryParam("user-id", userID)
+	}
+	resp, err := req.Get(client.resourceServiceAddr + serviceNamespacePath)
+	if err != nil {
+		return model.ResourceNamespace{}, nil
+	}
+	return *resp.Result().(*model.ResourceNamespace), nil
 }
