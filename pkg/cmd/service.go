@@ -9,8 +9,8 @@ const (
 	servicesPath = "/namespaces/{namespace}/services"
 )
 
-// GetService -- consume namespace id and srvice name
-// returns Service OR uninitialized Service struct AND error
+// GetService -- consume a namespace id and a service name
+// returns a Service OR an uninitialized Service struct AND an error
 func (client *Client) GetService(namespace, serviceName string) (model.Service, error) {
 	resp, err := client.Request.
 		SetResult(model.Service{}).
@@ -26,8 +26,8 @@ func (client *Client) GetService(namespace, serviceName string) (model.Service, 
 	return *resp.Result().(*model.Service), nil
 }
 
-// GetServiceList -- consume namespace name
-// returns slice of Services OR nil slice AND error
+// GetServiceList -- consumes a namespace name
+// returns a slice of Services OR a nil slice AND an error
 func (client *Client) GetServiceList(namespace string) ([]model.Service, error) {
 	resp, err := client.Request.
 		SetResult([]model.Service{}).
@@ -42,6 +42,8 @@ func (client *Client) GetServiceList(namespace string) ([]model.Service, error) 
 	return *resp.Result().(*[]model.Service), nil
 }
 
+// CreateService -- consumes a namespace name and a Service data,
+// returns the created Service AND nil OR an uninitialized Service AND an error
 func (client *Client) CreateService(namespace string, service model.Service) (model.Service, error) {
 	resp, err := client.Request.
 		SetResult(model.Service{}).
