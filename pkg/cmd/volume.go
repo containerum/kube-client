@@ -7,14 +7,6 @@ const (
 	resourceVolumePath     = resourceVolumeRootPath + "/{volume}"
 )
 
-// CreateVolume -- creates Volume for User by Tariff
-func (client *Client) CreateVolume(volume model.ResourceCreateVolume) error {
-	_, err := client.Request.
-		SetBody(volume).
-		Post(client.resourceServiceAddr + resourceVolumeRootPath)
-	return err
-}
-
 // DeleteVolume -- deletes Volume with provided volume name
 func (client *Client) DeleteVolume(volumeName string) error {
 	_, err := client.Request.
