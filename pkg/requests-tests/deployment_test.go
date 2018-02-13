@@ -34,6 +34,9 @@ func TestDeployment(test *testing.T) {
 	if err != nil {
 		test.Fatalf("error while creating client: %v", err)
 	}
+	client.SetHeaders(map[string]string{
+		"X-User-Role": "admin",
+	})
 	{
 		fakeResourceDeployment := newFakeResourceDeployment(test)
 		fakeUpdateImage := newFakeResourceUpdateImage(test)
@@ -73,13 +76,13 @@ func setContainerImageTest(client *cmd.Client, namespace, deployment string, upd
 		}
 	}
 }
-func getDeploymentTest(client *cmd.Client, namespace, deployment string, referenceDeplyment model.Deployment) func(*testing.T) {
+func getDeploymentTest(client *cmd.Client, namespace, deployment string, referenceDeployment model.Deployment) func(*testing.T) {
 	return func(test *testing.T) {
 		gainedDeployment, err := client.GetDeployment(namespace, deployment)
 		if err != nil {
 			test.Fatalf("error while getting deployment: %v", err)
 		}
-		if !reflect.DeepEqual(referenceDeplyment, gainedDeployment) {
+		if !reflect.DeepEqual(referenceDeployment.Containers, gainedDeployment.Containers) {
 			test.Fatalf("gained deployment doesn't match reference deployment")
 		}
 	}
