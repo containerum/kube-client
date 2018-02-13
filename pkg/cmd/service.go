@@ -34,7 +34,7 @@ func (client *Client) GetServiceList(namespace string) ([]model.Service, error) 
 		SetPathParams(map[string]string{
 			"namespace": namespace,
 		}).
-		Get(client.serverURL + servicesPath)
+		Get(client.resourceServiceAddr + servicesPath)
 	if err != nil {
 		return nil, err
 	}
@@ -50,7 +50,35 @@ func (client *Client) CreateService(namespace string, service model.Service) (mo
 		SetBody(service).
 		SetPathParams(map[string]string{
 			"namespace": namespace,
-		}).Post(client.serverURL + servicesPath)
+		}).Post(client.resourceServiceAddr + servicesPath)
+	if err != nil {
+		return model.Service{}, err
+	}
+	return *resp.Result().(*model.Service), nil
+}
+
+// DeleteService -- consumes a namespace, a servicce name,
+// returns error in case of problem
+func (client *Client) DeleteService(namespace, serviceName string) error {
+	// TODO: check if errors with code > 399 are stored in err
+	_, err := client.Request.
+		SetPathParams(map[string]string{
+			"namespace": namespace,
+			"service":   serviceName,
+		}).Delete(client.resourceServiceAddr + servicePath)
+	return err
+}
+
+// UpdateService -- consumes a namespace, a service data,
+// returns an ipdated Service OR an uninitialized Service AND an error
+func (client *Client) UpdateService(namespace string, service model.Service) (model.Service, error) {
+	resp, err := client.Request.
+		SetResult(model.Service{}).
+		SetBody(service).
+		SetPathParams(map[string]string{
+			"namespace": namespace,
+			"service":   service.Name,
+		}).Put(client.resourceServiceAddr + servicePath)
 	if err != nil {
 		return model.Service{}, err
 	}
