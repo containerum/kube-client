@@ -23,3 +23,7 @@ type ResourceCreateVolume struct {
 	TariffID string `json:"tariff-id"`
 	Label    string `json:"label"`
 }
+
+type ResourceUpdateVolumeName struct {
+	Label string `json:"label"`
+}
