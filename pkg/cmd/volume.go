@@ -3,8 +3,10 @@ package cmd
 import "git.containerum.net/ch/kube-client/pkg/model"
 
 const (
-	resourceVolumeRootPath = "/volume"
-	resourceVolumePath     = resourceVolumeRootPath + "/{volume}"
+	resourceVolumeRootPath   = "/volume"
+	resourceVolumePath       = resourceVolumeRootPath + "/{volume}"
+	resourceVolumeNamePath   = resourceVolumeRootPath + "/name"
+	resourceVolumeAccessPath = resourceVolumeRootPath + "/access"
 )
 
 // DeleteVolume -- deletes Volume with provided volume name
@@ -62,6 +64,16 @@ func (client *Client) RenameVolume(volumeName, newName string) error {
 			"volume": volumeName,
 		}).
 		SetBody(model.ResourceUpdateVolumeName{Label: newName}).
-		Put(client.resourceServiceAddr + resourceVolumePath)
+		Put(client.resourceServiceAddr + resourceVolumeNamePath)
+	return err
+}
+
+func (client *Client) SetAccess(volumeName string, accessData model.ResourceUserVolumeAccess) error {
+	_, err := client.Request.
+		SetPathParams(map[string]string{
+			"volume": volumeName,
+		}).
+		SetBody(accessData).
+		Post(client.resourceServiceAddr + resourceVolumeAccessPath)
 	return err
 }
