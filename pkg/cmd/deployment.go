@@ -9,7 +9,7 @@ const (
 	kubeAPIdeploymentPath  = "/namespaces/{namespace}/deployments/{deployment}"
 	kubeAPIdeploymentsPath = "/namespaces/{namespace}/deployments"
 
-	resourceDeploymentPath = "namespace/{namespace}/deployment/{deployment}"
+	resourceDeploymentPath = "/namespace/{namespace}/deployment/{deployment}"
 	resourceImagePath      = resourceDeploymentPath + "/image"
 	resourceReplicasPath   = resourceDeploymentPath + "/replicas"
 )
