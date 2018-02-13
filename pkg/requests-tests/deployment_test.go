@@ -35,10 +35,14 @@ func TestDeployment(test *testing.T) {
 	Convey("Test resource service methods", test, func() {
 		fakeResourceDeployment := newFakeResourceDeployment(test)
 		fakeUpdateImage := newFakeResourceUpdateImage(test)
-		Convey("deployment creation test",
+		Convey("create deployment",
 			deploymentCreationTest(client, resourceTestNamespace, fakeResourceDeployment))
-		Convey("set container image test",
+		Convey("set container image",
 			setContainerImageTest(client, resourceTestNamespace, fakeResourceDeployment.Name, fakeUpdateImage))
+		Convey("replace deployment", func() {
+			err := client.ReplaceDeployment(resourceTestNamespace, fakeResourceDeployment)
+			So(err, ShouldBeNil)
+		})
 	})
 	Convey("Test KubeAPI methods", test, func() {
 		fakeKubeAPIdeployment := newFakeKubeAPIdeployment(test)
