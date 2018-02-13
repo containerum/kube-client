@@ -44,6 +44,8 @@ func TestDeployment(test *testing.T) {
 		test.Run("get deployment test",
 			getDeploymentTest(client, kubeAPItestNamespace,
 				kubeAPItestDeployment, fakeKubeAPIdeployment))
+		test.Run("get deployment list",
+			getDeploymentListTest(client, kubeAPItestNamespace, []model.Deployment{fakeKubeAPIdeployment}))
 	}
 }
 
@@ -64,6 +66,18 @@ func getDeploymentTest(client *cmd.Client, namespace, deployment string, referen
 		}
 		if !reflect.DeepEqual(referenceDeplyment, gainedDeployment) {
 			test.Fatalf("gained deployment doesn't match reference deployment")
+		}
+	}
+}
+
+func getDeploymentListTest(client *cmd.Client, namespace string, referenceList []model.Deployment) func(*testing.T) {
+	return func(test *testing.T) {
+		gainedDeploymentList, err := client.GetDeploymentList(namespace)
+		if err != nil {
+			test.Fatalf("error while getting deployment: %v", err)
+		}
+		if !reflect.DeepEqual(referenceList, gainedDeploymentList) {
+			test.Fatalf("gained deployment list doesn't match reference deployment list!")
 		}
 	}
 }
