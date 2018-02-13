@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"math/rand"
+	"reflect"
 	"testing"
 	"time"
 
@@ -39,8 +40,10 @@ func TestDeployment(test *testing.T) {
 			deploymentCreationTest(client, testNamespace, fakeResourceDeployment))
 	}
 	{
+		fakeKubeAPIdeployment := newFakeKubeAPIdeployment(test)
 		test.Run("get deployment test",
-			getDeploymentTest(client, kubeAPItestNamespace, kubeAPItestDeployment))
+			getDeploymentTest(client, kubeAPItestNamespace,
+				kubeAPItestDeployment, fakeKubeAPIdeployment))
 	}
 }
 
@@ -53,11 +56,14 @@ func deploymentCreationTest(client *cmd.Client, namespace string, deployment mod
 	}
 }
 
-func getDeploymentTest(client *cmd.Client, namespace, deployment string) func(*testing.T) {
+func getDeploymentTest(client *cmd.Client, namespace, deployment string, referenceDeplyment model.Deployment) func(*testing.T) {
 	return func(test *testing.T) {
-		_, err := client.GetDeployment(namespace, deployment)
+		gainedDeployment, err := client.GetDeployment(namespace, deployment)
 		if err != nil {
 			test.Fatalf("error while getting deployment: %v", err)
+		}
+		if !reflect.DeepEqual(referenceDeplyment, gainedDeployment) {
+			test.Fatalf("gained deployment doesn't match reference deployment")
 		}
 	}
 }
