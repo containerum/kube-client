@@ -9,14 +9,8 @@ import (
 )
 
 func newFakeDeployment(test *testing.T, file string) model.Deployment {
-	jsonData, err := ioutil.ReadFile(file)
-	if err != nil {
-		test.Fatalf("error while reading test data: %v", err)
-	}
 	var deployment model.Deployment
-	if err := json.Unmarshal(jsonData, &deployment); err != nil {
-		test.Fatalf("error while unmarshalling test response to deployment datastruct: %v", err)
-	}
+	loadTestJSONdata(test, file, &deployment)
 	return deployment
 }
 
@@ -29,13 +23,23 @@ func newFakeKubeAPIdeployment(test *testing.T) model.Deployment {
 }
 
 func newFakeResourceUpdateImage(test *testing.T) model.UpdateImage {
-	jsonData, err := ioutil.ReadFile("test_data/update_image.json")
-	if err != nil {
-		test.Fatalf("error while reading test data: %v", err)
-	}
 	var updateImage model.UpdateImage
-	if err := json.Unmarshal(jsonData, &updateImage); err != nil {
-		test.Fatalf("error while unmarshalling test response to UpdateImage datastruct: %v", err)
-	}
+	loadTestJSONdata(test, "test_data/update_image.json", &updateImage)
 	return updateImage
+}
+
+func newFakeKubeAPInamespace(test *testing.T) model.Namespace {
+	var namespace model.Namespace
+	loadTestJSONdata(test, "test_data/kube_api_namespace.json", &namespace)
+	return namespace
+}
+func loadTestJSONdata(test *testing.T, file string, data interface{}) {
+	jsonData, err := ioutil.ReadFile(file)
+	if err != nil {
+		test.Fatalf("error wgile reading from %q: %v", file, err)
+	}
+	err = json.Unmarshal(jsonData, data)
+	if err != nil {
+		test.Fatalf("error while unmarshalling data: %v", err)
+	}
 }
