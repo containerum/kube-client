@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"git.containerum.net/ch/kube-client/pkg/cmd"
-	"git.containerum.net/ch/kube-client/pkg/model"
 	. "github.com/smartystreets/goconvey/convey"
 )
 
@@ -35,50 +34,32 @@ func TestDeployment(test *testing.T) {
 	Convey("Test resource service methods", test, func() {
 		fakeResourceDeployment := newFakeResourceDeployment(test)
 		fakeUpdateImage := newFakeResourceUpdateImage(test)
-		Convey("create deployment",
-			deploymentCreationTest(client, resourceTestNamespace, fakeResourceDeployment))
-		Convey("set container image",
-			setContainerImageTest(client, resourceTestNamespace, fakeResourceDeployment.Name, fakeUpdateImage))
+		Convey("create deployment", func() {
+			err := client.CreateDeployment(resourceTestNamespace, fakeResourceDeployment)
+			So(err, ShouldBeNil)
+		})
+		Convey("set container image", func() {
+			err := client.SetContainerImage(resourceTestNamespace,
+				fakeResourceDeployment.Name, fakeUpdateImage)
+			So(err, ShouldBeNil)
+		})
 		Convey("replace deployment", func() {
 			err := client.ReplaceDeployment(resourceTestNamespace, fakeResourceDeployment)
 			So(err, ShouldBeNil)
 		})
+		Convey("set replicas", func() {
+			err := client.SetReplicas(resourceTestNamespace, fakeResourceDeployment.Name, 4)
+			So(err, ShouldBeNil)
+		})
 	})
 	Convey("Test KubeAPI methods", test, func() {
-		fakeKubeAPIdeployment := newFakeKubeAPIdeployment(test)
-		Convey("get deployment test",
-			getDeploymentTest(client, kubeAPItestNamespace,
-				kubeAPItestDeployment, fakeKubeAPIdeployment))
-		Convey("get deployment list",
-			getDeploymentListTest(client, kubeAPItestNamespace, []model.Deployment{fakeKubeAPIdeployment}))
+		Convey("get deployment test", func() {
+			_, err := client.GetDeployment(kubeAPItestNamespace, kubeAPItestDeployment)
+			So(err, ShouldBeNil)
+		})
+		Convey("get deployment list", func() {
+			_, err := client.GetDeploymentList(kubeAPItestNamespace)
+			So(err, ShouldBeNil)
+		})
 	})
-}
-
-func deploymentCreationTest(client *cmd.Client, namespace string, deployment model.Deployment) func() {
-	return func() {
-		err := client.CreateDeployment(namespace, deployment)
-		So(err, ShouldBeNil)
-	}
-}
-
-func setContainerImageTest(client *cmd.Client, namespace, deployment string, updateImage model.UpdateImage) func() {
-	return func() {
-		err := client.SetContainerImage(namespace, deployment, updateImage)
-		So(err, ShouldBeNil)
-	}
-}
-func getDeploymentTest(client *cmd.Client, namespace, deployment string, referenceDeployment model.Deployment) func() {
-	return func() {
-		/*gainedDeployment*/ _, err := client.GetDeployment(namespace, deployment)
-		So(err, ShouldBeNil)
-		//So(gainedDeployment, ShouldEqual, referenceDeployment)
-	}
-}
-
-func getDeploymentListTest(client *cmd.Client, namespace string, referenceList []model.Deployment) func() {
-	return func() {
-		/*gainedDeploymentList*/ _, err := client.GetDeploymentList(namespace)
-		So(err, ShouldBeNil)
-		//So(gainedDeploymentList, ShouldEqual, referenceList)
-	}
 }
