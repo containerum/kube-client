@@ -78,3 +78,16 @@ func (client *Client) SetAccess(volumeName string, accessData model.ResourceUser
 		Post(client.resourceServiceAddr + resourceVolumeAccessPath)
 	return err
 }
+
+// DeleteAccess -- deletes user Volume access
+func (client *Client) DeleteAccess(volumeName, username string) error {
+	_, err := client.Request.
+		SetPathParams(map[string]string{
+			"volume": volumeName,
+		}).
+		SetBody(model.ResourceUserVolumeAccess{
+			Username: username,
+		}).
+		Delete(client.resourceServiceAddr + resourceVolumeAccessPath)
+	return err
+}
