@@ -27,3 +27,8 @@ type ResourceCreateVolume struct {
 type ResourceUpdateVolumeName struct {
 	Label string `json:"label"`
 }
+
+type ResourceUserVolumeAccess struct {
+	Username string `json:"username"`
+	Access   string `json:"access"`
+}
