@@ -36,8 +36,11 @@ func TestDeployment(test *testing.T) {
 	}
 	{
 		fakeResourceDeployment := newFakeResourceDeployment(test)
+		fakeUpdateImage := newFakeResourceUpdateImage(test)
 		test.Run("deployment creaton test",
 			deploymentCreationTest(client, testNamespace, fakeResourceDeployment))
+		test.Run("set container image test",
+			setContainerImageTest(client, testNamespace, fakeResourceDeployment.Name, fakeUpdateImage))
 	}
 	{
 		fakeKubeAPIdeployment := newFakeKubeAPIdeployment(test)
@@ -58,6 +61,18 @@ func deploymentCreationTest(client *cmd.Client, namespace string, deployment mod
 	}
 }
 
+func setContainerImageTest(client *cmd.Client, namespace, deployment string, updateImage model.UpdateImage) func(*testing.T) {
+	return func(test *testing.T) {
+		client.SetHeaders(map[string]string{
+			"X-User-ID":   "20b616d8-1ea7-4842-b8ec-c6e8226fda5b",
+			"X-User-Role": "user",
+		})
+		err := client.SetContainerImage(namespace, deployment, updateImage)
+		if err != nil {
+			test.Fatalf("error while deployment creation: %v", err)
+		}
+	}
+}
 func getDeploymentTest(client *cmd.Client, namespace, deployment string, referenceDeplyment model.Deployment) func(*testing.T) {
 	return func(test *testing.T) {
 		gainedDeployment, err := client.GetDeployment(namespace, deployment)
@@ -97,6 +112,19 @@ func newFakeDeployment(test *testing.T, file string) model.Deployment {
 func newFakeResourceDeployment(test *testing.T) model.Deployment {
 	return newFakeDeployment(test, "test_data/deployment.json")
 }
+
 func newFakeKubeAPIdeployment(test *testing.T) model.Deployment {
 	return newFakeDeployment(test, "test_data/kubeAPIdeployment.json")
+}
+
+func newFakeResourceUpdateImage(test *testing.T) model.UpdateImage {
+	jsonData, err := ioutil.ReadFile("test_data/update_image.json")
+	if err != nil {
+		test.Fatalf("error while reading test data: %v", err)
+	}
+	var updateImage model.UpdateImage
+	if err := json.Unmarshal(jsonData, &updateImage); err != nil {
+		test.Fatalf("error while unmarshalling test response to UpdateImage datastruct: %v", err)
+	}
+	return updateImage
 }
