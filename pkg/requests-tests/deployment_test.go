@@ -23,6 +23,7 @@ func TestDeployment(test *testing.T) {
 	client, err := cmd.CreateCmdClient(
 		cmd.ClientConfig{
 			ResourceAddr: "http://192.168.88.200:1213",
+			APIurl:       "http://192.168.88.200:1214",
 			User: cmd.User{
 				Role: "admin",
 			},
