@@ -4,12 +4,12 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"math/rand"
-	"reflect"
 	"testing"
 	"time"
 
 	"git.containerum.net/ch/kube-client/pkg/cmd"
 	"git.containerum.net/ch/kube-client/pkg/model"
+	. "github.com/smartystreets/goconvey/convey"
 )
 
 const (
@@ -37,22 +37,22 @@ func TestDeployment(test *testing.T) {
 	client.SetHeaders(map[string]string{
 		"X-User-Role": "admin",
 	})
-	{
+	Convey("Test resource service methods", test, func() {
 		fakeResourceDeployment := newFakeResourceDeployment(test)
 		fakeUpdateImage := newFakeResourceUpdateImage(test)
 		test.Run("deployment creaton test",
 			deploymentCreationTest(client, testNamespace, fakeResourceDeployment))
 		test.Run("set container image test",
 			setContainerImageTest(client, testNamespace, fakeResourceDeployment.Name, fakeUpdateImage))
-	}
-	{
+	})
+	Convey("Test KubeAPI methods", test, func() {
 		fakeKubeAPIdeployment := newFakeKubeAPIdeployment(test)
-		test.Run("get deployment test",
+		Convey("get deployment test",
 			getDeploymentTest(client, kubeAPItestNamespace,
 				kubeAPItestDeployment, fakeKubeAPIdeployment))
-		test.Run("get deployment list",
+		Convey("get deployment list",
 			getDeploymentListTest(client, kubeAPItestNamespace, []model.Deployment{fakeKubeAPIdeployment}))
-	}
+	})
 }
 
 func deploymentCreationTest(client *cmd.Client, namespace string, deployment model.Deployment) func(*testing.T) {
@@ -76,27 +76,19 @@ func setContainerImageTest(client *cmd.Client, namespace, deployment string, upd
 		}
 	}
 }
-func getDeploymentTest(client *cmd.Client, namespace, deployment string, referenceDeployment model.Deployment) func(*testing.T) {
-	return func(test *testing.T) {
+func getDeploymentTest(client *cmd.Client, namespace, deployment string, referenceDeployment model.Deployment) func() {
+	return func() {
 		gainedDeployment, err := client.GetDeployment(namespace, deployment)
-		if err != nil {
-			test.Fatalf("error while getting deployment: %v", err)
-		}
-		if !reflect.DeepEqual(referenceDeployment.Containers, gainedDeployment.Containers) {
-			test.Fatalf("gained deployment doesn't match reference deployment")
-		}
+		So(err, ShouldBeNil)
+		So(referenceDeployment.Containers, ShouldEqual, gainedDeployment)
 	}
 }
 
-func getDeploymentListTest(client *cmd.Client, namespace string, referenceList []model.Deployment) func(*testing.T) {
-	return func(test *testing.T) {
+func getDeploymentListTest(client *cmd.Client, namespace string, referenceList []model.Deployment) func() {
+	return func() {
 		gainedDeploymentList, err := client.GetDeploymentList(namespace)
-		if err != nil {
-			test.Fatalf("error while getting deployment: %v", err)
-		}
-		if !reflect.DeepEqual(referenceList, gainedDeploymentList) {
-			test.Fatalf("gained deployment list doesn't match reference deployment list!")
-		}
+		So(err, ShouldBeNil)
+		So(gainedDeploymentList, ShouldEqual, referenceList)
 	}
 }
 
