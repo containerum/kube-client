@@ -54,3 +54,14 @@ func (client *Client) GetVolumeList(userID, filter *string) ([]model.ResourceVol
 	}
 	return *resp.Result().(*[]model.ResourceVolume), nil
 }
+
+//RenameVolume -- change volume name
+func (client *Client) RenameVolume(volumeName, newName string) error {
+	_, err := client.Request.
+		SetPathParams(map[string]string{
+			"volume": volumeName,
+		}).
+		SetBody(model.ResourceUpdateVolumeName{Label: newName}).
+		Put(client.resourceServiceAddr + resourceVolumePath)
+	return err
+}
