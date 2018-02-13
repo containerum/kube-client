@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"git.containerum.net/ch/json-types/user-manager"
 	"git.containerum.net/ch/kube-client/pkg/model"
 )
 
@@ -45,15 +44,13 @@ func (client *Client) GetDeploymentList(namespace string) ([]model.Deployment, e
 
 // DeleteDeployment -- consumes a namespace, a deployment,
 // an user role and an ID
-func (client *Client) DeleteDeployment(namespace, deployment, userID, userRole string) error {
+func (client *Client) DeleteDeployment(namespace, deployment string) error {
 	_, err := client.Request.
 		SetPathParams(map[string]string{
 			"namespace":  namespace,
 			"deployment": deployment,
-		}).SetHeaders(map[string]string{
-		user.UserIDHeader:   userID,
-		user.UserRoleHeader: userRole,
-	}).Delete(client.resourceServiceAddr + resourceDeploymentPath)
+		}).
+		Delete(client.resourceServiceAddr + resourceDeploymentPath)
 	return err
 }
 
