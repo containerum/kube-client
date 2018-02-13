@@ -30,5 +30,5 @@ type ResourceUpdateVolumeName struct {
 
 type ResourceUserVolumeAccess struct {
 	Username string `json:"username"`
-	Access   string `json:"access"`
+	Access   string `json:"access, omitempty"`
 }
