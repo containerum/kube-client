@@ -1,9 +1,7 @@
 package requests_tests
 
 import (
-	"math/rand"
 	"testing"
-	"time"
 
 	"git.containerum.net/ch/kube-client/pkg/cmd"
 	. "github.com/smartystreets/goconvey/convey"
@@ -13,10 +11,6 @@ const (
 	resourceTestNamespace = "test-namespace"
 	kubeAPItestNamespace  = "5020aa84-4827-47da-87ee-5fc2cf18c111"
 	kubeAPItestDeployment = "roma"
-)
-
-var (
-	randomGen = rand.New(rand.NewSource(time.Now().UnixNano()))
 )
 
 func TestDeployment(test *testing.T) {
