@@ -45,6 +45,10 @@ func TestDeployment(test *testing.T) {
 			err := client.SetReplicas(resourceTestNamespace, fakeResourceDeployment.Name, 4)
 			So(err, ShouldBeNil)
 		})
+		Convey("delete deployment", func() {
+			err := client.DeleteDeployment(resourceTestNamespace, fakeResourceDeployment.Name)
+			So(err, ShouldBeNil)
+		})
 	})
 	Convey("Test KubeAPI methods", test, func() {
 		Convey("get deployment test", func() {
