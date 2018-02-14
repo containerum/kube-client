@@ -8,3 +8,15 @@ import (
 func resourceError(resp *resty.Response) error {
 	return resp.Error().(*model.ResourceError)
 }
+
+func firstNonNilErr(err error, errs ...error) error {
+	if err != nil {
+		return err
+	}
+	for _, err := range errs {
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
