@@ -3,22 +3,12 @@ package requests_tests
 import (
 	"testing"
 
-	"git.containerum.net/ch/kube-client/pkg/cmd"
 	. "github.com/smartystreets/goconvey/convey"
 )
 
 func TestNamespace(test *testing.T) {
-	client, err := cmd.CreateCmdClient(
-		cmd.ClientConfig{
-			ResourceAddr: "http://192.168.88.200:1213",
-			APIurl:       "http://192.168.88.200:1214",
-			User: cmd.User{
-				Role: "admin",
-			},
-		})
-	if err != nil {
-		test.Fatalf("error while creating client: %v", err)
-	}
+	client := newResourceClient(test)
+	fakeNamespaces := newFakeResourceNamespaces(test)
 	Convey("Test KubeAPI methods", test, func() {
 		Convey("get namespace", func() {
 			_, err := client.GetNamespace(kubeAPItestNamespace)
@@ -31,8 +21,9 @@ func TestNamespace(test *testing.T) {
 	})
 	Convey("Test resource service methods", test, func() {
 		Convey("get namespace", func() {
-			_, err := client.ResourceGetNamespace(resourceTestNamespace, "")
+			gainedNamespace, err := client.ResourceGetNamespace(fakeNamespaces[0].Label, "")
 			So(err, ShouldBeNil)
+			So(gainedNamespace, ShouldResemble, fakeNamespaces[0])
 		})
 		Convey("get namespace list", func() {
 			_, err := client.ResourceGetNamespaceList(0, 16, "")
