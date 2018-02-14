@@ -33,6 +33,13 @@ func newFakeKubeAPInamespace(test *testing.T) model.Namespace {
 	loadTestJSONdata(test, "test_data/kube_api_namespace.json", &namespace)
 	return namespace
 }
+
+func newFakeResourceVolume(test *testing.T) model.ResourceVolume {
+	var volume model.ResourceVolume
+	loadTestJSONdata(test, "test_data/get_volume.json", &volume)
+	return volume
+}
+
 func loadTestJSONdata(test *testing.T, file string, data interface{}) {
 	jsonData, err := ioutil.ReadFile(file)
 	if err != nil {
