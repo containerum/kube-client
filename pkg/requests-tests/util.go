@@ -5,8 +5,26 @@ import (
 	"io/ioutil"
 	"testing"
 
+	"git.containerum.net/ch/kube-client/pkg/cmd"
+
 	"git.containerum.net/ch/kube-client/pkg/model"
 )
+
+func newResourceClient(test *testing.T) *cmd.Client {
+	client, err := cmd.CreateCmdClient(
+		cmd.ClientConfig{
+			ResourceAddr: "http://192.168.88.200:1213",
+			APIurl:       "http://192.168.88.200:1214",
+			User: cmd.User{
+				Role: "admin",
+			},
+		})
+	if err != nil {
+		test.Fatalf("error while creating client: %v", err)
+	}
+	client.SetHeader("X-User-ID", "20b616d8-1ea7-4842-b8ec-c6e8226fda5b")
+	return client
+}
 
 func newFakeDeployment(test *testing.T, file string) model.Deployment {
 	var deployment model.Deployment
