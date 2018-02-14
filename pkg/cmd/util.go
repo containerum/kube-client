@@ -20,3 +20,15 @@ func firstNonNilErr(err error, errs ...error) error {
 	}
 	return nil
 }
+
+func catchErr(err error, resp *resty.Response, okCodes ...int) error {
+	if err != nil {
+		return err
+	}
+	for _, code := range okCodes {
+		if resp.StatusCode() == code {
+			return nil
+		}
+	}
+	return resp.Error().(*model.ResourceError)
+}
