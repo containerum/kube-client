@@ -24,9 +24,11 @@ func TestVolume(test *testing.T) {
 		test.Fatalf("error while creating client: %v", err)
 	}
 	Convey("Test resource API methods", test, func() {
+		referenceVolume := newFakeResourceVolume(test)
 		Convey("get volume", func() {
-			_, err := client.GetVolume(resourceTestVolume, nil)
+			gainedVolume, err := client.GetVolume(resourceTestVolume, nil)
 			So(err, ShouldBeNil)
+			So(gainedVolume, ShouldResemble, referenceVolume)
 		})
 	})
 }
