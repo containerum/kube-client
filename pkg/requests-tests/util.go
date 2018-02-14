@@ -26,6 +26,21 @@ func newResourceClient(test *testing.T) *cmd.Client {
 	return client
 }
 
+func newCubeAPIClient(test *testing.T) *cmd.Client {
+	client, err := cmd.CreateCmdClient(
+		cmd.ClientConfig{
+			ResourceAddr: "http://192.168.88.200:1213",
+			APIurl:       "http://192.168.88.200:1214",
+			User: cmd.User{
+				Role: "admin",
+			},
+		})
+	if err != nil {
+		test.Fatalf("error while creating client: %v", err)
+	}
+	return client
+}
+
 func newFakeDeployment(test *testing.T, file string) model.Deployment {
 	var deployment model.Deployment
 	loadTestJSONdata(test, file, &deployment)
