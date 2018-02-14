@@ -54,7 +54,7 @@ func newFakeKubeAPInamespace(test *testing.T) model.Namespace {
 
 func newFakeResourceVolume(test *testing.T) []model.ResourceVolume {
 	var volume []model.ResourceVolume
-	loadTestJSONdata(test, "test_data/fake_volume.json", &volume)
+	loadTestJSONdata(test, "test_data/fake_volumes.json", &volume)
 	return volume
 }
 
