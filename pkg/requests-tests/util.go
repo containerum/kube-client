@@ -1,9 +1,14 @@
 package requests_tests
 
 import (
+	"bytes"
+	"encoding/base64"
 	"encoding/json"
+	"io"
 	"io/ioutil"
+	"math/rand"
 	"testing"
+	"time"
 
 	"git.containerum.net/ch/kube-client/pkg/cmd"
 	"git.containerum.net/ch/kube-client/pkg/model"
@@ -101,4 +106,12 @@ func loadTestJSONdata(test *testing.T, file string, data interface{}) {
 	if err != nil {
 		test.Fatalf("error while unmarshalling data: %v", err)
 	}
+}
+
+func newRandomName(size int64) string {
+	buf := &bytes.Buffer{}
+	encoder := base64.NewEncoder(base64.RawURLEncoding, buf)
+	rnd := rand.New(rand.NewSource(time.Now().UnixNano()))
+	io.CopyN(encoder, rnd, (3*size)/4)
+	return buf.String()
 }
