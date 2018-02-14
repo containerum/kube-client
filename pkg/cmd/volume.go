@@ -51,7 +51,8 @@ func (client *Client) GetVolume(volumeName string, userID *string) (model.Resour
 // Should have filters: not deleted, limited, not limited, owner, not owner.
 func (client *Client) GetVolumeList(userID, filter *string) ([]model.ResourceVolume, error) {
 	req := client.Request.
-		SetResult([]model.ResourceVolume{})
+		SetResult([]model.ResourceVolume{}).
+		SetError(model.ResourceError{})
 	if userID != nil {
 		req.SetQueryParam("user-id", *userID)
 	}
@@ -61,6 +62,9 @@ func (client *Client) GetVolumeList(userID, filter *string) ([]model.ResourceVol
 	resp, err := req.Get(client.resourceServiceAddr + resourceVolumeRootPath)
 	if err != nil {
 		return nil, err
+	}
+	if resp.StatusCode() != http.StatusOK {
+		return nil, resp.Error().(*model.ResourceError)
 	}
 	return *resp.Result().(*[]model.ResourceVolume), nil
 }
