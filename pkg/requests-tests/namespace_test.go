@@ -30,6 +30,9 @@ func TestNamespace(test *testing.T) {
 		})
 	})
 	Convey("Test resource service methods", test, func() {
+
+		client.SetHeader("X-User-ID", resourceTestUserID)
+
 		Convey("get namespace", func() {
 			_, err := client.ResourceGetNamespace(resourceTestNamespace, "")
 			So(err, ShouldBeNil)

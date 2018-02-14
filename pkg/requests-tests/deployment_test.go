@@ -9,6 +9,7 @@ import (
 
 const (
 	resourceTestNamespace = "test-namespace"
+	resourceTestUserID    = "20b616d8-1ea7-4842-b8ec-c6e8226fda5b"
 	kubeAPItestNamespace  = "5020aa84-4827-47da-87ee-5fc2cf18c111"
 	kubeAPItestDeployment = "roma"
 )
@@ -28,6 +29,9 @@ func TestDeployment(test *testing.T) {
 	Convey("Test resource service methods", test, func() {
 		fakeResourceDeployment := newFakeResourceDeployment(test)
 		fakeUpdateImage := newFakeResourceUpdateImage(test)
+
+		client.SetHeader("X-User-ID", resourceTestUserID)
+
 		Convey("create deployment", func() {
 			err := client.CreateDeployment(resourceTestNamespace, fakeResourceDeployment)
 			So(err, ShouldBeNil)
