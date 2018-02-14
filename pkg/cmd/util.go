@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"errors"
+
 	"git.containerum.net/ch/kube-client/pkg/model"
 	"github.com/go-resty/resty"
 )
@@ -30,5 +32,8 @@ func catchErr(err error, resp *resty.Response, okCodes ...int) error {
 			return nil
 		}
 	}
-	return resp.Error().(*model.ResourceError)
+	if resp.Error() != nil {
+		return resp.Error().(*model.ResourceError)
+	}
+	return errors.New(resp.Status())
 }
