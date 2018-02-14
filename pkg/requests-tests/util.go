@@ -6,15 +6,19 @@ import (
 	"testing"
 
 	"git.containerum.net/ch/kube-client/pkg/cmd"
-
 	"git.containerum.net/ch/kube-client/pkg/model"
+)
+
+const (
+	resourceAddr = "http://192.168.88.200:1213"
+	cubeAPIaddr  = "http://192.168.88.200:1214"
 )
 
 func newResourceClient(test *testing.T) *cmd.Client {
 	client, err := cmd.CreateCmdClient(
 		cmd.ClientConfig{
-			ResourceAddr: "http://192.168.88.200:1213",
-			APIurl:       "http://192.168.88.200:1214",
+			ResourceAddr: resourceAddr,
+			APIurl:       cubeAPIaddr,
 			User: cmd.User{
 				Role: "admin",
 			},
@@ -29,8 +33,8 @@ func newResourceClient(test *testing.T) *cmd.Client {
 func newCubeAPIClient(test *testing.T) *cmd.Client {
 	client, err := cmd.CreateCmdClient(
 		cmd.ClientConfig{
-			ResourceAddr: "http://192.168.88.200:1213",
-			APIurl:       "http://192.168.88.200:1214",
+			ResourceAddr: resourceAddr,
+			APIurl:       cubeAPIaddr,
 			User: cmd.User{
 				Role: "admin",
 			},
@@ -39,6 +43,21 @@ func newCubeAPIClient(test *testing.T) *cmd.Client {
 		test.Fatalf("error while creating client: %v", err)
 	}
 	return client
+}
+
+func newFakeResourceNamespaces(test *testing.T) []model.ResourceNamespace {
+	var ns []model.ResourceNamespace
+	loadTestJSONdata(test, "test_data/test_namespaces.json", &ns)
+	return ns
+}
+
+func createResourceNamespace(test *testing.T, client *cmd.Client, namespace model.ResourceNamespace) {
+	resp, _ := client.Request.
+		SetBody(namespace).
+		Post(resourceAddr + "/namespace")
+	if resp.Error() != nil {
+		test.Fatalf("error while creating test namespace: %v", resp.Error())
+	}
 }
 
 func newFakeDeployment(test *testing.T, file string) model.Deployment {
