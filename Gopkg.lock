@@ -4,10 +4,7 @@
 [[projects]]
   branch = "master"
   name = "git.containerum.net/ch/json-types"
-  packages = [
-    "auth",
-    "user-manager"
-  ]
+  packages = ["auth"]
   revision = "e680a4ffd16c6255aee4c7ebf7da9127b6cd638c"
 
 [[projects]]
@@ -81,6 +78,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "7957ee6eec92056f888db720d73e073eccddeae4d22ada879c5095c33e220ff8"
+  inputs-digest = "a32b545c581c0f4098df23e9e67ee1099a1e05e868757478e408f66e230f6a6f"
   solver-name = "gps-cdcl"
   solver-version = 1
