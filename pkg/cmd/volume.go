@@ -19,7 +19,7 @@ func (client *Client) DeleteVolume(volumeName string) error {
 		SetPathParams(map[string]string{
 			"volume": volumeName,
 		}).
-		Delete(client.resourceServiceAddr + resourceVolumePath)
+		Delete(client.ResourceAddr + resourceVolumePath)
 	return err
 }
 
@@ -35,7 +35,7 @@ func (client *Client) GetVolume(volumeName string, userID *string) (model.Resour
 	if userID != nil {
 		req.SetQueryParam("user-id", *userID)
 	}
-	resp, err := req.Get(client.resourceServiceAddr + resourceVolumePath)
+	resp, err := req.Get(client.ResourceAddr + resourceVolumePath)
 	if err != nil {
 		return model.ResourceVolume{}, err
 	}
@@ -59,7 +59,7 @@ func (client *Client) GetVolumeList(userID, filter *string) ([]model.ResourceVol
 	if filter != nil {
 		req.SetQueryParam("user-id", *filter)
 	}
-	resp, err := req.Get(client.resourceServiceAddr + resourceVolumeRootPath)
+	resp, err := req.Get(client.ResourceAddr + resourceVolumeRootPath)
 	if err != nil {
 		return nil, err
 	}
@@ -76,7 +76,7 @@ func (client *Client) RenameVolume(volumeName, newName string) error {
 			"volume": volumeName,
 		}).
 		SetBody(model.ResourceUpdateName{Label: newName}).
-		Put(client.resourceServiceAddr + resourceVolumeNamePath)
+		Put(client.ResourceAddr + resourceVolumeNamePath)
 	return err
 }
 
@@ -87,7 +87,7 @@ func (client *Client) SetAccess(volumeName string, accessData model.ResourceUpda
 			"volume": volumeName,
 		}).
 		SetBody(accessData).
-		Post(client.resourceServiceAddr + resourceVolumeAccessPath)
+		Post(client.ResourceAddr + resourceVolumeAccessPath)
 	return err
 }
 
@@ -100,6 +100,6 @@ func (client *Client) DeleteAccess(volumeName, username string) error {
 		SetBody(model.ResourceUpdateUserAccess{
 			Username: username,
 		}).
-		Delete(client.resourceServiceAddr + resourceVolumeAccessPath)
+		Delete(client.ResourceAddr + resourceVolumeAccessPath)
 	return err
 }

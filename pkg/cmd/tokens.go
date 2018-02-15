@@ -23,7 +23,7 @@ func (client *Client) CheckToken(token, userFingerprint string) (auth.CheckToken
 		SetHeaders(map[string]string{
 			user.FingerprintHeader: userFingerprint,
 			user.UserAgentHeader:   userAgent,
-		}).Get(client.serverURL + getCheckToken)
+		}).Get(client.APIurl + getCheckToken)
 	if err != nil {
 		return auth.CheckTokenResponse{}, err
 	}
@@ -41,7 +41,7 @@ func (client *Client) ExtendToken(refreshToken, userFingerprint string) (auth.Ex
 		SetResult(auth.ExtendTokenResponse{}).
 		SetHeaders(map[string]string{
 			user.FingerprintHeader: userFingerprint,
-		}).Put(client.serverURL + getExtendToken)
+		}).Put(client.APIurl + getExtendToken)
 	if err != nil {
 		return auth.ExtendTokenResponse{}, err
 	}

@@ -27,7 +27,7 @@ func (client *Client) GetNamespaceList(queries map[string]string) ([]model.Names
 	resp, err := client.Request.
 		SetQueryParams(queries).
 		SetResult([]model.Namespace{}).
-		Get(client.serverURL + getNamespaceList)
+		Get(client.APIurl + getNamespaceList)
 	if err := catchErr(err, resp, http.StatusOK); err != nil {
 		return []model.Namespace{}, err
 	}
@@ -40,7 +40,7 @@ func (client *Client) GetNamespace(ns string) (model.Namespace, error) {
 		SetPathParams(map[string]string{
 			"namespace": ns,
 		}).
-		Get(client.serverURL + getNamespace)
+		Get(client.APIurl + getNamespace)
 	if err := catchErr(err, resp, http.StatusOK); err != nil {
 		return model.Namespace{}, err
 	}
@@ -58,7 +58,7 @@ func (client *Client) ResourceGetNamespace(namespace string, userID *string) (mo
 	if userID != nil {
 		req.SetQueryParam("user-id", *userID)
 	}
-	resp, err := req.Get(client.resourceServiceAddr + resourceNamespacePath)
+	resp, err := req.Get(client.ResourceAddr + resourceNamespacePath)
 	if err := catchErr(err, resp, http.StatusOK); err != nil {
 		return model.ResourceNamespace{}, err
 	}
@@ -78,7 +78,7 @@ func (client *Client) ResourceGetNamespaceList(page, perPage uint64, userID stri
 	if userID != "" {
 		req.SetQueryParam("user-id", userID)
 	}
-	resp, err := req.Get(client.resourceServiceAddr + resourceNamespacesPath)
+	resp, err := req.Get(client.ResourceAddr + resourceNamespacesPath)
 	if err := catchErr(err, resp, http.StatusOK); err != nil {
 		return nil, err
 	}
@@ -93,7 +93,7 @@ func (client *Client) RenameNamespace(namespace, newName string) error {
 			"namespace": resourceNamespacePath,
 		}).SetBody(model.ResourceUpdateName{
 		Label: newName,
-	}).Put(client.resourceServiceAddr + resourceNamespacePath)
+	}).Put(client.ResourceAddr + resourceNamespacePath)
 	if err != nil {
 		return err
 	}
@@ -116,7 +116,7 @@ func (client *Client) SetNamespaceAccess(namespace, username, access string) err
 		}).SetBody(model.ResourceUpdateUserAccess{
 		Username: username,
 		Access:   access,
-	}).Post(client.resourceServiceAddr + resourceNamespaceNamePath)
+	}).Post(client.ResourceAddr + resourceNamespaceNamePath)
 	if err != nil {
 		return err
 	}
@@ -138,7 +138,7 @@ func (client *Client) DeleteNamespaceAccess(namespace, username string) error {
 			"namespace": namespace,
 		}).SetBody(model.ResourceUpdateUserAccess{
 		Username: username,
-	}).Delete(client.resourceServiceAddr + resourceNamespaceNamePath)
+	}).Delete(client.ResourceAddr + resourceNamespaceNamePath)
 	if err != nil {
 		return err
 	}

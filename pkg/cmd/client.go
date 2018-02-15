@@ -12,10 +12,8 @@ import (
 //Client - rest client
 type Client struct {
 	*resty.Request
-	serverURL           string
-	resourceServiceAddr string
-	userManagerURL      string
-	User                User
+	ClientConfig
+	User User
 }
 
 //User -
@@ -55,10 +53,9 @@ func CreateCmdClient(config ClientConfig) (*Client, error) {
 		config.UserManagerURL = os.Getenv("USER_MANAGER_URL")
 	}
 	client := &Client{
-		Request:             resty.R(),
-		serverURL:           config.APIurl,
-		resourceServiceAddr: config.ResourceAddr,
-		User:                config.User,
+		Request:      resty.R(),
+		ClientConfig: config,
+		User:         config.User,
 	}
 	client.SetHeaders(map[string]string{
 		"X-User-Role": client.User.Role,

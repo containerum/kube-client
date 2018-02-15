@@ -15,7 +15,7 @@ func (client *Client) GetProfileInfo() (model.User, error) {
 	resp, err := client.Request.
 		SetResult(model.User{}).
 		SetError(model.ResourceError{}).
-		Get(client.userManagerURL + userInfoPath)
+		Get(client.UserManagerURL + userInfoPath)
 	if err := catchErr(err, resp, http.StatusOK); err != nil {
 		return model.User{}, err
 	}

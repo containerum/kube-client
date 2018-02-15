@@ -25,7 +25,7 @@ func (client *Client) GetDeployment(namespace, deployment string) (model.Deploym
 			"deployment": deployment,
 		}).SetResult(model.Deployment{}).
 		SetError(model.ResourceError{}).
-		Get(client.serverURL + kubeAPIdeploymentPath)
+		Get(client.APIurl + kubeAPIdeploymentPath)
 	if err := catchErr(err, resp, http.StatusOK); err != nil {
 		return model.Deployment{}, err
 	}
@@ -40,7 +40,7 @@ func (client *Client) GetDeploymentList(namespace string) ([]model.Deployment, e
 			"namespace": namespace,
 		}).SetResult([]model.Deployment{}).
 		SetError(model.ResourceError{}).
-		Get(client.serverURL + kubeAPIdeploymentsPath)
+		Get(client.APIurl + kubeAPIdeploymentsPath)
 	if err := catchErr(err, resp, http.StatusOK); err != nil {
 		return nil, err
 	}
@@ -55,7 +55,7 @@ func (client *Client) DeleteDeployment(namespace, deployment string) error {
 			"namespace":  namespace,
 			"deployment": deployment,
 		}).SetError(model.ResourceError{}).
-		Delete(client.resourceServiceAddr + resourceDeploymentPath)
+		Delete(client.ResourceAddr + resourceDeploymentPath)
 	return catchErr(err, resp, http.StatusOK)
 }
 
@@ -67,7 +67,7 @@ func (client *Client) CreateDeployment(namespace string, deployment model.Resour
 			"namespace": namespace,
 		}).SetBody(deployment).
 		SetError(model.ResourceError{}).
-		Post(client.resourceServiceAddr + resourceDeploymentRootPath)
+		Post(client.ResourceAddr + resourceDeploymentRootPath)
 	return catchErr(err, resp,
 		http.StatusOK,
 		http.StatusCreated,
@@ -82,7 +82,7 @@ func (client *Client) SetContainerImage(namespace, deployment string, updateImag
 			"namespace":  namespace,
 			"deployment": deployment,
 		}).SetBody(updateImage).
-		Put(client.resourceServiceAddr + resourceImagePath)
+		Put(client.ResourceAddr + resourceImagePath)
 	return catchErr(err, resp,
 		http.StatusAccepted,
 		http.StatusOK,
@@ -97,7 +97,7 @@ func (client *Client) ReplaceDeployment(namespace string, deployment model.Resou
 			"deployment": deployment.Name,
 		}).SetBody(deployment).
 		SetError(model.ResourceError{}).
-		Put(client.resourceServiceAddr + resourceDeploymentPath)
+		Put(client.ResourceAddr + resourceDeploymentPath)
 	return catchErr(err, resp, http.StatusOK)
 }
 
@@ -108,7 +108,7 @@ func (client *Client) SetReplicas(namespace, deployment string, replicas int) er
 		"deployment": deployment,
 	}).SetBody(model.UpdateReplicas{
 		Replicas: replicas,
-	}).Put(client.resourceServiceAddr + resourceReplicasPath)
+	}).Put(client.ResourceAddr + resourceReplicasPath)
 	return catchErr(err, resp,
 		http.StatusAccepted,
 		http.StatusOK)

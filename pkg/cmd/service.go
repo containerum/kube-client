@@ -20,7 +20,7 @@ func (client *Client) GetService(namespace, serviceName string) (model.Service, 
 			"namespace": namespace,
 			"service":   serviceName,
 		}).
-		Get(client.serverURL + servicePath)
+		Get(client.APIurl + servicePath)
 	if err := catchErr(err, resp, http.StatusOK); err != nil {
 		return model.Service{}, err
 	}
@@ -35,7 +35,7 @@ func (client *Client) GetServiceList(namespace string) ([]model.Service, error) 
 		SetPathParams(map[string]string{
 			"namespace": namespace,
 		}).
-		Get(client.serverURL + servicesPath)
+		Get(client.APIurl + servicesPath)
 	if err := catchErr(err, resp, http.StatusOK); err != nil {
 		return nil, err
 	}
@@ -50,7 +50,7 @@ func (client *Client) CreateService(namespace string, service model.Service) (mo
 		SetBody(service).
 		SetPathParams(map[string]string{
 			"namespace": namespace,
-		}).Post(client.resourceServiceAddr + servicesPath)
+		}).Post(client.ResourceAddr + servicesPath)
 	if err != nil {
 		return model.Service{}, err
 	}
@@ -65,7 +65,7 @@ func (client *Client) DeleteService(namespace, serviceName string) error {
 		SetPathParams(map[string]string{
 			"namespace": namespace,
 			"service":   serviceName,
-		}).Delete(client.resourceServiceAddr + servicePath)
+		}).Delete(client.ResourceAddr + servicePath)
 	return err
 }
 
@@ -78,7 +78,7 @@ func (client *Client) UpdateService(namespace string, service model.Service) (mo
 		SetPathParams(map[string]string{
 			"namespace": namespace,
 			"service":   service.Name,
-		}).Put(client.resourceServiceAddr + servicePath)
+		}).Put(client.ResourceAddr + servicePath)
 	if err != nil {
 		return model.Service{}, err
 	}
