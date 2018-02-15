@@ -41,3 +41,7 @@ type ResourceNamespace struct {
 	MaxTraffic       int              `json:"max_traffic"`
 	Volumes          []ResourceVolume `json:"volumes"`
 }
+
+type UpdateNamespaceName struct {
+	Label string `json:"label"`
+}

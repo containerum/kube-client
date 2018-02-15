@@ -74,6 +74,8 @@ func (client *Client) CreateDeployment(namespace string, deployment model.Resour
 		http.StatusAccepted)
 }
 
+// SetContainerImage -- set or changes deployment container image
+// Consumes namespace, deployment and container data
 func (client *Client) SetContainerImage(namespace, deployment string, updateImage model.UpdateImage) error {
 	resp, err := client.Request.
 		SetPathParams(map[string]string{
@@ -87,6 +89,7 @@ func (client *Client) SetContainerImage(namespace, deployment string, updateImag
 		http.StatusNoContent)
 }
 
+// ReplaceDeployment -- replaces deployment in provided namespace with new one
 func (client *Client) ReplaceDeployment(namespace string, deployment model.ResourceDeployment) error {
 	resp, err := client.Request.
 		SetPathParams(map[string]string{
@@ -98,12 +101,14 @@ func (client *Client) ReplaceDeployment(namespace string, deployment model.Resou
 	return catchErr(err, resp, http.StatusOK)
 }
 
+// SetReplicas -- sets or changes deployment replicas
 func (client *Client) SetReplicas(namespace, deployment string, replicas int) error {
 	resp, err := client.Request.SetPathParams(map[string]string{
 		"namespace":  namespace,
 		"deployment": deployment,
-	}).SetBody(model.UpdateReplicas{replicas}).
-		Put(client.resourceServiceAddr + resourceReplicasPath)
+	}).SetBody(model.UpdateReplicas{
+		Replicas: replicas,
+	}).Put(client.resourceServiceAddr + resourceReplicasPath)
 	return catchErr(err, resp,
 		http.StatusAccepted,
 		http.StatusOK)
