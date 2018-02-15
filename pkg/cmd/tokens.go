@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"fmt"
 	"net/http"
 
 	"git.containerum.net/ch/kube-client/pkg/model"
@@ -25,13 +26,21 @@ func (client *Client) CheckToken(token string) (model.CheckTokenResponse, error)
 	if err != nil {
 		return model.CheckTokenResponse{}, err
 	}
-	return *resp.Result().(*model.CheckTokenResponse), nil
+	switch resp.StatusCode() {
+	case http.StatusOK:
+		return *resp.Result().(*model.CheckTokenResponse), nil
+	default:
+		if resp.Error() != nil {
+			return model.CheckTokenResponse{}, fmt.Errorf("%v", resp.Error())
+		}
+		return model.CheckTokenResponse{}, fmt.Errorf("%s", resp.Status())
+	}
 }
 
 // ExtendToken -- consumes refresh JWT token and user fingerprint
 // If they're correct returns new extended access and refresh token OR void tokens AND error.
 // Old access and refresh token become inactive.
-func (client *Client) ExtendToken(refreshToken, userFingerprint string) (model.Tokens, error) {
+func (client *Client) ExtendToken(refreshToken string) (model.Tokens, error) {
 	resp, err := client.Request.
 		SetPathParams(map[string]string{
 			"refresh_token": refreshToken,
