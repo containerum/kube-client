@@ -93,6 +93,7 @@ func (client *Client) ReplaceDeployment(namespace string, deployment model.Resou
 			"namespace":  namespace,
 			"deployment": deployment.Name,
 		}).SetBody(deployment).
+		SetError(model.ResourceError{}).
 		Put(client.resourceServiceAddr + resourceDeploymentPath)
 	return catchErr(err, resp, http.StatusOK)
 }
