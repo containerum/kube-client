@@ -19,8 +19,8 @@ func TestDeployment(test *testing.T) {
 			//fakeNamespaces := newFakeResourceNamespaces(test)
 			fakeResourceDeployment := newFakeResourceDeployment(test)
 
-			namespace := "meson"
-			fakeResourceDeployment.Name = newRandomName(10)
+			namespace := "pion"
+			fakeResourceDeployment.Name = "fermi"
 			updateImage := model.UpdateImage{
 				Container: fakeResourceDeployment.Containers[0].Name,
 				Image:     "mongo",
@@ -43,7 +43,6 @@ func TestDeployment(test *testing.T) {
 				So(err, ShouldBeNil)
 			})
 			Convey("delete deployment", func() {
-				test.Log(fakeResourceDeployment.Name)
 				err := client.DeleteDeployment(namespace, fakeResourceDeployment.Name)
 				So(err, ShouldBeNil)
 			})
