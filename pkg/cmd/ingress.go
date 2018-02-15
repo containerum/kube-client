@@ -90,3 +90,25 @@ func (client *Client) UpdateIngress(namespace, domain string, ingress model.Reso
 		return fmt.Errorf("%s", resp.Status())
 	}
 }
+
+// DeleteIngress -- deletes ingress on provided domain
+func (client *Client) DeleteIngress(namespace, domain string) error {
+	resp, err := client.Request.
+		SetPathParams(map[string]string{
+			"namespace": namespace,
+			"domain":    domain,
+		}).
+		Delete(client.resourceServiceAddr + resourceIngressPath)
+	if err != nil {
+		return err
+	}
+	switch resp.StatusCode() {
+	case http.StatusOK, http.StatusAccepted, http.StatusNoContent:
+		return nil
+	default:
+		if resp.Error() != nil {
+			return fmt.Errorf("%v", resp.Error())
+		}
+		return fmt.Errorf("%s", resp.Status())
+	}
+}
