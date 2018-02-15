@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"fmt"
+	"net/http"
 	"strconv"
 
 	"git.containerum.net/ch/kube-client/pkg/model"
@@ -77,4 +79,25 @@ func (client *Client) ResourceGetNamespaceList(page, perPage uint64, userID stri
 		return nil, err
 	}
 	return *resp.Result().(*[]model.ResourceNamespace), nil
+}
+
+func (client *Client) RenameNamespace(namespace, newName string) error {
+	resp, err := client.Request.
+		SetPathParams(map[string]string{
+			"namespace": serviceNamespacePath,
+		}).SetFormData(map[string]string{
+		"label": newName,
+	}).Get(client.resourceServiceAddr + serviceNamespacePath)
+	if err != nil {
+		return err
+	}
+	switch resp.StatusCode() {
+	case http.StatusOK, http.StatusAccepted:
+		return nil
+	default:
+		if resp.Error() != nil {
+			return fmt.Errorf("%v", resp.Error())
+		}
+		return fmt.Errorf("%v", resp.Status())
+	}
 }
