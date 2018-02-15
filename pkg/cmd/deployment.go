@@ -93,7 +93,8 @@ func (client *Client) SetReplicas(namespace, deployment string, replicas int) er
 	_, err := client.Request.SetPathParams(map[string]string{
 		"namespace":  namespace,
 		"deployment": deployment,
-	}).SetBody(model.UpdateReplicas{replicas}).
-		Put(client.resourceServiceAddr + resourceReplicasPath)
+	}).SetBody(model.UpdateReplicas{
+		Replicas: replicas,
+	}).Put(client.resourceServiceAddr + resourceReplicasPath)
 	return err
 }
