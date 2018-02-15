@@ -26,6 +26,7 @@ type UpdateReplicas struct {
 
 type ResourceDeployment struct {
 	Containers []Container       `json:"containers"`
+	Owner      *string           `json:"owner,omitempty"`
 	Labels     map[string]string `json:"labels"`
 	Name       string            `json:"name"`
 	Replicas   int               `json:"replicas"`
