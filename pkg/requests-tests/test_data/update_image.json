@@ -1,4 +1,4 @@
 {
-    "container_name": "solution-webpack-3-ssh",
+    "container_name": "first",
     "image": "nginx"
 }

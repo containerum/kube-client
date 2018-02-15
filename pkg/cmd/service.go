@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"net/http"
+
 	"git.containerum.net/ch/kube-client/pkg/model"
 )
 
@@ -19,10 +21,9 @@ func (client *Client) GetService(namespace, serviceName string) (model.Service, 
 			"service":   serviceName,
 		}).
 		Get(client.serverURL + servicePath)
-	if err != nil {
+	if err := catchErr(err, resp, http.StatusOK); err != nil {
 		return model.Service{}, err
 	}
-
 	return *resp.Result().(*model.Service), nil
 }
 
@@ -34,11 +35,10 @@ func (client *Client) GetServiceList(namespace string) ([]model.Service, error) 
 		SetPathParams(map[string]string{
 			"namespace": namespace,
 		}).
-		Get(client.resourceServiceAddr + servicesPath)
-	if err != nil {
+		Get(client.serverURL + servicesPath)
+	if err := catchErr(err, resp, http.StatusOK); err != nil {
 		return nil, err
 	}
-
 	return *resp.Result().(*[]model.Service), nil
 }
 
