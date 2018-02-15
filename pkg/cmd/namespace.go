@@ -128,3 +128,25 @@ func (client *Client) SetNamespaceAccess(namespace, username, access string) err
 		return fmt.Errorf("%v", resp.Status())
 	}
 }
+
+// DeleteNamespaceAccess -- deletes user access to namespace
+func (client *Client) DeleteNamespaceAccess(namespace, username string) error {
+	resp, err := client.Request.
+		SetPathParams(map[string]string{
+			"namespace": namespace,
+		}).SetBody(model.ResourceUserVolumeAccess{
+		Username: username,
+	}).Delete(client.resourceServiceAddr + resourceNamespaceNamePath)
+	if err != nil {
+		return err
+	}
+	switch resp.StatusCode() {
+	case http.StatusOK, http.StatusAccepted:
+		return nil
+	default:
+		if resp.Error() != nil {
+			return fmt.Errorf("%v", resp.Error())
+		}
+		return fmt.Errorf("%v", resp.Status())
+	}
+}
