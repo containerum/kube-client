@@ -3,7 +3,6 @@ package cmd
 import (
 	"net/http"
 
-	"git.containerum.net/ch/json-types/auth"
 	"git.containerum.net/ch/kube-client/pkg/model"
 )
 
@@ -16,17 +15,17 @@ const (
 // CheckToken -- consumes JWT token, user fingerprint
 // If they're correct returns user access data:
 // list of namespaces and list of volumes OR uninitialized structure AND error
-func (client *Client) CheckToken(token string) (model.Tokens, error) {
+func (client *Client) CheckToken(token string) (model.CheckTokenResponse, error) {
 	resp, err := client.Request.
 		SetPathParams(map[string]string{
 			"access_token": token,
 		}).
-		SetResult(auth.CheckTokenResponse{}).
+		SetResult(model.CheckTokenResponse{}).
 		Get(client.APIurl + getCheckToken)
 	if err != nil {
-		return model.Tokens{}, err
+		return model.CheckTokenResponse{}, err
 	}
-	return *resp.Result().(*model.Tokens), nil
+	return *resp.Result().(*model.CheckTokenResponse), nil
 }
 
 // ExtendToken -- consumes refresh JWT token and user fingerprint
