@@ -28,7 +28,7 @@ func (client *Client) ChangePassword(currentPassword, newPassword string) (model
 	resp, err := client.Request.
 		SetResult(model.Tokens{}).
 		SetError(model.ResourceError{}).
-		Get(client.UserManagerURL + userPasswordChangePath)
+		Put(client.UserManagerURL + userPasswordChangePath)
 	if err := catchErr(err, resp, http.StatusAccepted, http.StatusOK); err != nil {
 		return model.Tokens{}, err
 	}
