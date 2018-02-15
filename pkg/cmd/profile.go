@@ -23,6 +23,7 @@ func (client *Client) GetProfileInfo() (model.User, error) {
 	return *resp.Result().(*model.User), nil
 }
 
+// ChangePassword -- changes user password, returns access and refresh tokens
 func (client *Client) ChangePassword(currentPassword, newPassword string) (model.Tokens, error) {
 	resp, err := client.Request.
 		SetResult(model.Tokens{}).
