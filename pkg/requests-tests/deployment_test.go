@@ -17,33 +17,33 @@ func TestDeployment(test *testing.T) {
 		Convey("resource service methods", func() {
 			client := newResourceClient(test)
 			//fakeNamespaces := newFakeResourceNamespaces(test)
-			fakeResourceDeployment := newFakeResourceDeployment(test)
-
+			deployment := newFakeResourceDeployment(test)
 			namespace := "pion"
-			fakeResourceDeployment.Name = "fermi"
+			deployment.Name = "fermi"
 			updateImage := model.UpdateImage{
-				Container: fakeResourceDeployment.Containers[0].Name,
+				Container: deployment.Containers[0].Name,
 				Image:     "mongo",
 			}
 			Convey("create deployment", func() {
-				err := client.CreateDeployment(namespace, fakeResourceDeployment)
+				err := client.CreateDeployment(namespace, deployment)
 				So(err, ShouldBeNil)
 			})
 			Convey("set container image", func() {
 				err := client.SetContainerImage(namespace,
-					fakeResourceDeployment.Name, updateImage)
+					deployment.Name, updateImage)
 				So(err, ShouldBeNil)
 			})
 			Convey("replace deployment", func() {
-				err := client.ReplaceDeployment(namespace, fakeResourceDeployment)
+				deployment = newResourceUpdateDeployment(test)
+				err := client.ReplaceDeployment(namespace, deployment)
 				So(err, ShouldBeNil)
 			})
 			Convey("set replicas", func() {
-				err := client.SetReplicas(namespace, fakeResourceDeployment.Name, 6)
+				err := client.SetReplicas(namespace, deployment.Name, 6)
 				So(err, ShouldBeNil)
 			})
 			Convey("delete deployment", func() {
-				err := client.DeleteDeployment(namespace, fakeResourceDeployment.Name)
+				err := client.DeleteDeployment(namespace, deployment.Name)
 				So(err, ShouldBeNil)
 			})
 		})
