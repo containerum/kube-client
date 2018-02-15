@@ -16,7 +16,7 @@ const (
 // CheckToken -- consumes JWT token, user fingerprint
 // If they're correct returns user access data:
 // list of namespaces and list of volumes OR uninitialized structure AND error
-func (client *Client) CheckToken(token, userFingerprint string) (model.Tokens, error) {
+func (client *Client) CheckToken(token string) (model.Tokens, error) {
 	resp, err := client.Request.
 		SetPathParams(map[string]string{
 			"access_token": token,
