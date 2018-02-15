@@ -2,7 +2,7 @@ package model
 
 type Ingress struct {
 	Name      string  `json:"name" binding:"required"`
-	Owner     *string `json:"owner,omitempty" binding:"required"`
+	Owner     *string `json:"owner,omitempty" binding:"required,uuid"`
 	CreatedAt *int64  `json:"created_at,omitempty"`
 	TLSSecret *string `json:"tls_secret,omitempty"`
 	Rule      Rule    `json:"rule" binding:"required"`

@@ -5,7 +5,7 @@ import "time"
 type Namespace struct {
 	Created   int64     `json:"created_at,omitempty"`
 	Name      string    `json:"name" binding:"required"`
-	Owner     string    `json:"owner,omitempty"`
+	Owner     string    `json:"owner,omitempty" binding:"required,uuid"`
 	Resources Resources `json:"resources" binding:"required"`
 }
 
