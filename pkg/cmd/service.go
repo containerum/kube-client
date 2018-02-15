@@ -35,7 +35,7 @@ func (client *Client) GetServiceList(namespace string) ([]model.Service, error) 
 		SetPathParams(map[string]string{
 			"namespace": namespace,
 		}).
-		Get(client.resourceServiceAddr + servicesPath)
+		Get(client.serverURL + servicesPath)
 	if err := catchErr(err, resp, http.StatusOK); err != nil {
 		return nil, err
 	}
