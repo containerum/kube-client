@@ -22,6 +22,9 @@ type User struct {
 	Role string
 }
 
+// ClientConfig -- provides configuration for Client
+// If APIurl or ResourceAddr is void,
+// trys to get them from envvars
 type ClientConfig struct {
 	User         User
 	APIurl       string
