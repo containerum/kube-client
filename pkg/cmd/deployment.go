@@ -11,7 +11,7 @@ const (
 	kubeAPIdeploymentsPath = "/namespaces/{namespace}/deployments"
 
 	resourceDeploymentRootPath = "/namespace/{namespace}/deployment"
-	resourceDeploymentPath     = resourceDeploymentRootPath + "/{deployment}"
+	resourceDeploymentPath     = "/namespace/{namespace}/deployment/{deployment}"
 	resourceImagePath          = "/namespace/{namespace}/deployment/{deployment}/image"
 	resourceReplicasPath       = "/namespace/{namespace}/deployment/{deployment}/replicas"
 )
@@ -61,7 +61,7 @@ func (client *Client) DeleteDeployment(namespace, deployment string) error {
 
 // CreateDeployment -- consumes a namespace, an user ID and a Role,
 // returns nil if OK
-func (client *Client) CreateDeployment(namespace string, deployment model.Deployment) error {
+func (client *Client) CreateDeployment(namespace string, deployment model.ResourceDeployment) error {
 	resp, err := client.Request.
 		SetPathParams(map[string]string{
 			"namespace": namespace,
@@ -87,17 +87,14 @@ func (client *Client) SetContainerImage(namespace, deployment string, updateImag
 		http.StatusNoContent)
 }
 
-func (client *Client) ReplaceDeployment(namespace string, deployment model.Deployment) error {
+func (client *Client) ReplaceDeployment(namespace string, deployment model.ResourceDeployment) error {
 	resp, err := client.Request.
 		SetPathParams(map[string]string{
 			"namespace":  namespace,
 			"deployment": deployment.Name,
 		}).SetBody(deployment).
 		Put(client.resourceServiceAddr + resourceDeploymentPath)
-	return catchErr(err, resp,
-		http.StatusAccepted,
-		http.StatusOK,
-		http.StatusNoContent)
+	return catchErr(err, resp, http.StatusOK)
 }
 
 func (client *Client) SetReplicas(namespace, deployment string, replicas int) error {
