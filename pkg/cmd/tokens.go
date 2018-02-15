@@ -3,6 +3,7 @@ package cmd
 import (
 	"git.containerum.net/ch/json-types/auth"
 	user "git.containerum.net/ch/json-types/user-manager"
+	"git.containerum.net/ch/kube-client/pkg/model"
 )
 
 const (
@@ -33,17 +34,17 @@ func (client *Client) CheckToken(token, userFingerprint string) (auth.CheckToken
 // ExtendToken -- consumes refresh JWT token and user fingerprint
 // If they're correct returns new extended access and refresh token OR void tokens AND error.
 // Old access and refresh token become inactive.
-func (client *Client) ExtendToken(refreshToken, userFingerprint string) (auth.ExtendTokenResponse, error) {
+func (client *Client) ExtendToken(refreshToken, userFingerprint string) (model.Tokens, error) {
 	resp, err := client.Request.
 		SetPathParams(map[string]string{
 			"refresh_token": refreshToken,
 		}).
-		SetResult(auth.ExtendTokenResponse{}).
+		SetResult(auth.Tokens{}).
 		SetHeaders(map[string]string{
 			user.FingerprintHeader: userFingerprint,
 		}).Put(client.APIurl + getExtendToken)
 	if err != nil {
-		return auth.ExtendTokenResponse{}, err
+		return model.Tokens{}, err
 	}
-	return *resp.Result().(*auth.ExtendTokenResponse), nil
+	return *resp.Result().(*model.Tokens), nil
 }
