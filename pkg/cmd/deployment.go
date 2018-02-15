@@ -12,7 +12,7 @@ const (
 
 	resourceDeploymentRootPath = "/namespace/{namespace}/deployment"
 	resourceDeploymentPath     = resourceDeploymentRootPath + "/{deployment}"
-	resourceImagePath          = resourceDeploymentPath + "/image"
+	resourceImagePath          = "/namespace/{namespace}/deployment/{deployment}/image"
 	resourceReplicasPath       = "/namespace/{namespace}/deployment/{deployment}/replicas"
 )
 
