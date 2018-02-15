@@ -1,8 +1,9 @@
 package cmd
 
 import (
+	"net/http"
+
 	"git.containerum.net/ch/json-types/auth"
-	user "git.containerum.net/ch/json-types/user-manager"
 	"git.containerum.net/ch/kube-client/pkg/model"
 )
 
@@ -15,20 +16,17 @@ const (
 // CheckToken -- consumes JWT token, user fingerprint
 // If they're correct returns user access data:
 // list of namespaces and list of volumes OR uninitialized structure AND error
-func (client *Client) CheckToken(token, userFingerprint string) (auth.CheckTokenResponse, error) {
+func (client *Client) CheckToken(token, userFingerprint string) (model.Tokens, error) {
 	resp, err := client.Request.
 		SetPathParams(map[string]string{
 			"access_token": token,
 		}).
 		SetResult(auth.CheckTokenResponse{}).
-		SetHeaders(map[string]string{
-			user.FingerprintHeader: userFingerprint,
-			user.UserAgentHeader:   userAgent,
-		}).Get(client.APIurl + getCheckToken)
+		Get(client.APIurl + getCheckToken)
 	if err != nil {
-		return auth.CheckTokenResponse{}, err
+		return model.Tokens{}, err
 	}
-	return *resp.Result().(*auth.CheckTokenResponse), nil
+	return *resp.Result().(*model.Tokens), nil
 }
 
 // ExtendToken -- consumes refresh JWT token and user fingerprint
@@ -39,11 +37,9 @@ func (client *Client) ExtendToken(refreshToken, userFingerprint string) (model.T
 		SetPathParams(map[string]string{
 			"refresh_token": refreshToken,
 		}).
-		SetResult(auth.Tokens{}).
-		SetHeaders(map[string]string{
-			user.FingerprintHeader: userFingerprint,
-		}).Put(client.APIurl + getExtendToken)
-	if err != nil {
+		SetResult(model.Tokens{}).
+		Put(client.APIurl + getExtendToken)
+	if err := catchErr(err, resp, http.StatusOK, http.StatusAccepted); err != nil {
 		return model.Tokens{}, err
 	}
 	return *resp.Result().(*model.Tokens), nil
