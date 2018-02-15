@@ -16,6 +16,6 @@ type PodStatus struct {
 }
 
 type UpdateImage struct {
-	Container string `json:"container" binding:"required"`
+	Container string `json:"container_name" binding:"required"`
 	Image     string `json:"image" binding:"required"`
 }
