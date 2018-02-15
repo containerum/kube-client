@@ -30,7 +30,7 @@ func TestTokenMethods(test *testing.T) {
 	if err != nil {
 		test.Fatalf("error while checking token: %v", err)
 	}
-	_, err := client.ExtendToken(tokens.RefreshToken)
+	_, err = client.ExtendToken(tokens.RefreshToken)
 	if err != nil {
 		test.Fatalf("error while refreshing token: %v", err)
 	}
