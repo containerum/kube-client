@@ -47,8 +47,16 @@ func (client *Client) ExtendToken(refreshToken string) (model.Tokens, error) {
 		}).
 		SetResult(model.Tokens{}).
 		Put(client.APIurl + getExtendToken)
-	if err := catchErr(err, resp, http.StatusOK, http.StatusAccepted); err != nil {
+	if err != nil {
 		return model.Tokens{}, err
 	}
-	return *resp.Result().(*model.Tokens), nil
+	switch resp.StatusCode() {
+	case http.StatusOK:
+		return *resp.Result().(*model.Tokens), nil
+	default:
+		if resp.Error() != nil {
+			return model.Tokens{}, fmt.Errorf("%v", resp.Error())
+		}
+		return model.Tokens{}, fmt.Errorf("%s", resp.Status())
+	}
 }
