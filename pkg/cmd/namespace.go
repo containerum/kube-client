@@ -51,7 +51,7 @@ func (client *Client) ResourceGetNamespace(namespace string, userID *string) (mo
 		SetPathParams(map[string]string{
 			"namespace": namespace,
 		}).SetResult(model.ResourceNamespace{}).
-		SetResult(model.ResourceError{})
+		SetError(model.ResourceError{})
 	if userID != nil {
 		req.SetQueryParam("user-id", *userID)
 	}
