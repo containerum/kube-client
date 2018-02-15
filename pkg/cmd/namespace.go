@@ -17,7 +17,7 @@ const (
 	getNamespace                = "/namespaces/{namespace}"
 	getNamespaceList            = "/namespaces"
 	resourceNamespacePath       = "/namespace/{namespace}"
-	serviceNamespacesPath       = "/namespace"
+	resourceNamespacesPath      = "/namespace"
 	resourceNamespaceNamePath   = resourceNamespacePath + "/name"
 	resourceNamespaceAccessPath = resourceNamespacePath + "/access"
 )
@@ -76,7 +76,7 @@ func (client *Client) ResourceGetNamespaceList(page, perPage uint64, userID stri
 	if userID != "" {
 		req.SetQueryParam("user-id", userID)
 	}
-	resp, err := req.Get(client.resourceServiceAddr + serviceNamespacesPath)
+	resp, err := req.Get(client.resourceServiceAddr + resourceNamespacesPath)
 	if err != nil {
 		return nil, err
 	}
