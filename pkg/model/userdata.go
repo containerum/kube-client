@@ -36,3 +36,9 @@ type CheckTokenResponse struct {
 		Volume    []Resource `json:"volume"`
 	} `json:"access"`
 }
+
+type Login struct {
+	Username  string  `json:"username"`
+	Password  string  `json:"password"`
+	Recaptcha *string `json:"recaptcha,omitempty"`
+}
