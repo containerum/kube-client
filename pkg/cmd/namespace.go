@@ -85,8 +85,8 @@ func (client *Client) RenameNamespace(namespace, newName string) error {
 	resp, err := client.Request.
 		SetPathParams(map[string]string{
 			"namespace": serviceNamespacePath,
-		}).SetFormData(map[string]string{
-		"label": newName,
+		}).SetBody(model.UpdateNamespaceName{
+		Label: newName,
 	}).Put(client.resourceServiceAddr + serviceNamespacePath)
 	if err != nil {
 		return err
