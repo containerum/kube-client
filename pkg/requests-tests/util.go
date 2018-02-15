@@ -71,8 +71,10 @@ func newFakeDeployment(test *testing.T, file string) model.Deployment {
 	return deployment
 }
 
-func newFakeResourceDeployment(test *testing.T) model.Deployment {
-	return newFakeDeployment(test, "test_data/deployment.json")
+func newFakeResourceDeployment(test *testing.T) model.ResourceDeployment {
+	var deployment model.ResourceDeployment
+	loadTestJSONdata(test, "test_data/deployment.json", &deployment)
+	return deployment
 }
 
 func newFakeKubeAPIdeployment(test *testing.T) model.Deployment {
@@ -114,4 +116,10 @@ func newRandomName(size int64) string {
 	rnd := rand.New(rand.NewSource(time.Now().UnixNano()))
 	io.CopyN(encoder, rnd, (3*size)/4)
 	return buf.String()
+}
+
+func newResourceUpdateDeployment(test *testing.T) model.ResourceDeployment {
+	var deployment model.ResourceDeployment
+	loadTestJSONdata(test, "test_data/update_deployment.json", &deployment)
+	return deployment
 }
