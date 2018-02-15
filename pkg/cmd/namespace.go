@@ -57,7 +57,7 @@ func (client *Client) ResourceGetNamespace(namespace string, userID *string) (mo
 	}
 	resp, err := req.Get(client.resourceServiceAddr + serviceNamespacePath)
 	if err := catchErr(err, resp, http.StatusOK); err != nil {
-		return model.ResourceNamespace{}, nil
+		return model.ResourceNamespace{}, err
 	}
 	return *resp.Result().(*model.ResourceNamespace), nil
 }
