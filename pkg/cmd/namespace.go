@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"fmt"
+	"net/http"
 	"strconv"
 
 	"git.containerum.net/ch/kube-client/pkg/model"
@@ -12,10 +14,12 @@ type ListOptions struct {
 }
 
 const (
-	getNamespace          = "/namespaces/{namespace}"
-	getNamespaceList      = "/namespaces"
-	serviceNamespacePath  = "/namespace/{namespace}"
-	serviceNamespacesPath = "/namespace"
+	getNamespace                = "/namespaces/{namespace}"
+	getNamespaceList            = "/namespaces"
+	resourceNamespacePath       = "/namespace/{namespace}"
+	resourceNamespacesPath      = "/namespace"
+	resourceNamespaceNamePath   = resourceNamespacePath + "/name"
+	resourceNamespaceAccessPath = resourceNamespacePath + "/access"
 )
 
 //GetNamespaceList return namespace list. Can use query filters: owner
@@ -53,7 +57,7 @@ func (client *Client) ResourceGetNamespace(namespace, userID string) (model.Reso
 	if userID != "" {
 		req.SetQueryParam("user-id", userID)
 	}
-	resp, err := req.Get(client.resourceServiceAddr + serviceNamespacePath)
+	resp, err := req.Get(client.resourceServiceAddr + resourceNamespacePath)
 	if err != nil {
 		return model.ResourceNamespace{}, nil
 	}
@@ -72,9 +76,77 @@ func (client *Client) ResourceGetNamespaceList(page, perPage uint64, userID stri
 	if userID != "" {
 		req.SetQueryParam("user-id", userID)
 	}
-	resp, err := req.Get(client.resourceServiceAddr + serviceNamespacesPath)
+	resp, err := req.Get(client.resourceServiceAddr + resourceNamespacesPath)
 	if err != nil {
 		return nil, err
 	}
 	return *resp.Result().(*[]model.ResourceNamespace), nil
+}
+
+// RenameNamespace -- renames user namespace
+// Consumes namespace name and new name.
+func (client *Client) RenameNamespace(namespace, newName string) error {
+	resp, err := client.Request.
+		SetPathParams(map[string]string{
+			"namespace": resourceNamespacePath,
+		}).SetBody(model.ResourceUpdateName{
+		Label: newName,
+	}).Put(client.resourceServiceAddr + resourceNamespacePath)
+	if err != nil {
+		return err
+	}
+	switch resp.StatusCode() {
+	case http.StatusOK, http.StatusAccepted:
+		return nil
+	default:
+		if resp.Error() != nil {
+			return fmt.Errorf("%v", resp.Error())
+		}
+		return fmt.Errorf("%v", resp.Status())
+	}
+}
+
+// SetNamespaceAccess -- sets/changes access to namespace for provided user
+func (client *Client) SetNamespaceAccess(namespace, username, access string) error {
+	resp, err := client.Request.
+		SetPathParams(map[string]string{
+			"namespace": namespace,
+		}).SetBody(model.ResourceUpdateUserAccess{
+		Username: username,
+		Access:   access,
+	}).Post(client.resourceServiceAddr + resourceNamespaceNamePath)
+	if err != nil {
+		return err
+	}
+	switch resp.StatusCode() {
+	case http.StatusOK, http.StatusAccepted:
+		return nil
+	default:
+		if resp.Error() != nil {
+			return fmt.Errorf("%v", resp.Error())
+		}
+		return fmt.Errorf("%v", resp.Status())
+	}
+}
+
+// DeleteNamespaceAccess -- deletes user access to namespace
+func (client *Client) DeleteNamespaceAccess(namespace, username string) error {
+	resp, err := client.Request.
+		SetPathParams(map[string]string{
+			"namespace": namespace,
+		}).SetBody(model.ResourceUpdateUserAccess{
+		Username: username,
+	}).Delete(client.resourceServiceAddr + resourceNamespaceNamePath)
+	if err != nil {
+		return err
+	}
+	switch resp.StatusCode() {
+	case http.StatusOK, http.StatusAccepted:
+		return nil
+	default:
+		if resp.Error() != nil {
+			return fmt.Errorf("%v", resp.Error())
+		}
+		return fmt.Errorf("%v", resp.Status())
+	}
 }
