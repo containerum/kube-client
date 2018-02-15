@@ -20,10 +20,10 @@ type Path struct {
 }
 
 type ResourceIngress struct {
-	Domain    string             `json:"domain,omitempty"`
-	Type      string             `json:"type, omitempty"`
+	Domain    string             `json:"domain"`
+	Type      string             `json:"type"`
 	CreatedAt *int64             `json:"created_at,omitempty"`
-	Service   string             `json:"service,omitempty"`
+	Service   string             `json:"service"`
 	TLS       *ResourceTLSsecret `json:"tls, omitempty"`
 }
 
