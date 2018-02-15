@@ -24,11 +24,11 @@ type ResourceCreateVolume struct {
 	Label    string `json:"label"`
 }
 
-type ResourceUpdateVolumeName struct {
+type ResourceUpdateName struct {
 	Label string `json:"label"`
 }
 
-type ResourceUserVolumeAccess struct {
+type ResourceUpdateUserAccess struct {
 	Username string `json:"username"`
 	Access   string `json:"access, omitempty"`
 }
