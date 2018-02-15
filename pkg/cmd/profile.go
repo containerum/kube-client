@@ -9,6 +9,7 @@ import (
 const (
 	userInfoPath           = "/user/info"
 	userPasswordChangePath = "/password/change"
+	userLoginPath          = "/login/basic"
 )
 
 // GetProfileInfo -- returns user info
@@ -33,4 +34,20 @@ func (client *Client) ChangePassword(currentPassword, newPassword string) (model
 		return model.Tokens{}, err
 	}
 	return *resp.Error().(*model.Tokens), nil
+}
+
+// Login -- sign in with username and password
+func (client *Client) Login(username, password string) (model.Tokens, error) {
+	resp, err := client.Request.
+		SetBody(model.Login{
+			Username: username,
+			Password: password,
+		}).
+		SetResult(model.Tokens{}).
+		SetError(model.ResourceError{}).
+		Post(client.UserManagerURL + userLoginPath)
+	if err := catchErr(err, resp, http.StatusOK, http.StatusAccepted); err != nil {
+		return model.Tokens{}, err
+	}
+	return *resp.Result().(*model.Tokens), nil
 }
