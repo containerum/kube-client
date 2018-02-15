@@ -10,6 +10,7 @@ import (
 
 const (
 	resourceIngressRootPath = "/namespace/{namespace}/ingress"
+	resourceIngressPath     = resourceIngressRootPath + "/{domain}"
 )
 
 // AddIngress -- adds ingress to provided namespace
@@ -65,5 +66,27 @@ func (client *Client) GetIngressList(namespace string, userID *string, page, per
 			return nil, fmt.Errorf("%v", resp.Error())
 		}
 		return nil, fmt.Errorf("%s", resp.Status())
+	}
+}
+
+// UpdateIngress -- updates ingress on provided domain with new one
+func (client *Client) UpdateIngress(namespace, domain string, ingress model.ResourceIngress) error {
+	resp, err := client.Request.
+		SetPathParams(map[string]string{
+			"namespace": namespace,
+			"domain":    domain,
+		}).SetBody(ingress).
+		Put(client.resourceServiceAddr + resourceIngressPath)
+	if err != nil {
+		return err
+	}
+	switch resp.StatusCode() {
+	case http.StatusOK, http.StatusAccepted:
+		return nil
+	default:
+		if resp.Error() != nil {
+			return fmt.Errorf("%v", resp.Error())
+		}
+		return fmt.Errorf("%s", resp.Status())
 	}
 }
