@@ -12,9 +12,8 @@ import (
 //Client - rest client
 type Client struct {
 	*resty.Request
-	serverURL           string
-	resourceServiceAddr string
-	User                User
+	ClientConfig
+	User User
 }
 
 //User -
@@ -26,9 +25,10 @@ type User struct {
 // If APIurl or ResourceAddr is void,
 // trys to get them from envvars
 type ClientConfig struct {
-	User         User
-	APIurl       string
-	ResourceAddr string
+	User           User
+	APIurl         string
+	ResourceAddr   string
+	UserManagerURL string
 }
 
 //CreateCmdClient -
@@ -49,11 +49,13 @@ func CreateCmdClient(config ClientConfig) (*Client, error) {
 		// TODO: addr validation
 		config.ResourceAddr = os.Getenv("RESOURCE_ADDR")
 	}
+	if config.UserManagerURL == "" {
+		config.UserManagerURL = os.Getenv("USER_MANAGER_URL")
+	}
 	client := &Client{
-		Request:             resty.R(),
-		serverURL:           config.APIurl,
-		resourceServiceAddr: config.ResourceAddr,
-		User:                config.User,
+		Request:      resty.R(),
+		ClientConfig: config,
+		User:         config.User,
 	}
 	client.SetHeaders(map[string]string{
 		"X-User-Role": client.User.Role,
