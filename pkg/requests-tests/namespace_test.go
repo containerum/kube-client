@@ -21,7 +21,7 @@ func TestNamespace(test *testing.T) {
 	})
 	Convey("Test resource service methods", test, func() {
 		Convey("get namespace", func() {
-			gainedNamespace, err := client.ResourceGetNamespace(fakeNamespaces[0].Label, "")
+			gainedNamespace, err := client.ResourceGetNamespace(fakeNamespaces[0].Label, nil)
 			So(err, ShouldBeNil)
 			So(gainedNamespace, ShouldResemble, fakeNamespaces[0])
 		})
