@@ -81,6 +81,8 @@ func (client *Client) ResourceGetNamespaceList(page, perPage uint64, userID stri
 	return *resp.Result().(*[]model.ResourceNamespace), nil
 }
 
+// RenameNamespace -- renames user namespace
+// Consumes namespace name and new name.
 func (client *Client) RenameNamespace(namespace, newName string) error {
 	resp, err := client.Request.
 		SetPathParams(map[string]string{
