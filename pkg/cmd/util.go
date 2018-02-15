@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"errors"
+	"fmt"
 
 	"git.containerum.net/ch/kube-client/pkg/model"
 	"github.com/go-resty/resty"
@@ -23,17 +23,16 @@ func firstNonNilErr(err error, errs ...error) error {
 	return nil
 }
 
-func catchErr(err error, resp *resty.Response, okCodes ...int) error {
-	if err != nil {
-		return err
-	}
+func catchErr(resp *resty.Response, okCodes ...int) error {
 	for _, code := range okCodes {
 		if resp.StatusCode() == code {
 			return nil
 		}
 	}
 	if resp.Error() != nil {
-		return resp.Error().(*model.ResourceError)
+		err := resp.Error().(*model.ResourceError)
+		err.Status = resp.Status()
+		return err
 	}
-	return errors.New(resp.Status())
+	return fmt.Errorf(resp.Status())
 }
