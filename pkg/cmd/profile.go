@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"fmt"
 	"net/http"
 
 	"git.containerum.net/ch/kube-client/pkg/model"
@@ -37,17 +38,22 @@ func (client *Client) ChangePassword(currentPassword, newPassword string) (model
 }
 
 // Login -- sign in with username and password
-func (client *Client) Login(username, password string) (model.Tokens, error) {
+func (client *Client) Login(login model.Login) (model.Tokens, error) {
 	resp, err := client.Request.
-		SetBody(model.Login{
-			Username: username,
-			Password: password,
-		}).
+		SetBody(login).
 		SetResult(model.Tokens{}).
-		SetError(model.ResourceError{}).
 		Post(client.UserManagerURL + userLoginPath)
-	if err := catchErr(err, resp, http.StatusOK, http.StatusAccepted); err != nil {
+	if err != nil {
 		return model.Tokens{}, err
 	}
-	return *resp.Result().(*model.Tokens), nil
+	switch resp.StatusCode() {
+	case http.StatusOK, http.StatusAccepted:
+		return *resp.Result().(*model.Tokens), nil
+	default:
+		if resp.Error() != nil {
+			return model.Tokens{}, fmt.Errorf("%v", resp.Error())
+		}
+		return model.Tokens{}, fmt.Errorf("%s", string(resp.Body()))
+	}
+
 }
