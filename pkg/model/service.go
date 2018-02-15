@@ -17,10 +17,11 @@ type Service struct {
 	Name      string      `json:"name" binding:"required"`
 	Owner     *string     `json:"owner,omitempty" binding:"required"`
 	CreatedAt *int64      `json:"created_at,omitempty"`
-	Deploy    string      `json:"deploy,omitempty" binding:"required"`
+	Deploy    string      `json:"deploy,omitempty"`
 	IP        *[]string   `json:"ip,omitempty"`
-	Type      ServiceType `json:"type" binding:"required"`
+	Type      ServiceType `json:"type"`
 	Ports     []Port      `json:"ports" binding:"required"`
+	Hidden    bool        `json:"hidden,omitempty"`
 }
 
 type Port struct {

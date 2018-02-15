@@ -7,7 +7,6 @@ type Namespace struct {
 	Name      string    `json:"name" binding:"required"`
 	Owner     string    `json:"owner,omitempty"`
 	Resources Resources `json:"resources" binding:"required"`
-	GlusterIP *[]string `json:"gluster_ip,omitempty"`
 }
 
 type Resources struct {
