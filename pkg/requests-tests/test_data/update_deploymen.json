@@ -1,6 +1,6 @@
 {
     "containers": [{
-        "image": "nginx",
+        "image": "nginx2",
         "name": "first",
         "resources": {
             "requests": {
@@ -25,6 +25,7 @@
     "labels": {
         "name": "value"
     },
-    "name": "nginx",
+    "name": "fermi",
+    "owner": "20b616d8-1ea7-4842-b8ec-c6e8226fda5b",
     "replicas": 1
 }
