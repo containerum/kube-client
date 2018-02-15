@@ -7,7 +7,8 @@ import (
 )
 
 const (
-	userInfoPath = "/user/info"
+	userInfoPath           = "/user/info"
+	userPasswordChangePath = "/password/change"
 )
 
 // GetProfileInfo -- returns user info
@@ -20,4 +21,15 @@ func (client *Client) GetProfileInfo() (model.User, error) {
 		return model.User{}, err
 	}
 	return *resp.Result().(*model.User), nil
+}
+
+func (client *Client) ChangePassword(currentPassword, newPassword string) (model.Tokens, error) {
+	resp, err := client.Request.
+		SetResult(model.Tokens{}).
+		SetError(model.ResourceError{}).
+		Get(client.UserManagerURL + userPasswordChangePath)
+	if err := catchErr(err, resp, http.StatusAccepted, http.StatusOK); err != nil {
+		return model.Tokens{}, err
+	}
+	return *resp.Error().(*model.Tokens), nil
 }
