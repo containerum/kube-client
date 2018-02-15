@@ -14,10 +14,12 @@ type ListOptions struct {
 }
 
 const (
-	getNamespace          = "/namespaces/{namespace}"
-	getNamespaceList      = "/namespaces"
-	serviceNamespacePath  = "/namespace/{namespace}"
-	serviceNamespacesPath = "/namespace"
+	getNamespace                = "/namespaces/{namespace}"
+	getNamespaceList            = "/namespaces"
+	serviceNamespacePath        = "/namespace/{namespace}"
+	serviceNamespacesPath       = "/namespace"
+	resourceNamespaceNamePath   = serviceNamespacePath + "/name"
+	resourceNamespaceAccessPath = serviceNamespacePath + "/access"
 )
 
 //GetNamespaceList return namespace list. Can use query filters: owner
@@ -90,6 +92,29 @@ func (client *Client) RenameNamespace(namespace, newName string) error {
 		}).SetBody(model.UpdateNamespaceName{
 		Label: newName,
 	}).Put(client.resourceServiceAddr + serviceNamespacePath)
+	if err != nil {
+		return err
+	}
+	switch resp.StatusCode() {
+	case http.StatusOK, http.StatusAccepted:
+		return nil
+	default:
+		if resp.Error() != nil {
+			return fmt.Errorf("%v", resp.Error())
+		}
+		return fmt.Errorf("%v", resp.Status())
+	}
+}
+
+// SetNamespaceAccess -- sets/changes access to namespace for provided user
+func (client *Client) SetNamespaceAccess(namespace, username, access string) error {
+	resp, err := client.Request.
+		SetPathParams(map[string]string{
+			"namespace": namespace,
+		}).SetBody(model.ResourceUserVolumeAccess{
+		Username: username,
+		Access:   access,
+	}).Post(client.resourceServiceAddr + resourceNamespaceNamePath)
 	if err != nil {
 		return err
 	}
