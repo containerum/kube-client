@@ -89,7 +89,7 @@ func (client *Client) RenameNamespace(namespace, newName string) error {
 	resp, err := client.Request.
 		SetPathParams(map[string]string{
 			"namespace": resourceNamespacePath,
-		}).SetBody(model.UpdateNamespaceName{
+		}).SetBody(model.ResourceUpdateName{
 		Label: newName,
 	}).Put(client.resourceServiceAddr + resourceNamespacePath)
 	if err != nil {
@@ -111,7 +111,7 @@ func (client *Client) SetNamespaceAccess(namespace, username, access string) err
 	resp, err := client.Request.
 		SetPathParams(map[string]string{
 			"namespace": namespace,
-		}).SetBody(model.ResourceUserVolumeAccess{
+		}).SetBody(model.ResourceUpdateUserAccess{
 		Username: username,
 		Access:   access,
 	}).Post(client.resourceServiceAddr + resourceNamespaceNamePath)
@@ -134,7 +134,7 @@ func (client *Client) DeleteNamespaceAccess(namespace, username string) error {
 	resp, err := client.Request.
 		SetPathParams(map[string]string{
 			"namespace": namespace,
-		}).SetBody(model.ResourceUserVolumeAccess{
+		}).SetBody(model.ResourceUpdateUserAccess{
 		Username: username,
 	}).Delete(client.resourceServiceAddr + resourceNamespaceNamePath)
 	if err != nil {

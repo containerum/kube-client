@@ -63,13 +63,13 @@ func (client *Client) RenameVolume(volumeName, newName string) error {
 		SetPathParams(map[string]string{
 			"volume": volumeName,
 		}).
-		SetBody(model.ResourceUpdateVolumeName{Label: newName}).
+		SetBody(model.ResourceUpdateName{Label: newName}).
 		Put(client.resourceServiceAddr + resourceVolumeNamePath)
 	return err
 }
 
 // SetAccess -- sets User Volume access
-func (client *Client) SetAccess(volumeName string, accessData model.ResourceUserVolumeAccess) error {
+func (client *Client) SetAccess(volumeName string, accessData model.ResourceUpdateUserAccess) error {
 	_, err := client.Request.
 		SetPathParams(map[string]string{
 			"volume": volumeName,
@@ -85,7 +85,7 @@ func (client *Client) DeleteAccess(volumeName, username string) error {
 		SetPathParams(map[string]string{
 			"volume": volumeName,
 		}).
-		SetBody(model.ResourceUserVolumeAccess{
+		SetBody(model.ResourceUpdateUserAccess{
 			Username: username,
 		}).
 		Delete(client.resourceServiceAddr + resourceVolumeAccessPath)
