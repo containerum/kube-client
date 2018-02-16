@@ -3,6 +3,8 @@ package cmd
 import (
 	"fmt"
 	"net/http"
+
+	"git.containerum.net/ch/kube-client/pkg/model"
 )
 
 const (
@@ -24,5 +26,24 @@ func (client *Client) DeletePod(namespace, pod string) error {
 		return nil
 	default:
 		return fmt.Errorf("%s", string(resp.Body()))
+	}
+}
+
+// GetPod -- gets a particular pod by name.
+func (client *Client) GetPod(namespace, pod string) (model.Pod, error) {
+	resp, err := client.Request.
+		SetPathParams(map[string]string{
+			"namespace": namespace,
+			"pod":       pod,
+		}).
+		Get(client.APIurl + kubeAPIpodPath)
+	if err != nil {
+		return model.Pod{}, err
+	}
+	switch resp.StatusCode() {
+	case http.StatusOK, http.StatusAccepted:
+		return *resp.Result().(*model.Pod), nil
+	default:
+		return model.Pod{}, fmt.Errorf("%s", string(resp.Body()))
 	}
 }
