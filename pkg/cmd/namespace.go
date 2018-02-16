@@ -93,7 +93,7 @@ func (client *Client) RenameNamespace(namespace, newName string) error {
 			"namespace": resourceNamespacePath,
 		}).SetBody(model.ResourceUpdateName{
 		Label: newName,
-	}).Put(client.ResourceAddr + resourceNamespacePath)
+	}).Put(client.ResourceAddr + resourceNamespaceNamePath)
 	if err != nil {
 		return err
 	}
@@ -104,7 +104,7 @@ func (client *Client) RenameNamespace(namespace, newName string) error {
 		if resp.Error() != nil {
 			return fmt.Errorf("%v", resp.Error())
 		}
-		return fmt.Errorf("%v", resp.Status())
+		return fmt.Errorf("%s", resp.Status())
 	}
 }
 
