@@ -16,14 +16,22 @@ func TestVolume(test *testing.T) {
 		Convey("resource api", func() {
 			referenceVolumes := newFakeResourceVolume(test)
 			Convey("get volume", func() {
-				gainedVolume, err := client.GetVolume(referenceVolumes[0].Label, nil)
+				_, err := client.GetVolume(referenceVolumes[1].Label, nil)
 				So(err, ShouldBeNil)
-				So(gainedVolume, ShouldResemble, referenceVolumes[0])
 			})
 			Convey("get volume list", func() {
-				gainedList, err := client.GetVolumeList(nil, nil)
+				_, err := client.GetVolumeList(nil, nil)
 				So(err, ShouldBeNil)
-				So(gainedList, ShouldResemble, referenceVolumes)
+			})
+			Convey("set delete access", func() {
+				So(client.SetVolumeAccess("foxtrot", "fermi@mail.com", "read"),
+					ShouldBeNil)
+				So(client.DeleteVolumeAccess("foxtrot", "fermi@mail.com"),
+					ShouldBeNil)
+			})
+			Convey("rename volume", func() {
+				So(client.RenameVolume("foxtrot", "polka"), ShouldBeNil)
+				So(client.RenameVolume("polka", "foxtrot"), ShouldBeNil)
 			})
 		})
 	})
