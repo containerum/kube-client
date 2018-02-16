@@ -116,7 +116,7 @@ func (client *Client) SetNamespaceAccess(namespace, username, access string) err
 		}).SetBody(model.ResourceUpdateUserAccess{
 		Username: username,
 		Access:   access,
-	}).Post(client.ResourceAddr + resourceNamespaceNamePath)
+	}).Put(client.ResourceAddr + resourceNamespaceAccessPath)
 	if err != nil {
 		return err
 	}
@@ -147,7 +147,7 @@ func (client *Client) DeleteNamespaceAccess(namespace, username string) error {
 		return nil
 	default:
 		if resp.Error() != nil {
-			return fmt.Errorf("%v", resp.Error())
+			return fmt.Errorf("%s", string(resp.Body()))
 		}
 		return fmt.Errorf("%v", resp.Status())
 	}
