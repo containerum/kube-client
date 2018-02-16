@@ -90,7 +90,7 @@ func (client *Client) ResourceGetNamespaceList(page, perPage uint64, userID stri
 func (client *Client) RenameNamespace(namespace, newName string) error {
 	resp, err := client.Request.
 		SetPathParams(map[string]string{
-			"namespace": resourceNamespacePath,
+			"namespace": namespace,
 		}).SetBody(model.ResourceUpdateName{
 		Label: newName,
 	}).Put(client.ResourceAddr + resourceNamespaceNamePath)
@@ -102,9 +102,9 @@ func (client *Client) RenameNamespace(namespace, newName string) error {
 		return nil
 	default:
 		if resp.Error() != nil {
-			return fmt.Errorf("%v", resp.Error())
+			return fmt.Errorf("%s", string(resp.Body()))
 		}
-		return fmt.Errorf("%s", resp.Status())
+		return fmt.Errorf("error: %s", resp.Status())
 	}
 }
 
@@ -125,7 +125,7 @@ func (client *Client) SetNamespaceAccess(namespace, username, access string) err
 		return nil
 	default:
 		if resp.Error() != nil {
-			return fmt.Errorf("%v", resp.Error())
+			return fmt.Errorf("%s", string(resp.Body()))
 		}
 		return fmt.Errorf("%v", resp.Status())
 	}
