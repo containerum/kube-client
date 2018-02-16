@@ -2,11 +2,11 @@ package model
 
 type Container struct {
 	Name    string    `json:"name" binding:"required"`
-	Env     *[]Env    `json:"env,omitempty" binding:"dive"`
+	Env     *[]Env    `json:"env,omitempty" binding:"omitempty,dive"`
 	Image   string    `json:"image" binding:"required"`
-	Volume  *[]Volume `json:"volume,omitempty" binding:"dive"`
+	Volume  *[]Volume `json:"volume,omitempty" binding:"omitempty,dive"`
 	Limits  Limits    `json:"limits" binding:"required"`
-	Ports   *[]Port   `json:"ports,omitempty" binding:"dive"`
+	Ports   *[]Port   `json:"ports,omitempty" binding:"omitempty,dive"`
 	Command *[]string `json:"command,omitempty"`
 }
 
