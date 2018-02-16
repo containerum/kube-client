@@ -15,7 +15,6 @@ const (
 
 type Service struct {
 	Name      string      `json:"name" binding:"required"`
-	Owner     *string     `json:"owner,omitempty" binding:"required,uuid"`
 	CreatedAt *int64      `json:"created_at,omitempty"`
 	Deploy    string      `json:"deploy,omitempty"`
 	IP        *[]string   `json:"ip,omitempty"`
