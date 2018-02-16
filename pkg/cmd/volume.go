@@ -15,12 +15,12 @@ const (
 
 // DeleteVolume -- deletes Volume with provided volume name
 func (client *Client) DeleteVolume(volumeName string) error {
-	_, err := client.Request.
+	resp, err := client.Request.
 		SetPathParams(map[string]string{
 			"volume": volumeName,
-		}).
+		}).SetError(model.ResourceError{}).
 		Delete(client.ResourceAddr + resourceVolumePath)
-	return err
+	return catchErr(err, resp, http.StatusAccepted, http.StatusOK)
 }
 
 // GetVolume -- return User Volume by name,
@@ -36,11 +36,8 @@ func (client *Client) GetVolume(volumeName string, userID *string) (model.Resour
 		req.SetQueryParam("user-id", *userID)
 	}
 	resp, err := req.Get(client.ResourceAddr + resourceVolumePath)
-	if err != nil {
+	if err := catchErr(err, resp, http.StatusOK); err != nil {
 		return model.ResourceVolume{}, err
-	}
-	if resp.StatusCode() != http.StatusOK {
-		return model.ResourceVolume{}, resp.Error().(*model.ResourceError)
 	}
 	return *resp.Result().(*model.ResourceVolume), nil
 }
