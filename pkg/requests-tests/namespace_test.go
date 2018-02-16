@@ -29,5 +29,12 @@ func TestNamespace(test *testing.T) {
 			_, err := client.ResourceGetNamespaceList(0, 16, "")
 			So(err, ShouldBeNil)
 		})
+		Convey("rename namespace", func() {
+			err := client.RenameNamespace(fakeNamespaces[0].Label, "electron")
+			So(err, ShouldBeNil)
+			err = client.RenameNamespace("electron", fakeNamespaces[0].Label)
+			So(err, ShouldBeNil)
+		})
 	})
+
 }
