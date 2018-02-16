@@ -2,7 +2,6 @@ package model
 
 type Deployment struct {
 	Name            string             `json:"name" binding:"required"`
-	Owner           *string            `json:"owner,omitempty" binding:"required,uuid"`
 	Replicas        int                `json:"replicas" binding:"required"`
 	Containers      []Container        `json:"containers" binding:"required,dive"`
 	ImagePullSecret *map[string]string `json:"image_pull_secret,omitempty"`
