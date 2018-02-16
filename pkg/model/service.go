@@ -20,7 +20,6 @@ type Service struct {
 	IP        *[]string   `json:"ip,omitempty"`
 	Type      ServiceType `json:"type"`
 	Ports     []Port      `json:"ports" binding:"required,dive"`
-	Hidden    bool        `json:"hidden,omitempty"`
 }
 
 type Port struct {
