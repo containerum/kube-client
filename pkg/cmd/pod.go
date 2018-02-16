@@ -8,7 +8,8 @@ import (
 )
 
 const (
-	kubeAPIpodPath = "/namespaces/{namespace}/pods/{pod}"
+	kubeAPIpodRootPath = "/namespaces/{namespace}/pods"
+	kubeAPIpodPath     = "/namespaces/{namespace}/pods/{pod}"
 )
 
 // DeletePod -- deletes pod in provided namespace
@@ -45,5 +46,22 @@ func (client *Client) GetPod(namespace, pod string) (model.Pod, error) {
 		return *resp.Result().(*model.Pod), nil
 	default:
 		return model.Pod{}, fmt.Errorf("%s", string(resp.Body()))
+	}
+}
+
+func (client *Client) GetPodList(namespace string) ([]model.Pod, error) {
+	resp, err := client.Request.
+		SetPathParams(map[string]string{
+			"namespace": namespace,
+		}).
+		Get(client.APIurl + kubeAPIpodRootPath)
+	if err != nil {
+		return nil, err
+	}
+	switch resp.StatusCode() {
+	case http.StatusOK, http.StatusAccepted:
+		return *resp.Result().(*[]model.Pod), nil
+	default:
+		return nil, fmt.Errorf("%s", string(resp.Body()))
 	}
 }
