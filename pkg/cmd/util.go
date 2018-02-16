@@ -35,7 +35,7 @@ func catchErr(err error, resp *resty.Response, okCodes ...int) error {
 	if resp.Error() != nil {
 		err, ok := resp.Error().(*model.ResourceError)
 		if !ok {
-			return fmt.Errorf("%v", resp.Error())
+			return fmt.Errorf("%s", string(resp.Body()))
 		}
 		err.Status = resp.Status()
 		return err
