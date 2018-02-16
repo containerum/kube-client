@@ -35,6 +35,14 @@ func TestNamespace(test *testing.T) {
 			err = client.RenameNamespace("electron", fakeNamespaces[0].Label)
 			So(err, ShouldBeNil)
 		})
+		Convey("set access", func() {
+			err := client.SetNamespaceAccess(fakeNamespaces[0].Label, "fermi@da.com", "read")
+			So(err, ShouldBeNil)
+		})
+		Convey("delete access", func() {
+			err := client.DeleteNamespaceAccess(fakeNamespaces[0].Label, "fermi@da.com")
+			So(err, ShouldBeNil)
+		})
 	})
 
 }
