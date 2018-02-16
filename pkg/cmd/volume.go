@@ -8,9 +8,9 @@ import (
 
 const (
 	resourceVolumeRootPath   = "/volume"
-	resourceVolumePath       = resourceVolumeRootPath + "/{volume}"
-	resourceVolumeNamePath   = resourceVolumePath + "/name"
-	resourceVolumeAccessPath = resourceVolumePath + "/access"
+	resourceVolumePath       = "/volume/{volume}"
+	resourceVolumeNamePath   = "/volume/{volume}/name"
+	resourceVolumeAccessPath = "/volume/{volume}/access"
 )
 
 // DeleteVolume -- deletes Volume with provided volume name
@@ -78,25 +78,30 @@ func (client *Client) RenameVolume(volumeName, newName string) error {
 }
 
 // SetVolumeAccess -- sets User Volume access
-func (client *Client) SetVolumeAccess(volumeName string, accessData model.ResourceUpdateUserAccess) error {
-	_, err := client.Request.
+func (client *Client) SetVolumeAccess(volumeName, username, access string) error {
+	resp, err := client.Request.
 		SetPathParams(map[string]string{
 			"volume": volumeName,
 		}).
-		SetBody(accessData).
-		Post(client.ResourceAddr + resourceVolumeAccessPath)
-	return err
+		SetBody(model.ResourceUpdateUserAccess{
+			Username: username,
+			Access:   access,
+		}).
+		SetError(model.ResourceError{}).
+		Put(client.ResourceAddr + resourceVolumeAccessPath)
+	return catchErr(err, resp, http.StatusOK, http.StatusAccepted)
 }
 
 // DeleteVolumeAccess -- deletes user Volume access
 func (client *Client) DeleteVolumeAccess(volumeName, username string) error {
-	_, err := client.Request.
+	resp, err := client.Request.
 		SetPathParams(map[string]string{
 			"volume": volumeName,
 		}).
 		SetBody(model.ResourceUpdateUserAccess{
 			Username: username,
 		}).
+		SetError(model.ResourceError{}).
 		Delete(client.ResourceAddr + resourceVolumeAccessPath)
-	return err
+	return catchErr(err, resp, http.StatusOK, http.StatusAccepted)
 }
