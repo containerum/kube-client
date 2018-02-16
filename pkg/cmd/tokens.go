@@ -22,7 +22,7 @@ func (client *Client) CheckToken(token string) (model.CheckTokenResponse, error)
 			"access_token": token,
 		}).
 		SetResult(model.CheckTokenResponse{}).
-		Get(client.APIurl + getCheckToken)
+		Get(client.AuthURL + getCheckToken)
 	if err != nil {
 		return model.CheckTokenResponse{}, err
 	}
@@ -46,7 +46,7 @@ func (client *Client) ExtendToken(refreshToken string) (model.Tokens, error) {
 			"refresh_token": refreshToken,
 		}).
 		SetResult(model.Tokens{}).
-		Put(client.APIurl + getExtendToken)
+		Put(client.AuthURL + getExtendToken)
 	if err != nil {
 		return model.Tokens{}, err
 	}
