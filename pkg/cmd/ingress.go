@@ -19,7 +19,7 @@ func (client *Client) AddIngress(namespace string, ingress model.ResourceIngress
 		SetPathParams(map[string]string{
 			"namespace": namespace,
 		}).SetBody(ingress).
-		Post(client.resourceServiceAddr + resourceIngressRootPath)
+		Post(client.ResourceAddr + resourceIngressRootPath)
 	if err != nil {
 		return err
 	}
@@ -54,7 +54,7 @@ func (client *Client) GetIngressList(namespace string, userID *string, page, per
 	if perPage != nil {
 		req.SetQueryParam("per_page", strconv.FormatUint(*perPage, 10))
 	}
-	resp, err := req.Get(client.resourceServiceAddr + resourceIngressRootPath)
+	resp, err := req.Get(client.ResourceAddr + resourceIngressRootPath)
 	if err != nil {
 		return nil, err
 	}
@@ -76,7 +76,7 @@ func (client *Client) UpdateIngress(namespace, domain string, ingress model.Reso
 			"namespace": namespace,
 			"domain":    domain,
 		}).SetBody(ingress).
-		Put(client.resourceServiceAddr + resourceIngressPath)
+		Put(client.ResourceAddr + resourceIngressPath)
 	if err != nil {
 		return err
 	}
@@ -98,7 +98,7 @@ func (client *Client) DeleteIngress(namespace, domain string) error {
 			"namespace": namespace,
 			"domain":    domain,
 		}).
-		Delete(client.resourceServiceAddr + resourceIngressPath)
+		Delete(client.ResourceAddr + resourceIngressPath)
 	if err != nil {
 		return err
 	}

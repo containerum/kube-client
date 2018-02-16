@@ -1,6 +1,10 @@
 package cmd
 
-import "git.containerum.net/ch/kube-client/pkg/model"
+import (
+	"net/http"
+
+	"git.containerum.net/ch/kube-client/pkg/model"
+)
 
 const (
 	resourceVolumeRootPath   = "/volume"
@@ -15,7 +19,7 @@ func (client *Client) DeleteVolume(volumeName string) error {
 		SetPathParams(map[string]string{
 			"volume": volumeName,
 		}).
-		Delete(client.resourceServiceAddr + resourceVolumePath)
+		Delete(client.ResourceAddr + resourceVolumePath)
 	return err
 }
 
@@ -26,13 +30,17 @@ func (client *Client) GetVolume(volumeName string, userID *string) (model.Resour
 		SetPathParams(map[string]string{
 			"volume": volumeName,
 		}).
-		SetResult(&model.ResourceVolume{})
+		SetResult(model.ResourceVolume{}).
+		SetError(model.ResourceError{})
 	if userID != nil {
 		req.SetQueryParam("user-id", *userID)
 	}
-	resp, err := req.Get(client.resourceServiceAddr + resourceVolumePath)
+	resp, err := req.Get(client.ResourceAddr + resourceVolumePath)
 	if err != nil {
 		return model.ResourceVolume{}, err
+	}
+	if resp.StatusCode() != http.StatusOK {
+		return model.ResourceVolume{}, resp.Error().(*model.ResourceError)
 	}
 	return *resp.Result().(*model.ResourceVolume), nil
 }
@@ -43,16 +51,20 @@ func (client *Client) GetVolume(volumeName string, userID *string) (model.Resour
 // Should have filters: not deleted, limited, not limited, owner, not owner.
 func (client *Client) GetVolumeList(userID, filter *string) ([]model.ResourceVolume, error) {
 	req := client.Request.
-		SetResult([]model.ResourceVolume{})
+		SetResult([]model.ResourceVolume{}).
+		SetError(model.ResourceError{})
 	if userID != nil {
 		req.SetQueryParam("user-id", *userID)
 	}
 	if filter != nil {
 		req.SetQueryParam("user-id", *filter)
 	}
-	resp, err := req.Get(client.resourceServiceAddr + resourceVolumeRootPath)
+	resp, err := req.Get(client.ResourceAddr + resourceVolumeRootPath)
 	if err != nil {
 		return nil, err
+	}
+	if resp.StatusCode() != http.StatusOK {
+		return nil, resp.Error().(*model.ResourceError)
 	}
 	return *resp.Result().(*[]model.ResourceVolume), nil
 }
@@ -64,7 +76,7 @@ func (client *Client) RenameVolume(volumeName, newName string) error {
 			"volume": volumeName,
 		}).
 		SetBody(model.ResourceUpdateName{Label: newName}).
-		Put(client.resourceServiceAddr + resourceVolumeNamePath)
+		Put(client.ResourceAddr + resourceVolumeNamePath)
 	return err
 }
 
@@ -75,7 +87,7 @@ func (client *Client) SetAccess(volumeName string, accessData model.ResourceUpda
 			"volume": volumeName,
 		}).
 		SetBody(accessData).
-		Post(client.resourceServiceAddr + resourceVolumeAccessPath)
+		Post(client.ResourceAddr + resourceVolumeAccessPath)
 	return err
 }
 
@@ -88,6 +100,6 @@ func (client *Client) DeleteAccess(volumeName, username string) error {
 		SetBody(model.ResourceUpdateUserAccess{
 			Username: username,
 		}).
-		Delete(client.resourceServiceAddr + resourceVolumeAccessPath)
+		Delete(client.ResourceAddr + resourceVolumeAccessPath)
 	return err
 }
