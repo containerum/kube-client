@@ -31,7 +31,7 @@ func (client *Client) GetVolume(volumeName string, userID *string) (model.Resour
 		SetPathParams(map[string]string{
 			"volume": volumeName,
 		}).
-		SetError(model.ResourceError{})
+		SetResult(model.ResourceVolume{})
 	if userID != nil {
 		req.SetQueryParam("user-id", *userID)
 	}
