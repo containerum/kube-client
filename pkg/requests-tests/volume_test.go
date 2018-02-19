@@ -3,6 +3,7 @@ package requests_tests
 import (
 	"testing"
 
+	"git.containerum.net/ch/kube-client/pkg/model"
 	. "github.com/smartystreets/goconvey/convey"
 )
 
@@ -14,15 +15,15 @@ func TestVolume(test *testing.T) {
 	client := newResourceClient(test)
 	Convey("Test volume methods", test, func() {
 		Convey("resource api", func() {
-			referenceVolumes := newFakeResourceVolume(test)
-			Convey("get volume", func() {
-				gainedVolume, err := client.GetVolume(referenceVolumes[0].Label, nil)
+			var volumes []model.ResourceVolume
+			Convey("get volume and list", func() {
+				var err error
+				volumes, err = client.GetVolumeList(nil, nil)
 				So(err, ShouldBeNil)
-				So(gainedVolume, ShouldResemble, referenceVolumes[0])
-			})
-			Convey("get volume list", func() {
-				_, err := client.GetVolumeList(nil, nil)
+				So(len(volumes), ShouldBeGreaterThan, 0)
+				gainedVolume, err := client.GetVolume(volumes[0].Label, nil)
 				So(err, ShouldBeNil)
+				So(gainedVolume, ShouldResemble, volumes[0])
 			})
 		})
 	})
