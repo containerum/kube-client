@@ -72,8 +72,16 @@ func newFakeDeployment(test *testing.T, file string) model.Deployment {
 }
 
 func newFakeResourceDeployment(test *testing.T) model.ResourceDeployment {
-	var deployment model.ResourceDeployment
-	loadTestJSONdata(test, "test_data/deployment.json", &deployment)
+	deployment := model.ResourceDeployment{
+		Name:     "gateway",
+		Replicas: 4,
+		Containers: []model.Container{
+			{
+				Name: "proxy", Image: "nginx",
+				Limits: model.Limits{CPU: "1", Memory: "256"},
+			},
+		},
+	}
 	return deployment
 }
 
