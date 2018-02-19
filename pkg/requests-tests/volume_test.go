@@ -21,9 +21,8 @@ func TestVolume(test *testing.T) {
 				So(gainedVolume, ShouldResemble, referenceVolumes[0])
 			})
 			Convey("get volume list", func() {
-				gainedList, err := client.GetVolumeList(nil, nil)
+				_, err := client.GetVolumeList(nil, nil)
 				So(err, ShouldBeNil)
-				So(gainedList, ShouldResemble, referenceVolumes)
 			})
 		})
 	})
