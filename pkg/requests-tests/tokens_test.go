@@ -9,6 +9,7 @@ import (
 func TestTokenMethods(test *testing.T) {
 	client := newResourceClient(test)
 	client.UserManagerURL = "http://192.168.88.200:8111"
+	client.AuthURL = "http://192.168.88.200:1111"
 	client.SetHeaders(map[string]string{
 		"X-User-Agent":  "kube-client",
 		"X-User-Client": "315d3143bab041b3656e4666355adb15",
@@ -26,8 +27,13 @@ func TestTokenMethods(test *testing.T) {
 	if err != nil {
 		test.Fatalf("error while login: %v", err)
 	}
+
 	_, err = client.CheckToken(tokens.AccessToken)
 	if err != nil {
 		test.Fatalf("error while checking token: %v", err)
+	}
+	_, err = client.ExtendToken(tokens.RefreshToken)
+	if err != nil {
+		test.Fatalf("error while refreshing token: %v", err)
 	}
 }
