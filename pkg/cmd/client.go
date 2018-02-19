@@ -29,6 +29,7 @@ type ClientConfig struct {
 	APIurl         string
 	ResourceAddr   string
 	UserManagerURL string
+	AuthURL        string
 }
 
 //CreateCmdClient -
@@ -51,6 +52,9 @@ func CreateCmdClient(config ClientConfig) (*Client, error) {
 	}
 	if config.UserManagerURL == "" {
 		config.UserManagerURL = os.Getenv("USER_MANAGER_URL")
+	}
+	if config.AuthURL == "" {
+		config.AuthURL = os.Getenv("AUTH_URL")
 	}
 	client := &Client{
 		Request:      resty.R(),
