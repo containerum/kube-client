@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"fmt"
 	"net/http"
 
 	"git.containerum.net/ch/kube-client/pkg/model"
@@ -30,8 +31,7 @@ func (client *Client) GetVolume(volumeName string, userID *string) (model.Resour
 		SetPathParams(map[string]string{
 			"volume": volumeName,
 		}).
-		SetResult(model.ResourceVolume{}).
-		SetError(model.ResourceError{})
+		SetResult(model.ResourceVolume{})
 	if userID != nil {
 		req.SetQueryParam("user-id", *userID)
 	}
@@ -40,7 +40,7 @@ func (client *Client) GetVolume(volumeName string, userID *string) (model.Resour
 		return model.ResourceVolume{}, err
 	}
 	if resp.StatusCode() != http.StatusOK {
-		return model.ResourceVolume{}, resp.Error().(*model.ResourceError)
+		return model.ResourceVolume{}, fmt.Errorf("%s", string(resp.Body()))
 	}
 	return *resp.Result().(*model.ResourceVolume), nil
 }
