@@ -2,12 +2,6 @@
 
 
 [[projects]]
-  branch = "master"
-  name = "git.containerum.net/ch/json-types"
-  packages = ["auth"]
-  revision = "e680a4ffd16c6255aee4c7ebf7da9127b6cd638c"
-
-[[projects]]
   name = "github.com/go-resty/resty"
   packages = ["."]
   revision = "00cb083b8cdc8b0fb1e1f5ebe24bbc23e0ff0cf6"
@@ -78,6 +72,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "a32b545c581c0f4098df23e9e67ee1099a1e05e868757478e408f66e230f6a6f"
+  inputs-digest = "2838b5e9c1206bce56f6d1c19e60b9e90d83a7b3c0502fe69e4f01ac985280b4"
   solver-name = "gps-cdcl"
   solver-version = 1
