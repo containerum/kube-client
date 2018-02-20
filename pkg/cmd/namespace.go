@@ -152,3 +152,13 @@ func (client *Client) DeleteNamespaceAccess(namespace, username string) error {
 		return fmt.Errorf("%v", resp.Status())
 	}
 }
+
+// DeleteNamespace -- deletes provided namespace
+func (client *Client) DeleteNamespace(namespace string) error {
+	resp, err := client.Request.
+		SetPathParams(map[string]string{
+			"namespace": namespace,
+		}).SetError(model.ResourceError{}).
+		Delete(client.ResourceAddr + getNamespace)
+	return catchErr(err, resp, http.StatusOK, http.StatusAccepted)
+}

@@ -2,7 +2,6 @@ package model
 
 type Pod struct {
 	Name            string             `json:"name" binding:"required"`
-	Owner           *string            `json:"owner,omitempty"`
 	Containers      []Container        `json:"containers" binding:"dive"`
 	ImagePullSecret *map[string]string `json:"image_pull_secret,omitempty"`
 	Status          *PodStatus         `json:"status,omitempty"`
