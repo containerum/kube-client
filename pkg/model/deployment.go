@@ -23,16 +23,14 @@ type Deployment struct {
 }
 
 type Container struct {
-	Image     string `json:"image"` //
-	Name      string `json:"name"`  // not UUID!
-	Resources struct {
-		Requests Resource `json:"requests"` //
-	} `json:"resources"` //
-	Env          []Env    `json:"env, omitempty"`       //
-	Commands     []string `json:"commands"`             //
-	Ports        []Port   `json:"ports"`                //
-	VolumeMounts []Volume `json:"volume_mounts"`        //
-	ConfigMap    []Volume `json:"config_map,omitempty"` //
+	Image        string            `json:"image"`                   //
+	Name         string            `json:"name"`                    // not UUID!
+	Limits       Resource          `json:"limits"`                  //
+	Env          []Env             `json:"env,omitempty"`           //
+	Commands     []string          `json:"commands,omitempty"`      //
+	Ports        []ContainerPort   `json:"ports,omitempty"`         //
+	VolumeMounts []ContainerVolume `json:"volume_mounts,omitempty"` //
+	ConfigMaps   []ContainerVolume `json:"config_maps,omitempty"`   //
 }
 
 type Env struct {
@@ -40,6 +38,15 @@ type Env struct {
 	Name  string `json:"name"`
 }
 
-type Port struct {
-	ContainerPort int `json:"container_port"`
+type ContainerPort struct {
+	Name     string   `json:"name"`
+	Port     int      `json:"port"`
+	Protocol Protocol `json:"protocol"`
+}
+
+type ContainerVolume struct {
+	Name      string  `json:"name"`
+	Mode      *string `json:"mode,omitempty"`
+	MountPath string  `json:"mount_path"`
+	SubPath   *string `json:"sub_path,omitempty"`
 }
