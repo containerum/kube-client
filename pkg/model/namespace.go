@@ -20,13 +20,13 @@ type UpdateNamespaceName struct {
 // provided by resource-service
 // https://ch.pages.containerum.net/api-docs/modules/resource-service/index.html#get-namespace
 type Namespace struct {
-	CreateTime    time.Time        `json:"create_time"`     //
-	TariffID      string           `json:"tariff_id"`       //
-	Label         string           `json:"label"`           //
-	Access        string           `json:"access"`          //
-	MaxExtService uint             `json:"max_ext_service"` //
-	MaxIntService uint             `json:"max_int_service"` //
-	MaxTraffic    uint             `json:"max_traffic"`     //
-	Volumes       []ResourceVolume `json:"volumes"`         //
-	Resources     Resources        `json:"resources"`       //
+	CreateTime    time.Time        `json:"create_time"`               //
+	TariffID      string           `json:"tariff_id,omitempty"`       //
+	Label         string           `json:"label"`                     //
+	Access        string           `json:"access,omitempty"`          //
+	MaxExtService *uint            `json:"max_ext_service,omitempty"` //
+	MaxIntService *uint            `json:"max_int_service,omitempty"` //
+	MaxTraffic    *uint            `json:"max_traffic,omitempty"`     //
+	Volumes       []ResourceVolume `json:"volumes,omitempty"`         //
+	Resources     Resources        `json:"resources"`                 //
 }
