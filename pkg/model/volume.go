@@ -5,7 +5,7 @@ import "time"
 // ResourceVolume -- volume representation
 // provided by resource-service
 // https://ch.pages.containerum.net/api-docs/modules/resource-service/index.html#get-namespace
-type ResourceVolume struct {
+type Volume struct {
 	CreateTime       time.Time `json:"create_time"`        //
 	Deleted          bool      `json:"deleted"`            //
 	TariffID         string    `json:"tariff_id"`          //
@@ -16,7 +16,7 @@ type ResourceVolume struct {
 	Replicas         int       `json:"replicas"`           //
 }
 
-type ResourceCreateVolume struct {
+type CreateVolume struct {
 	TariffID string `json:"tariff-id"`
 	Label    string `json:"label"`
 }
