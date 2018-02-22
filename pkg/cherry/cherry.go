@@ -21,7 +21,7 @@ import (
 //		+ "resource 'God' does't exist"
 type Err struct {
 	Message    string   `json:"message"`
-	StatusHTTP int      `json:"-"`
+	StatusHTTP int      `json:"status_http"`
 	ID         string   `json:"id"`
 	Details    []string `json:"details,omitempty"`
 }
@@ -29,8 +29,9 @@ type Err struct {
 // NewErr -- constructs Err struct with provided message and ID
 func NewErr(msg string, status int, ID string) *Err {
 	return &Err{
-		Message: msg,
-		ID:      ID,
+		Message:    msg,
+		StatusHTTP: status,
+		ID:         ID,
 	}
 }
 
