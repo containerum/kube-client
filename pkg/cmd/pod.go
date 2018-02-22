@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"fmt"
 	"net/http"
 
 	"git.containerum.net/ch/kube-client/pkg/model"
@@ -19,15 +18,9 @@ func (client *Client) DeletePod(namespace, pod string) error {
 			"pod": pod,
 		}).
 		Delete(client.APIurl + kubeAPIpodPath)
-	if err != nil {
-		return err
-	}
-	switch resp.StatusCode() {
-	case http.StatusOK, http.StatusAccepted:
-		return nil
-	default:
-		return fmt.Errorf("%s", string(resp.Body()))
-	}
+	return mapErrors(resp, err,
+		http.StatusOK,
+		http.StatusAccepted)
 }
 
 // GetPod -- gets a particular pod by name.
@@ -38,15 +31,10 @@ func (client *Client) GetPod(namespace, pod string) (model.Pod, error) {
 			"pod":       pod,
 		}).
 		Get(client.APIurl + kubeAPIpodPath)
-	if err != nil {
+	if err = mapErrors(resp, err, http.StatusOK, http.StatusAccepted); err != nil {
 		return model.Pod{}, err
 	}
-	switch resp.StatusCode() {
-	case http.StatusOK, http.StatusAccepted:
-		return *resp.Result().(*model.Pod), nil
-	default:
-		return model.Pod{}, fmt.Errorf("%s", string(resp.Body()))
-	}
+	return *resp.Result().(*model.Pod), nil
 }
 
 func (client *Client) GetPodList(namespace string) ([]model.Pod, error) {
@@ -55,13 +43,8 @@ func (client *Client) GetPodList(namespace string) ([]model.Pod, error) {
 			"namespace": namespace,
 		}).
 		Get(client.APIurl + kubeAPIpodRootPath)
-	if err != nil {
+	if err = mapErrors(resp, err, http.StatusOK, http.StatusAccepted); err != nil {
 		return nil, err
 	}
-	switch resp.StatusCode() {
-	case http.StatusOK, http.StatusAccepted:
-		return *resp.Result().(*[]model.Pod), nil
-	default:
-		return nil, fmt.Errorf("%s", string(resp.Body()))
-	}
+	return *resp.Result().(*[]model.Pod), nil
 }

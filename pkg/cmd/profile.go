@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"fmt"
 	"net/http"
 
 	"git.containerum.net/ch/kube-client/pkg/cherry"
@@ -45,17 +44,9 @@ func (client *Client) Login(login model.Login) (model.Tokens, error) {
 		SetBody(login).
 		SetResult(model.Tokens{}).
 		Post(client.UserManagerURL + userLoginPath)
-	if err != nil {
+	if err = mapErrors(resp, err, http.StatusOK, http.StatusAccepted); err != nil {
 		return model.Tokens{}, err
 	}
-	switch resp.StatusCode() {
-	case http.StatusOK, http.StatusAccepted:
-		return *resp.Result().(*model.Tokens), nil
-	default:
-		if resp.Error() != nil {
-			return model.Tokens{}, fmt.Errorf("%v", resp.Error())
-		}
-		return model.Tokens{}, fmt.Errorf("%s", string(resp.Body()))
-	}
+	return *resp.Result().(*model.Tokens), nil
 
 }

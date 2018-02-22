@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"fmt"
 	"net/http"
 
 	"git.containerum.net/ch/kube-client/pkg/model"
@@ -23,18 +22,10 @@ func (client *Client) CheckToken(token string) (model.CheckTokenResponse, error)
 		}).
 		SetResult(model.CheckTokenResponse{}).
 		Get(client.AuthURL + getCheckToken)
-	if err != nil {
+	if err = mapErrors(resp, err, http.StatusOK); err != nil {
 		return model.CheckTokenResponse{}, err
 	}
-	switch resp.StatusCode() {
-	case http.StatusOK:
-		return *resp.Result().(*model.CheckTokenResponse), nil
-	default:
-		if resp.Error() != nil {
-			return model.CheckTokenResponse{}, fmt.Errorf("%v", resp.Error())
-		}
-		return model.CheckTokenResponse{}, fmt.Errorf("%s", resp.Status())
-	}
+	return *resp.Result().(*model.CheckTokenResponse), nil
 }
 
 // ExtendToken -- consumes refresh JWT token and user fingerprint
@@ -47,16 +38,8 @@ func (client *Client) ExtendToken(refreshToken string) (model.Tokens, error) {
 		}).
 		SetResult(model.Tokens{}).
 		Put(client.AuthURL + getExtendToken)
-	if err != nil {
+	if err = mapErrors(resp, err, http.StatusOK); err != nil {
 		return model.Tokens{}, err
 	}
-	switch resp.StatusCode() {
-	case http.StatusOK:
-		return *resp.Result().(*model.Tokens), nil
-	default:
-		if resp.Error() != nil {
-			return model.Tokens{}, fmt.Errorf("%v", resp.Error())
-		}
-		return model.Tokens{}, fmt.Errorf("%s", resp.Status())
-	}
+	return *resp.Result().(*model.Tokens), nil
 }

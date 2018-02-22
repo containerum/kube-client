@@ -12,7 +12,7 @@ func mapErrors(resp *resty.Response, err error, okCodes ...int) error {
 		return err
 	}
 	for _, code := range okCodes {
-		if resp.StatusCode() == code {
+		if resp.StatusCode() == code && resp.Error() != nil {
 			return nil
 		}
 	}
