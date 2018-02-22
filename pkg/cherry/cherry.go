@@ -3,7 +3,6 @@ package cherry
 import (
 	"bytes"
 	"fmt"
-	"strconv"
 )
 
 // Err -- standart serializable API error
@@ -19,23 +18,34 @@ import (
 //		+ "resource 'God' does't exist"
 type Err struct {
 	Message string   `json:"message"`
-	ID      uint64   `json:"id"`
+	ID      string   `json:"id"`
 	Details []string `json:"details,omitempty"`
 }
 
 // NewErr -- constructs Err struct with provided message and ID
-func NewErr(msg string, ID uint64) *Err {
+func NewErr(msg, ID string) *Err {
 	return &Err{
 		Message: msg,
 		ID:      ID,
 	}
 }
 
+// BuildErr -- produces Err constructor with custom
+// ID prefix
+// Example:
+// 	MyErr := BuildErr("serivice_id")
+//  ErrNotEnoughCheese = MyErr("not enough cheese", "666")
+//  	--> "not enough cheese [service_id666]"
+func BuildErr(prefix string) func(string, string) *Err {
+	return func(msg, ID string) *Err {
+		return NewErr(msg, prefix+ID)
+	}
+}
+
 // Returns text representation kinda
 // "unable to parse quota []"
 func (err *Err) Error() string {
-	buf := bytes.NewBufferString(err.Message +
-		" [" + strconv.FormatUint(err.ID, 10) + "]")
+	buf := bytes.NewBufferString(err.Message + " [" + err.ID + "]")
 	detailsLen := len(err.Details)
 	if detailsLen > 0 {
 		buf.WriteString(": ")
