@@ -1,4 +1,4 @@
-package requests_tests
+package reqtests
 
 import (
 	"testing"

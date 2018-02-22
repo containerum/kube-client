@@ -1,4 +1,4 @@
-package requests_tests
+package reqtests
 
 import (
 	"testing"
@@ -15,9 +15,8 @@ const (
 func TestDeployment(test *testing.T) {
 	Convey("Test deployment methods", test, func() {
 		Convey("resource service methods", func() {
-			client := newResourceClient(test)
-			//fakeNamespaces := newFakeResourceNamespaces(test)
-			deployment := newFakeResourceDeployment(test)
+			client := newClient(test)
+			deployment := newFakeDeployment(test)
 			namespace := "pion"
 			deployment.Name = newRandomName(6)
 			updateImage := model.UpdateImage{
@@ -30,9 +29,6 @@ func TestDeployment(test *testing.T) {
 			err = client.SetContainerImage(namespace,
 				deployment.Name, updateImage)
 			So(err, ShouldBeNil)
-
-			owner := "20b616d8-1ea7-4842-b8ec-c6e8226fda5b"
-			deployment.Owner = &owner
 			deployment.Labels["color"] = "blue"
 			err = client.ReplaceDeployment(namespace, deployment)
 			So(err, ShouldBeNil)
