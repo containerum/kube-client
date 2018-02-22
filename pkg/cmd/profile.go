@@ -21,7 +21,7 @@ func (client *Client) GetProfileInfo() (model.User, error) {
 		SetResult(model.User{}).
 		SetError(cherry.Err{}).
 		Get(client.UserManagerURL + userInfoPath)
-	if err := catchErr(err, resp, http.StatusOK); err != nil {
+	if err := mapErrors(resp, err, http.StatusOK); err != nil {
 		return model.User{}, err
 	}
 	return *resp.Result().(*model.User), nil
@@ -33,7 +33,7 @@ func (client *Client) ChangePassword(currentPassword, newPassword string) (model
 		SetResult(model.Tokens{}).
 		SetError(cherry.Err{}).
 		Put(client.UserManagerURL + userPasswordChangePath)
-	if err := catchErr(err, resp, http.StatusAccepted, http.StatusOK); err != nil {
+	if err := mapErrors(resp, err, http.StatusAccepted, http.StatusOK); err != nil {
 		return model.Tokens{}, err
 	}
 	return *resp.Error().(*model.Tokens), nil

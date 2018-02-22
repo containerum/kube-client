@@ -7,7 +7,7 @@ import (
 	"github.com/go-resty/resty"
 )
 
-func catchErr(err error, resp *resty.Response, okCodes ...int) error {
+func mapErrors(resp *resty.Response, err error, okCodes ...int) error {
 	if err != nil {
 		return err
 	}
@@ -17,12 +17,10 @@ func catchErr(err error, resp *resty.Response, okCodes ...int) error {
 		}
 	}
 	if resp.Error() != nil {
-		err, ok := resp.Error().(*cherry.Err)
-		if !ok {
-			return fmt.Errorf("%v", resp.Error())
+		if err, ok := resp.Error().(*cherry.Err); ok {
+			return err
 		}
-		err.StatusHTTP = resp.StatusCode()
-		return err
+		return fmt.Errorf("%q", string(resp.Body()))
 	}
 	return fmt.Errorf("%s", resp.Status())
 }

@@ -21,7 +21,7 @@ func (client *Client) GetService(namespace, serviceName string) (model.Service, 
 			"service":   serviceName,
 		}).
 		Get(client.APIurl + servicePath)
-	if err := catchErr(err, resp, http.StatusOK); err != nil {
+	if err := mapErrors(resp, err, http.StatusOK); err != nil {
 		return model.Service{}, err
 	}
 	return *resp.Result().(*model.Service), nil
@@ -36,7 +36,7 @@ func (client *Client) GetServiceList(namespace string) ([]model.Service, error) 
 			"namespace": namespace,
 		}).
 		Get(client.APIurl + servicesPath)
-	if err := catchErr(err, resp, http.StatusOK); err != nil {
+	if err := mapErrors(resp, err, http.StatusOK); err != nil {
 		return nil, err
 	}
 	return *resp.Result().(*[]model.Service), nil
