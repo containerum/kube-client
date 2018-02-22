@@ -11,7 +11,7 @@ import (
 	"testing"
 	"time"
 
-	"git.containerum.net/ch/kube-client/cmd"
+	kubeClient "git.containerum.net/ch/kube-client/pkg/client"
 	"git.containerum.net/ch/kube-client/pkg/model"
 )
 
@@ -20,12 +20,12 @@ const (
 	cubeAPIaddr  = "http://192.168.88.200:1214"
 )
 
-func newClient(test *testing.T) *cmd.Client {
-	client, err := cmd.CreateCmdClient(
-		cmd.ClientConfig{
+func newClient(test *testing.T) *kubeClient.Client {
+	client, err := kubeClient.CreateCmdClient(
+		kubeClient.Config{
 			ResourceAddr: resourceAddr,
 			APIurl:       cubeAPIaddr,
-			User: cmd.User{
+			User: kubeClient.User{
 				Role: "admin",
 			},
 		})
@@ -36,12 +36,12 @@ func newClient(test *testing.T) *cmd.Client {
 	return client
 }
 
-func newCubeAPIClient(test *testing.T) *cmd.Client {
-	client, err := cmd.CreateCmdClient(
-		cmd.ClientConfig{
+func newCubeAPIClient(test *testing.T) *kubeClient.Client {
+	client, err := kubeClient.CreateCmdClient(
+		kubeClient.Config{
 			ResourceAddr: resourceAddr,
 			APIurl:       cubeAPIaddr,
-			User: cmd.User{
+			User: kubeClient.User{
 				Role: "admin",
 			},
 		})
@@ -59,11 +59,11 @@ func newFakeNamespaces(test *testing.T) []model.Namespace {
 	}
 }
 
-func createNamespace(test *testing.T, client *cmd.Client, namespace model.Namespace) {
+func createNamespace(test *testing.T, client *kubeClient.Client, namespace model.Namespace) {
 	resp, err := client.Request.
 		SetBody(namespace).
 		Post(resourceAddr + "/namespace")
-	if err = cmd.MapErrors(resp, err, http.StatusOK, http.StatusAccepted); err != nil {
+	if err = kubeClient.MapErrors(resp, err, http.StatusOK, http.StatusAccepted); err != nil {
 		test.Fatalf("error while creating ")
 	}
 }
