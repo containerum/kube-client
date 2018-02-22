@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"fmt"
 	"strconv"
+
+	"github.com/gin-gonic/gin"
 )
 
 // Err -- standart serializable API error
@@ -48,7 +50,7 @@ func BuildErr(prefix string) func(string, int, string) *Err {
 // "unable to parse quota []"
 func (err *Err) Error() string {
 	buf := bytes.NewBufferString(" [" + err.ID + "] " +
-		strconv.Itoa(err.StatusHTTP) + " " +
+		"HTTP " + strconv.Itoa(err.StatusHTTP) + " " +
 		err.Message)
 	detailsLen := len(err.Details)
 	if detailsLen > 0 {
@@ -81,4 +83,10 @@ func (err *Err) AddDetailsErr(details ...error) *Err {
 		err.AddDetails(detail.Error())
 	}
 	return err
+}
+
+// Gonic -- aborts gin HTTP request with StatusHTTP
+// and provides json representation of error
+func (err *Err) Gonic(ctx *gin.Context) {
+	ctx.AbortWithStatusJSON(err.StatusHTTP, err)
 }
