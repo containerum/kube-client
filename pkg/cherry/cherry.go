@@ -88,5 +88,6 @@ func (err *Err) AddDetailsErr(details ...error) *Err {
 // Gonic -- aborts gin HTTP request with StatusHTTP
 // and provides json representation of error
 func (err *Err) Gonic(ctx *gin.Context) {
+	ctx.Error(err)
 	ctx.AbortWithStatusJSON(err.StatusHTTP, err)
 }
