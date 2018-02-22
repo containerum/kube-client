@@ -61,7 +61,7 @@ func (client *Client) DeleteDeployment(namespace, deployment string) error {
 
 // CreateDeployment -- consumes a namespace, an user ID and a Role,
 // returns nil if OK
-func (client *Client) CreateDeployment(namespace string, deployment model.ResourceDeployment) error {
+func (client *Client) CreateDeployment(namespace string, deployment model.Deployment) error {
 	resp, err := client.Request.
 		SetPathParams(map[string]string{
 			"namespace": namespace,
@@ -90,7 +90,7 @@ func (client *Client) SetContainerImage(namespace, deployment string, updateImag
 }
 
 // ReplaceDeployment -- replaces deployment in provided namespace with new one
-func (client *Client) ReplaceDeployment(namespace string, deployment model.ResourceDeployment) error {
+func (client *Client) ReplaceDeployment(namespace string, deployment model.Deployment) error {
 	resp, err := client.Request.
 		SetPathParams(map[string]string{
 			"namespace":  namespace,

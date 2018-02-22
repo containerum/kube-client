@@ -49,31 +49,31 @@ func (client *Client) GetNamespace(ns string) (model.Namespace, error) {
 
 // ResourceGetNamespace -- consumes a namespace and an optional user ID
 // returns a namespace data OR an error
-func (client *Client) ResourceGetNamespace(namespace string, userID *string) (model.ResourceNamespace, error) {
+func (client *Client) ResourceGetNamespace(namespace string, userID *string) (model.Namespace, error) {
 	req := client.Request.
 		SetPathParams(map[string]string{
 			"namespace": namespace,
-		}).SetResult(model.ResourceNamespace{}).
+		}).SetResult(model.Namespace{}).
 		SetError(model.ResourceError{})
 	if userID != nil {
 		req.SetQueryParam("user-id", *userID)
 	}
 	resp, err := req.Get(client.ResourceAddr + resourceNamespacePath)
 	if err := catchErr(err, resp, http.StatusOK); err != nil {
-		return model.ResourceNamespace{}, err
+		return model.Namespace{}, err
 	}
-	return *resp.Result().(*model.ResourceNamespace), nil
+	return *resp.Result().(*model.Namespace), nil
 }
 
 // ResourceGetNamespaceList -- consumes a page number parameter,
 // amount of namespaces per page and optional userID,
 // returns a slice of Namespaces OR a nil slice AND an error
-func (client *Client) ResourceGetNamespaceList(page, perPage uint64, userID string) ([]model.ResourceNamespace, error) {
+func (client *Client) ResourceGetNamespaceList(page, perPage uint64, userID string) ([]model.Namespace, error) {
 	req := client.Request.
 		SetQueryParams(map[string]string{
 			"page":     strconv.FormatUint(page, 10),
 			"per_page": strconv.FormatUint(perPage, 10),
-		}).SetResult([]model.ResourceNamespace{}).
+		}).SetResult([]model.Namespace{}).
 		SetError(model.ResourceError{})
 	if userID != "" {
 		req.SetQueryParam("user-id", userID)
@@ -82,7 +82,7 @@ func (client *Client) ResourceGetNamespaceList(page, perPage uint64, userID stri
 	if err := catchErr(err, resp, http.StatusOK); err != nil {
 		return nil, err
 	}
-	return *resp.Result().(*[]model.ResourceNamespace), nil
+	return *resp.Result().(*[]model.Namespace), nil
 }
 
 // RenameNamespace -- renames user namespace
