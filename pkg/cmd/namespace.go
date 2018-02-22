@@ -5,6 +5,8 @@ import (
 	"net/http"
 	"strconv"
 
+	"git.containerum.net/ch/kube-client/pkg/cherry"
+
 	"git.containerum.net/ch/kube-client/pkg/model"
 )
 
@@ -54,7 +56,7 @@ func (client *Client) ResourceGetNamespace(namespace string, userID *string) (mo
 		SetPathParams(map[string]string{
 			"namespace": namespace,
 		}).SetResult(model.Namespace{}).
-		SetError(model.ResourceError{})
+		SetError(cherry.Err{})
 	if userID != nil {
 		req.SetQueryParam("user-id", *userID)
 	}
@@ -74,7 +76,7 @@ func (client *Client) ResourceGetNamespaceList(page, perPage uint64, userID stri
 			"page":     strconv.FormatUint(page, 10),
 			"per_page": strconv.FormatUint(perPage, 10),
 		}).SetResult([]model.Namespace{}).
-		SetError(model.ResourceError{})
+		SetError(cherry.Err{})
 	if userID != "" {
 		req.SetQueryParam("user-id", userID)
 	}
@@ -158,7 +160,7 @@ func (client *Client) DeleteNamespace(namespace string) error {
 	resp, err := client.Request.
 		SetPathParams(map[string]string{
 			"namespace": namespace,
-		}).SetError(model.ResourceError{}).
+		}).SetError(cherry.Err{}).
 		Delete(client.ResourceAddr + getNamespace)
 	return catchErr(err, resp, http.StatusOK, http.StatusAccepted)
 }

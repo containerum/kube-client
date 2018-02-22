@@ -3,12 +3,12 @@ package cmd
 import (
 	"fmt"
 
-	"git.containerum.net/ch/kube-client/pkg/model"
+	"git.containerum.net/ch/kube-client/pkg/cherry"
 	"github.com/go-resty/resty"
 )
 
 func resourceError(resp *resty.Response) error {
-	return resp.Error().(*model.ResourceError)
+	return resp.Error().(*cherry.Err)
 }
 
 func firstNonNilErr(err error, errs ...error) error {
@@ -33,11 +33,11 @@ func catchErr(err error, resp *resty.Response, okCodes ...int) error {
 		}
 	}
 	if resp.Error() != nil {
-		err, ok := resp.Error().(*model.ResourceError)
+		err, ok := resp.Error().(*cherry.Err)
 		if !ok {
 			return fmt.Errorf("%v", resp.Error())
 		}
-		err.Status = resp.Status()
+		err.StatusHTTP = resp.StatusCode()
 		return err
 	}
 	return fmt.Errorf("%s", resp.Status())

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"git.containerum.net/ch/kube-client/pkg/cherry"
 	"git.containerum.net/ch/kube-client/pkg/model"
 )
 
@@ -52,7 +53,7 @@ func (client *Client) GetVolume(volumeName string, userID *string) (model.Volume
 func (client *Client) GetVolumeList(userID, filter *string) ([]model.Volume, error) {
 	req := client.Request.
 		SetResult([]model.Volume{}).
-		SetError(model.ResourceError{})
+		SetError(cherry.Err{})
 	if userID != nil {
 		req.SetQueryParam("user-id", *userID)
 	}
@@ -64,7 +65,7 @@ func (client *Client) GetVolumeList(userID, filter *string) ([]model.Volume, err
 		return nil, err
 	}
 	if resp.StatusCode() != http.StatusOK {
-		return nil, resp.Error().(*model.ResourceError)
+		return nil, resp.Error().(*cherry.Err)
 	}
 	return *resp.Result().(*[]model.Volume), nil
 }

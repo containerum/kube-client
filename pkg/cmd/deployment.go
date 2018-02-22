@@ -3,6 +3,7 @@ package cmd
 import (
 	"net/http"
 
+	"git.containerum.net/ch/kube-client/pkg/cherry"
 	"git.containerum.net/ch/kube-client/pkg/model"
 )
 
@@ -24,7 +25,7 @@ func (client *Client) GetDeployment(namespace, deployment string) (model.Deploym
 			"namespace":  namespace,
 			"deployment": deployment,
 		}).SetResult(model.Deployment{}).
-		SetError(model.ResourceError{}).
+		SetError(cherry.Err{}).
 		Get(client.APIurl + kubeAPIdeploymentPath)
 	if err := catchErr(err, resp, http.StatusOK); err != nil {
 		return model.Deployment{}, err
@@ -39,7 +40,7 @@ func (client *Client) GetDeploymentList(namespace string) ([]model.Deployment, e
 		SetPathParams(map[string]string{
 			"namespace": namespace,
 		}).SetResult([]model.Deployment{}).
-		SetError(model.ResourceError{}).
+		SetError(cherry.Err{}).
 		Get(client.APIurl + kubeAPIdeploymentsPath)
 	if err := catchErr(err, resp, http.StatusOK); err != nil {
 		return nil, err
@@ -54,7 +55,7 @@ func (client *Client) DeleteDeployment(namespace, deployment string) error {
 		SetPathParams(map[string]string{
 			"namespace":  namespace,
 			"deployment": deployment,
-		}).SetError(model.ResourceError{}).
+		}).SetError(cherry.Err{}).
 		Delete(client.ResourceAddr + resourceDeploymentPath)
 	return catchErr(err, resp, http.StatusOK)
 }
@@ -66,7 +67,7 @@ func (client *Client) CreateDeployment(namespace string, deployment model.Deploy
 		SetPathParams(map[string]string{
 			"namespace": namespace,
 		}).SetBody(deployment).
-		SetError(model.ResourceError{}).
+		SetError(cherry.Err{}).
 		Post(client.ResourceAddr + resourceDeploymentRootPath)
 	return catchErr(err, resp,
 		http.StatusOK,
@@ -96,7 +97,7 @@ func (client *Client) ReplaceDeployment(namespace string, deployment model.Deplo
 			"namespace":  namespace,
 			"deployment": deployment.Name,
 		}).SetBody(deployment).
-		SetError(model.ResourceError{}).
+		SetError(cherry.Err{}).
 		Put(client.ResourceAddr + resourceDeploymentPath)
 	return catchErr(err, resp, http.StatusOK)
 }
