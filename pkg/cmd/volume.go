@@ -26,32 +26,32 @@ func (client *Client) DeleteVolume(volumeName string) error {
 
 // GetVolume -- return User Volume by name,
 // consumes optional userID param
-func (client *Client) GetVolume(volumeName string, userID *string) (model.ResourceVolume, error) {
+func (client *Client) GetVolume(volumeName string, userID *string) (model.Volume, error) {
 	req := client.Request.
 		SetPathParams(map[string]string{
 			"volume": volumeName,
 		}).
-		SetResult(model.ResourceVolume{})
+		SetResult(model.Volume{})
 	if userID != nil {
 		req.SetQueryParam("user-id", *userID)
 	}
 	resp, err := req.Get(client.ResourceAddr + resourceVolumePath)
 	if err != nil {
-		return model.ResourceVolume{}, err
+		return model.Volume{}, err
 	}
 	if resp.StatusCode() != http.StatusOK {
-		return model.ResourceVolume{}, fmt.Errorf("%s", string(resp.Body()))
+		return model.Volume{}, fmt.Errorf("%s", string(resp.Body()))
 	}
-	return *resp.Result().(*model.ResourceVolume), nil
+	return *resp.Result().(*model.Volume), nil
 }
 
 // GetVolumeList -- get list of volumes,
 // consumes optional user ID and filter parameters.
 // Returns new_access_level as access if user role = user.
 // Should have filters: not deleted, limited, not limited, owner, not owner.
-func (client *Client) GetVolumeList(userID, filter *string) ([]model.ResourceVolume, error) {
+func (client *Client) GetVolumeList(userID, filter *string) ([]model.Volume, error) {
 	req := client.Request.
-		SetResult([]model.ResourceVolume{}).
+		SetResult([]model.Volume{}).
 		SetError(model.ResourceError{})
 	if userID != nil {
 		req.SetQueryParam("user-id", *userID)
@@ -66,7 +66,7 @@ func (client *Client) GetVolumeList(userID, filter *string) ([]model.ResourceVol
 	if resp.StatusCode() != http.StatusOK {
 		return nil, resp.Error().(*model.ResourceError)
 	}
-	return *resp.Result().(*[]model.ResourceVolume), nil
+	return *resp.Result().(*[]model.Volume), nil
 }
 
 //RenameVolume -- change volume name

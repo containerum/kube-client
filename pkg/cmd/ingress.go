@@ -14,7 +14,7 @@ const (
 )
 
 // AddIngress -- adds ingress to provided namespace
-func (client *Client) AddIngress(namespace string, ingress model.ResourceIngress) error {
+func (client *Client) AddIngress(namespace string, ingress model.Ingress) error {
 	resp, err := client.Request.
 		SetPathParams(map[string]string{
 			"namespace": namespace,
@@ -39,12 +39,12 @@ func (client *Client) AddIngress(namespace string, ingress model.ResourceIngress
 // If role=admin && !user-id -> return all
 // If role=admin && user-id -> return user's
 // If role=user -> return user's
-func (client *Client) GetIngressList(namespace string, userID *string, page, perPage *uint64) ([]model.ResourceIngress, error) {
+func (client *Client) GetIngressList(namespace string, userID *string, page, perPage *uint64) ([]model.Ingress, error) {
 	req := client.Request.
 		SetPathParams(map[string]string{
 			"namespace": namespace,
 		}).
-		SetResult([]model.ResourceIngress{})
+		SetResult([]model.Ingress{})
 	if userID != nil {
 		req.SetQueryParam("user-id", *userID)
 	}
@@ -60,7 +60,7 @@ func (client *Client) GetIngressList(namespace string, userID *string, page, per
 	}
 	switch resp.StatusCode() {
 	case http.StatusOK:
-		return *resp.Result().(*[]model.ResourceIngress), nil
+		return *resp.Result().(*[]model.Ingress), nil
 	default:
 		if resp.Error() != nil {
 			return nil, fmt.Errorf("%v", resp.Error())
@@ -70,7 +70,7 @@ func (client *Client) GetIngressList(namespace string, userID *string, page, per
 }
 
 // UpdateIngress -- updates ingress on provided domain with new one
-func (client *Client) UpdateIngress(namespace, domain string, ingress model.ResourceIngress) error {
+func (client *Client) UpdateIngress(namespace, domain string, ingress model.Ingress) error {
 	resp, err := client.Request.
 		SetPathParams(map[string]string{
 			"namespace": namespace,
