@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -20,18 +19,9 @@ func (client *Client) AddIngress(namespace string, ingress model.Ingress) error 
 			"namespace": namespace,
 		}).SetBody(ingress).
 		Post(client.ResourceAddr + resourceIngressRootPath)
-	if err != nil {
-		return err
-	}
-	switch resp.StatusCode() {
-	case http.StatusOK, http.StatusAccepted:
-		return nil
-	default:
-		if resp.Error() != nil {
-			return fmt.Errorf("%v", resp.Error())
-		}
-		return fmt.Errorf("%s", resp.Status())
-	}
+	return mapErrors(resp, err,
+		http.StatusOK,
+		http.StatusAccepted)
 }
 
 // GetIngressList -- returns list of ingresses.
@@ -55,18 +45,11 @@ func (client *Client) GetIngressList(namespace string, userID *string, page, per
 		req.SetQueryParam("per_page", strconv.FormatUint(*perPage, 10))
 	}
 	resp, err := req.Get(client.ResourceAddr + resourceIngressRootPath)
-	if err != nil {
+	if err = mapErrors(resp, err, http.StatusOK); err != nil {
 		return nil, err
 	}
-	switch resp.StatusCode() {
-	case http.StatusOK:
-		return *resp.Result().(*[]model.Ingress), nil
-	default:
-		if resp.Error() != nil {
-			return nil, fmt.Errorf("%v", resp.Error())
-		}
-		return nil, fmt.Errorf("%s", resp.Status())
-	}
+	return *resp.Result().(*[]model.Ingress), nil
+
 }
 
 // UpdateIngress -- updates ingress on provided domain with new one
@@ -77,18 +60,9 @@ func (client *Client) UpdateIngress(namespace, domain string, ingress model.Ingr
 			"domain":    domain,
 		}).SetBody(ingress).
 		Put(client.ResourceAddr + resourceIngressPath)
-	if err != nil {
-		return err
-	}
-	switch resp.StatusCode() {
-	case http.StatusOK, http.StatusAccepted:
-		return nil
-	default:
-		if resp.Error() != nil {
-			return fmt.Errorf("%v", resp.Error())
-		}
-		return fmt.Errorf("%s", resp.Status())
-	}
+	return mapErrors(resp, err,
+		http.StatusOK,
+		http.StatusAccepted)
 }
 
 // DeleteIngress -- deletes ingress on provided domain
@@ -99,16 +73,8 @@ func (client *Client) DeleteIngress(namespace, domain string) error {
 			"domain":    domain,
 		}).
 		Delete(client.ResourceAddr + resourceIngressPath)
-	if err != nil {
-		return err
-	}
-	switch resp.StatusCode() {
-	case http.StatusOK, http.StatusAccepted, http.StatusNoContent:
-		return nil
-	default:
-		if resp.Error() != nil {
-			return fmt.Errorf("%v", resp.Error())
-		}
-		return fmt.Errorf("%s", resp.Status())
-	}
+	return mapErrors(resp, err,
+		http.StatusOK,
+		http.StatusAccepted,
+		http.StatusNoContent)
 }

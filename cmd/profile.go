@@ -1,8 +1,9 @@
 package cmd
 
 import (
-	"fmt"
 	"net/http"
+
+	"git.containerum.net/ch/kube-client/pkg/cherry"
 
 	"git.containerum.net/ch/kube-client/pkg/model"
 )
@@ -17,9 +18,9 @@ const (
 func (client *Client) GetProfileInfo() (model.User, error) {
 	resp, err := client.Request.
 		SetResult(model.User{}).
-		SetError(model.ResourceError{}).
+		SetError(cherry.Err{}).
 		Get(client.UserManagerURL + userInfoPath)
-	if err := catchErr(err, resp, http.StatusOK); err != nil {
+	if err := mapErrors(resp, err, http.StatusOK); err != nil {
 		return model.User{}, err
 	}
 	return *resp.Result().(*model.User), nil
@@ -29,9 +30,9 @@ func (client *Client) GetProfileInfo() (model.User, error) {
 func (client *Client) ChangePassword(currentPassword, newPassword string) (model.Tokens, error) {
 	resp, err := client.Request.
 		SetResult(model.Tokens{}).
-		SetError(model.ResourceError{}).
+		SetError(cherry.Err{}).
 		Put(client.UserManagerURL + userPasswordChangePath)
-	if err := catchErr(err, resp, http.StatusAccepted, http.StatusOK); err != nil {
+	if err := mapErrors(resp, err, http.StatusAccepted, http.StatusOK); err != nil {
 		return model.Tokens{}, err
 	}
 	return *resp.Error().(*model.Tokens), nil
@@ -43,17 +44,9 @@ func (client *Client) Login(login model.Login) (model.Tokens, error) {
 		SetBody(login).
 		SetResult(model.Tokens{}).
 		Post(client.UserManagerURL + userLoginPath)
-	if err != nil {
+	if err = mapErrors(resp, err, http.StatusOK, http.StatusAccepted); err != nil {
 		return model.Tokens{}, err
 	}
-	switch resp.StatusCode() {
-	case http.StatusOK, http.StatusAccepted:
-		return *resp.Result().(*model.Tokens), nil
-	default:
-		if resp.Error() != nil {
-			return model.Tokens{}, fmt.Errorf("%v", resp.Error())
-		}
-		return model.Tokens{}, fmt.Errorf("%s", string(resp.Body()))
-	}
+	return *resp.Result().(*model.Tokens), nil
 
 }
