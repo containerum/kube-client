@@ -7,22 +7,6 @@ import (
 	"github.com/go-resty/resty"
 )
 
-func resourceError(resp *resty.Response) error {
-	return resp.Error().(*cherry.Err)
-}
-
-func firstNonNilErr(err error, errs ...error) error {
-	if err != nil {
-		return err
-	}
-	for _, err := range errs {
-		if err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
 func catchErr(err error, resp *resty.Response, okCodes ...int) error {
 	if err != nil {
 		return err
