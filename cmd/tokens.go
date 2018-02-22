@@ -22,7 +22,7 @@ func (client *Client) CheckToken(token string) (model.CheckTokenResponse, error)
 		}).
 		SetResult(model.CheckTokenResponse{}).
 		Get(client.AuthURL + getCheckToken)
-	if err = mapErrors(resp, err, http.StatusOK); err != nil {
+	if err = MapErrors(resp, err, http.StatusOK); err != nil {
 		return model.CheckTokenResponse{}, err
 	}
 	return *resp.Result().(*model.CheckTokenResponse), nil
@@ -38,7 +38,7 @@ func (client *Client) ExtendToken(refreshToken string) (model.Tokens, error) {
 		}).
 		SetResult(model.Tokens{}).
 		Put(client.AuthURL + getExtendToken)
-	if err = mapErrors(resp, err, http.StatusOK); err != nil {
+	if err = MapErrors(resp, err, http.StatusOK); err != nil {
 		return model.Tokens{}, err
 	}
 	return *resp.Result().(*model.Tokens), nil

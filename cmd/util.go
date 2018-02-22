@@ -7,7 +7,7 @@ import (
 	"github.com/go-resty/resty"
 )
 
-func mapErrors(resp *resty.Response, err error, okCodes ...int) error {
+func MapErrors(resp *resty.Response, err error, okCodes ...int) error {
 	if err != nil {
 		return err
 	}

@@ -10,7 +10,7 @@ import (
 	"testing"
 	"time"
 
-	"git.containerum.net/ch/kube-client/pkg/cmd"
+	"git.containerum.net/ch/kube-client/cmd"
 	"git.containerum.net/ch/kube-client/pkg/model"
 )
 
@@ -50,19 +50,19 @@ func newCubeAPIClient(test *testing.T) *cmd.Client {
 	return client
 }
 
-func newFakeResourceNamespaces(test *testing.T) []model.ResourceNamespace {
-	var ns []model.ResourceNamespace
-	loadTestJSONdata(test, "test_data/test_namespaces.json", &ns)
-	return ns
+func newFakeResourceNamespaces(test *testing.T) []model.Namespace {
+	return []model.Namespace{
+		{
+			TariffID: "4563e8c1-fb41-416a-9798-e949a2616260",
+		},
+	}
 }
 
-func createResourceNamespace(test *testing.T, client *cmd.Client, namespace model.ResourceNamespace) {
-	resp, _ := client.Request.
+func createResourceNamespace(test *testing.T, client *cmd.Client, namespace model.Namespace) {
+	resp, err := client.Request.
 		SetBody(namespace).
 		Post(resourceAddr + "/namespace")
-	if resp.Error() != nil {
-		test.Fatalf("error while creating test namespace: %v", resp.Error())
-	}
+	if err = mapErr
 }
 
 func newFakeDeployment(test *testing.T, file string) model.Deployment {
