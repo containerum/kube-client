@@ -4,18 +4,11 @@ import (
 	"bytes"
 	"fmt"
 	"strconv"
-
-	"github.com/gin-gonic/gin"
 )
 
 // ErrSID -- represents service ID of error
 //go:generate stringer -type=ErrSID
 type ErrSID uint64
-
-const (
-	// UninitializedSID -- default SID
-	UninitializedSID ErrSID = 0
-)
 
 // ErrKind -- represents kind of error
 type ErrKind uint64
@@ -106,11 +99,4 @@ func (err *Err) AddDetailsErr(details ...error) *Err {
 		err.AddDetails(detail.Error())
 	}
 	return err
-}
-
-// Gonic -- aborts gin HTTP request with StatusHTTP
-// and provides json representation of error
-func (err *Err) Gonic(ctx *gin.Context) {
-	ctx.Error(err)
-	ctx.AbortWithStatusJSON(err.StatusHTTP, err)
 }
