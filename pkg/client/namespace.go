@@ -28,6 +28,7 @@ func (client *Client) GetNamespaceList(queries map[string]string) ([]model.Names
 	resp, err := client.Request.
 		SetQueryParams(queries).
 		SetResult([]model.Namespace{}).
+		SetError(cherry.Err{}).
 		Get(client.APIurl + getNamespaceList)
 	if err := MapErrors(resp, err, http.StatusOK); err != nil {
 		return nil, err
@@ -37,10 +38,12 @@ func (client *Client) GetNamespaceList(queries map[string]string) ([]model.Names
 
 //GetNamespace return namespace by Name
 func (client *Client) GetNamespace(ns string) (model.Namespace, error) {
-	resp, err := client.Request.SetResult(model.Namespace{}).
+	resp, err := client.Request.
+		SetResult(model.Namespace{}).
 		SetPathParams(map[string]string{
 			"namespace": ns,
 		}).
+		SetError(cherry.Err{}).
 		Get(client.APIurl + getNamespace)
 	if err := MapErrors(resp, err, http.StatusOK); err != nil {
 		return model.Namespace{}, err
@@ -51,12 +54,12 @@ func (client *Client) GetNamespace(ns string) (model.Namespace, error) {
 // ResourceGetNamespace -- consumes a namespace
 // returns a namespace data OR an error
 func (client *Client) ResourceGetNamespace(namespace string) (model.Namespace, error) {
-	req := client.Request.
+	resp, err := client.Request.
 		SetPathParams(map[string]string{
 			"namespace": namespace,
 		}).SetResult(model.Namespace{}).
-		SetError(cherry.Err{})
-	resp, err := req.Get(client.ResourceAddr + resourceNamespacePath)
+		SetError(cherry.Err{}).
+		Get(client.ResourceAddr + resourceNamespacePath)
 	if err := MapErrors(resp, err, http.StatusOK); err != nil {
 		return model.Namespace{}, err
 	}
@@ -85,13 +88,11 @@ func (client *Client) ResourceGetNamespaceList(page, perPage uint64) ([]model.Na
 func (client *Client) RenameNamespace(namespace, newName string) error {
 	resp, err := client.Request.
 		SetPathParams(map[string]string{
-			"namespace": resourceNamespacePath,
+			"namespace": namespace,
 		}).SetBody(model.ResourceUpdateName{
 		Label: newName,
-	}).Put(client.ResourceAddr + resourceNamespacePath)
-	if err != nil {
-		return err
-	}
+	}).SetError(cherry.Err{}).
+		Put(client.ResourceAddr + resourceNamespacePath)
 	return MapErrors(resp, err,
 		http.StatusOK,
 		http.StatusAccepted)
@@ -105,7 +106,8 @@ func (client *Client) SetNamespaceAccess(namespace, username, access string) err
 		}).SetBody(model.ResourceUpdateUserAccess{
 		Username: username,
 		Access:   access,
-	}).Post(client.ResourceAddr + resourceNamespaceNamePath)
+	}).SetError(cherry.Err{}).
+		Post(client.ResourceAddr + resourceNamespaceNamePath)
 	return MapErrors(resp, err,
 		http.StatusOK,
 		http.StatusAccepted)
@@ -118,7 +120,8 @@ func (client *Client) DeleteNamespaceAccess(namespace, username string) error {
 			"namespace": namespace,
 		}).SetBody(model.ResourceUpdateUserAccess{
 		Username: username,
-	}).Delete(client.ResourceAddr + resourceNamespaceNamePath)
+	}).SetError(cherry.Err{}).
+		Delete(client.ResourceAddr + resourceNamespaceNamePath)
 	return MapErrors(resp, err,
 		http.StatusOK,
 		http.StatusAccepted)

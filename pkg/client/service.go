@@ -3,6 +3,7 @@ package client
 import (
 	"net/http"
 
+	"git.containerum.net/ch/kube-client/pkg/cherry"
 	"git.containerum.net/ch/kube-client/pkg/model"
 )
 
@@ -79,7 +80,9 @@ func (client *Client) UpdateService(namespace string, service model.Service) (mo
 		SetPathParams(map[string]string{
 			"namespace": namespace,
 			"service":   service.Name,
-		}).Put(client.ResourceAddr + servicePath)
+		}).
+		SetError(cherry.Err{}).
+		Put(client.ResourceAddr + servicePath)
 	if err = MapErrors(resp, err, http.StatusOK, http.StatusAccepted); err != nil {
 		return model.Service{}, err
 	}

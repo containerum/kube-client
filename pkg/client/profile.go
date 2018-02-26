@@ -43,6 +43,7 @@ func (client *Client) Login(login model.Login) (model.Tokens, error) {
 	resp, err := client.Request.
 		SetBody(login).
 		SetResult(model.Tokens{}).
+		SetError(cherry.Err{}).
 		Post(client.UserManagerURL + userLoginPath)
 	if err = MapErrors(resp, err, http.StatusOK, http.StatusAccepted); err != nil {
 		return model.Tokens{}, err

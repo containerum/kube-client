@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"git.containerum.net/ch/kube-client/pkg/cherry"
 	"git.containerum.net/ch/kube-client/pkg/model"
 )
 
@@ -18,6 +19,7 @@ func (client *Client) AddIngress(namespace string, ingress model.Ingress) error 
 		SetPathParams(map[string]string{
 			"namespace": namespace,
 		}).SetBody(ingress).
+		SetError(cherry.Err{}).
 		Post(client.ResourceAddr + resourceIngressRootPath)
 	return MapErrors(resp, err,
 		http.StatusOK,
@@ -29,15 +31,13 @@ func (client *Client) AddIngress(namespace string, ingress model.Ingress) error 
 // If role=admin && !user-id -> return all
 // If role=admin && user-id -> return user's
 // If role=user -> return user's
-func (client *Client) GetIngressList(namespace string, userID *string, page, perPage *uint64) ([]model.Ingress, error) {
+func (client *Client) GetIngressList(namespace string, page, perPage *uint64) ([]model.Ingress, error) {
 	req := client.Request.
 		SetPathParams(map[string]string{
 			"namespace": namespace,
 		}).
-		SetResult([]model.Ingress{})
-	if userID != nil {
-		req.SetQueryParam("user-id", *userID)
-	}
+		SetResult([]model.Ingress{}).
+		SetError(cherry.Err{})
 	if page != nil {
 		req.SetQueryParam("page", strconv.FormatUint(*page, 10))
 	}
@@ -59,6 +59,7 @@ func (client *Client) UpdateIngress(namespace, domain string, ingress model.Ingr
 			"namespace": namespace,
 			"domain":    domain,
 		}).SetBody(ingress).
+		SetError(cherry.Err{}).
 		Put(client.ResourceAddr + resourceIngressPath)
 	return MapErrors(resp, err,
 		http.StatusOK,
@@ -72,6 +73,7 @@ func (client *Client) DeleteIngress(namespace, domain string) error {
 			"namespace": namespace,
 			"domain":    domain,
 		}).
+		SetError(cherry.Err{}).
 		Delete(client.ResourceAddr + resourceIngressPath)
 	return MapErrors(resp, err,
 		http.StatusOK,
