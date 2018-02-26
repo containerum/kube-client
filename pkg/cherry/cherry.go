@@ -8,16 +8,25 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// ErrSID -- represents service ID of error
 type ErrSID uint64
+
+const (
+	// UninitializedSID -- default SID
+	UninitializedSID ErrSID = 0
+)
+
+// ErrKind -- represents kind of error
 type ErrKind uint64
 
+// ErrID -- represnsents unique error ID
 type ErrID struct {
 	SID  ErrSID  `json:"sid"`
 	Kind ErrKind `json:"kind"`
 }
 
 func (errID *ErrID) String() string {
-	return fmt.Sprintf("%v-%v", errID.SID, errID.Kind)
+	return fmt.Sprintf("%s-%v", errID.SID, errID.Kind)
 }
 
 // Err -- standart serializable API error
