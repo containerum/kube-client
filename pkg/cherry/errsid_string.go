@@ -4,9 +4,9 @@ package cherry
 
 import "strconv"
 
-const _ErrSID_name = "UninitializedSID"
+const _ErrSID_name = "UninitializedSIDAuthKubeAPIResourceServiceUserManagerBillingGlusterMailTemplaiterGatewayArchiveCache"
 
-var _ErrSID_index = [...]uint8{0, 16}
+var _ErrSID_index = [...]uint8{0, 16, 20, 27, 42, 53, 60, 67, 81, 88, 95, 100}
 
 func (i ErrSID) String() string {
 	if i >= ErrSID(len(_ErrSID_index)-1) {

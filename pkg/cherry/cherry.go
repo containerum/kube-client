@@ -12,11 +12,6 @@ import (
 //go:generate stringer -type=ErrSID
 type ErrSID uint64
 
-const (
-	// UninitializedSID -- default SID
-	UninitializedSID ErrSID = 0
-)
-
 // ErrKind -- represents kind of error
 type ErrKind uint64
 
