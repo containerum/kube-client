@@ -31,16 +31,13 @@ func (client *Client) AddIngress(namespace string, ingress model.Ingress) error 
 // If role=admin && !user-id -> return all
 // If role=admin && user-id -> return user's
 // If role=user -> return user's
-func (client *Client) GetIngressList(namespace string, userID *string, page, perPage *uint64) ([]model.Ingress, error) {
+func (client *Client) GetIngressList(namespace string, page, perPage *uint64) ([]model.Ingress, error) {
 	req := client.Request.
 		SetPathParams(map[string]string{
 			"namespace": namespace,
 		}).
 		SetResult([]model.Ingress{}).
 		SetError(cherry.Err{})
-	if userID != nil {
-		req.SetQueryParam("user-id", *userID)
-	}
 	if page != nil {
 		req.SetQueryParam("page", strconv.FormatUint(*page, 10))
 	}
