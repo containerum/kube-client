@@ -8,6 +8,28 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// ErrSID -- represents service ID of error
+//go:generate stringer -type=ErrSID
+type ErrSID uint64
+
+const (
+	// UninitializedSID -- default SID
+	UninitializedSID ErrSID = 0
+)
+
+// ErrKind -- represents kind of error
+type ErrKind uint64
+
+// ErrID -- represnsents unique error ID
+type ErrID struct {
+	SID  ErrSID  `json:"sid"`
+	Kind ErrKind `json:"kind"`
+}
+
+func (errID *ErrID) String() string {
+	return fmt.Sprintf("%v-%v", errID.SID, errID.Kind)
+}
+
 // Err -- standart serializable API error
 // Message -- constant error message:
 //		+ "invalid username"
@@ -22,12 +44,12 @@ import (
 type Err struct {
 	Message    string   `json:"message"`
 	StatusHTTP int      `json:"status_http"`
-	ID         string   `json:"id"`
+	ID         ErrID    `json:"id"`
 	Details    []string `json:"details,omitempty"`
 }
 
 // NewErr -- constructs Err struct with provided message and ID
-func NewErr(msg string, status int, ID string) *Err {
+func NewErr(msg string, status int, ID ErrID) *Err {
 	return &Err{
 		Message:    msg,
 		StatusHTTP: status,
@@ -41,16 +63,16 @@ func NewErr(msg string, status int, ID string) *Err {
 // 	MyErr := BuildErr("serivice_id")
 //  ErrNotEnoughCheese = MyErr("not enough cheese", "666")
 //  	--> "not enough cheese [service_id666]"
-func BuildErr(prefix string) func(string, int, string) *Err {
-	return func(msg string, status int, ID string) *Err {
-		return NewErr(msg, status, prefix+ID)
+func BuildErr(SID ErrSID) func(string, int, ErrKind) *Err {
+	return func(msg string, status int, kind ErrKind) *Err {
+		return NewErr(msg, status, ErrID{SID: SID, Kind: kind})
 	}
 }
 
 // Returns text representation kinda
 // "unable to parse quota []"
 func (err *Err) Error() string {
-	buf := bytes.NewBufferString(" [" + err.ID + "] " +
+	buf := bytes.NewBufferString(" [" + err.ID.String() + "] " +
 		"HTTP " + strconv.Itoa(err.StatusHTTP) + " " +
 		err.Message)
 	detailsLen := len(err.Details)
