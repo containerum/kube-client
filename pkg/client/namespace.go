@@ -1,7 +1,6 @@
 package client
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -93,15 +92,9 @@ func (client *Client) RenameNamespace(namespace, newName string) error {
 	if err != nil {
 		return err
 	}
-	switch resp.StatusCode() {
-	case http.StatusOK, http.StatusAccepted:
-		return nil
-	default:
-		if resp.Error() != nil {
-			return fmt.Errorf("%v", resp.Error())
-		}
-		return fmt.Errorf("%v", resp.Status())
-	}
+	return MapErrors(resp, err,
+		http.StatusOK,
+		http.StatusAccepted)
 }
 
 // SetNamespaceAccess -- sets/changes access to namespace for provided user
@@ -113,18 +106,9 @@ func (client *Client) SetNamespaceAccess(namespace, username, access string) err
 		Username: username,
 		Access:   access,
 	}).Post(client.ResourceAddr + resourceNamespaceNamePath)
-	if err != nil {
-		return err
-	}
-	switch resp.StatusCode() {
-	case http.StatusOK, http.StatusAccepted:
-		return nil
-	default:
-		if resp.Error() != nil {
-			return fmt.Errorf("%v", resp.Error())
-		}
-		return fmt.Errorf("%v", resp.Status())
-	}
+	return MapErrors(resp, err,
+		http.StatusOK,
+		http.StatusAccepted)
 }
 
 // DeleteNamespaceAccess -- deletes user access to namespace
@@ -135,18 +119,9 @@ func (client *Client) DeleteNamespaceAccess(namespace, username string) error {
 		}).SetBody(model.ResourceUpdateUserAccess{
 		Username: username,
 	}).Delete(client.ResourceAddr + resourceNamespaceNamePath)
-	if err != nil {
-		return err
-	}
-	switch resp.StatusCode() {
-	case http.StatusOK, http.StatusAccepted:
-		return nil
-	default:
-		if resp.Error() != nil {
-			return fmt.Errorf("%v", resp.Error())
-		}
-		return fmt.Errorf("%v", resp.Status())
-	}
+	return MapErrors(resp, err,
+		http.StatusOK,
+		http.StatusAccepted)
 }
 
 // DeleteNamespace -- deletes provided namespace
