@@ -26,7 +26,7 @@ func newClient(test *testing.T) *kubeClient.Client {
 			ResourceAddr: resourceAddr,
 			APIurl:       kubeAPIaddr,
 			User: kubeClient.User{
-				Role: "admin",
+				Role: "user",
 			},
 		})
 	if err != nil {
@@ -42,7 +42,7 @@ func newCubeAPIClient(test *testing.T) *kubeClient.Client {
 			ResourceAddr: resourceAddr,
 			APIurl:       kubeAPIaddr,
 			User: kubeClient.User{
-				Role: "admin",
+				Role: "user",
 			},
 		})
 	if err != nil {
