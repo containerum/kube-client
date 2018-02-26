@@ -9,7 +9,7 @@ import (
 )
 
 // ErrSID -- represents service ID of error
-// go:generate stringer -type ErrSID
+//go:generate stringer -type=ErrSID
 type ErrSID uint64
 
 const (
@@ -27,7 +27,7 @@ type ErrID struct {
 }
 
 func (errID *ErrID) String() string {
-	return fmt.Sprintf("%s-%v", errID.SID, errID.Kind)
+	return fmt.Sprintf("%v-%v", errID.SID, errID.Kind)
 }
 
 // Err -- standart serializable API error
