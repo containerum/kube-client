@@ -19,7 +19,7 @@ func (client *Client) DeleteVolume(volumeName string) error {
 	resp, err := client.Request.
 		SetPathParams(map[string]string{
 			"volume": volumeName,
-		}).SetError(model.ResourceError{}).
+		}).SetError(cherry.Err{}).
 		Delete(client.ResourceAddr + resourceVolumePath)
 	return MapErrors(resp, err,
 		http.StatusOK,
@@ -100,7 +100,7 @@ func (client *Client) DeleteAccess(volumeName, username string) error {
 		SetBody(model.ResourceUpdateUserAccess{
 			Username: username,
 		}).
-		SetError(model.ResourceError{}).
+		SetError(cherry.Err{}).
 		Delete(client.ResourceAddr + resourceVolumeAccessPath)
 	return MapErrors(resp, err,
 		http.StatusOK,
