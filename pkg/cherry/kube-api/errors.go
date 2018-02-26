@@ -40,6 +40,3 @@ func ErrResourceAlreadyExists() *cherry.Err {
 func ErrResourceNotExist() *cherry.Err {
 	return kubeApiErr("Resource with this name doesn't exist", http.StatusNotFound, 10)
 }
-func ErrNamespaceNotExist() *cherry.Err {
-	return kubeApiErr("Namespace with this name doesn't exist", http.StatusNotFound, 11)
-}
