@@ -83,6 +83,7 @@ func (client *Client) SetContainerImage(namespace, deployment string, updateImag
 			"namespace":  namespace,
 			"deployment": deployment,
 		}).SetBody(updateImage).
+		SetError(cherry.Err{}).
 		Put(client.ResourceAddr + resourceImagePath)
 	return MapErrors(resp, err,
 		http.StatusAccepted,
@@ -109,7 +110,8 @@ func (client *Client) SetReplicas(namespace, deployment string, replicas int) er
 		"deployment": deployment,
 	}).SetBody(model.UpdateReplicas{
 		Replicas: replicas,
-	}).Put(client.ResourceAddr + resourceReplicasPath)
+	}).SetError(cherry.Err{}).
+		Put(client.ResourceAddr + resourceReplicasPath)
 	return MapErrors(resp, err,
 		http.StatusAccepted,
 		http.StatusOK)

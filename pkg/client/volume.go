@@ -19,7 +19,8 @@ func (client *Client) DeleteVolume(volumeName string) error {
 	resp, err := client.Request.
 		SetPathParams(map[string]string{
 			"volume": volumeName,
-		}).SetError(cherry.Err{}).
+		}).
+		SetError(cherry.Err{}).
 		Delete(client.ResourceAddr + resourceVolumePath)
 	return MapErrors(resp, err,
 		http.StatusOK,
@@ -28,16 +29,14 @@ func (client *Client) DeleteVolume(volumeName string) error {
 
 // GetVolume -- return User Volume by name,
 // consumes optional userID param
-func (client *Client) GetVolume(volumeName string, userID *string) (model.Volume, error) {
-	req := client.Request.
+func (client *Client) GetVolume(volumeName string) (model.Volume, error) {
+	resp, err := client.Request.
 		SetPathParams(map[string]string{
 			"volume": volumeName,
 		}).
-		SetResult(model.Volume{})
-	if userID != nil {
-		req.SetQueryParam("user-id", *userID)
-	}
-	resp, err := req.Get(client.ResourceAddr + resourceVolumePath)
+		SetError(cherry.Err{}).
+		SetResult(model.Volume{}).
+		Get(client.ResourceAddr + resourceVolumePath)
 	if err = MapErrors(resp, err, http.StatusOK); err != nil {
 		return model.Volume{}, err
 	}
@@ -48,15 +47,12 @@ func (client *Client) GetVolume(volumeName string, userID *string) (model.Volume
 // consumes optional user ID and filter parameters.
 // Returns new_access_level as access if user role = user.
 // Should have filters: not deleted, limited, not limited, owner, not owner.
-func (client *Client) GetVolumeList(userID, filter *string) ([]model.Volume, error) {
+func (client *Client) GetVolumeList(filter *string) ([]model.Volume, error) {
 	req := client.Request.
 		SetResult([]model.Volume{}).
 		SetError(cherry.Err{})
-	if userID != nil {
-		req.SetQueryParam("user-id", *userID)
-	}
 	if filter != nil {
-		req.SetQueryParam("user-id", *filter)
+		req.SetQueryParam("filter", *filter)
 	}
 	resp, err := req.Get(client.ResourceAddr + resourceVolumeRootPath)
 	if err = MapErrors(resp, err, http.StatusOK); err != nil {
@@ -71,6 +67,7 @@ func (client *Client) RenameVolume(volumeName, newName string) error {
 		SetPathParams(map[string]string{
 			"volume": volumeName,
 		}).
+		SetError(cherry.Err{}).
 		SetBody(model.ResourceUpdateName{Label: newName}).
 		Put(client.ResourceAddr + resourceVolumeNamePath)
 	return MapErrors(resp, err,
@@ -84,6 +81,7 @@ func (client *Client) SetAccess(volumeName string, accessData model.ResourceUpda
 		SetPathParams(map[string]string{
 			"volume": volumeName,
 		}).
+		SetError(cherry.Err{}).
 		SetBody(accessData).
 		Post(client.ResourceAddr + resourceVolumeAccessPath)
 	return MapErrors(resp, err,
