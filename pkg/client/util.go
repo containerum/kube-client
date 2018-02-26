@@ -17,6 +17,8 @@ func (err *UnexpectedHTTPstatusError) Error() string {
 	return "unexpected status: " + err.Msg
 }
 
+// MapErrors -- trys to extract errors from resty response,
+// check http statuses and pack resulting info to error
 func MapErrors(resp *resty.Response, err error, okCodes ...int) error {
 	if err != nil {
 		return err
