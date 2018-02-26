@@ -9,6 +9,7 @@ import (
 )
 
 // ErrSID -- represents service ID of error
+// go:generate stringer -type ErrSID
 type ErrSID uint64
 
 const (
