@@ -1,4 +1,4 @@
-package requests_tests
+package reqtests
 
 import (
 	"testing"
@@ -12,10 +12,10 @@ const (
 )
 
 func TestVolume(test *testing.T) {
-	client := newResourceClient(test)
+	client := newClient(test)
 	Convey("Test volume methods", test, func() {
 		Convey("resource api", func() {
-			var volumes []model.ResourceVolume
+			var volumes []model.Volume
 			Convey("get volume and list", func() {
 				var err error
 				volumes, err = client.GetVolumeList(nil, nil)

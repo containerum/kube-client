@@ -1,4 +1,4 @@
-package cmd
+package client
 
 import (
 	"fmt"
@@ -30,7 +30,7 @@ func (client *Client) GetNamespaceList(queries map[string]string) ([]model.Names
 		SetQueryParams(queries).
 		SetResult([]model.Namespace{}).
 		Get(client.APIurl + getNamespaceList)
-	if err := mapErrors(resp, err, http.StatusOK); err != nil {
+	if err := MapErrors(resp, err, http.StatusOK); err != nil {
 		return nil, err
 	}
 	return *resp.Result().(*[]model.Namespace), nil
@@ -43,25 +43,22 @@ func (client *Client) GetNamespace(ns string) (model.Namespace, error) {
 			"namespace": ns,
 		}).
 		Get(client.APIurl + getNamespace)
-	if err := mapErrors(resp, err, http.StatusOK); err != nil {
+	if err := MapErrors(resp, err, http.StatusOK); err != nil {
 		return model.Namespace{}, err
 	}
 	return *resp.Result().(*model.Namespace), nil
 }
 
-// ResourceGetNamespace -- consumes a namespace and an optional user ID
+// ResourceGetNamespace -- consumes a namespace
 // returns a namespace data OR an error
-func (client *Client) ResourceGetNamespace(namespace string, userID *string) (model.Namespace, error) {
+func (client *Client) ResourceGetNamespace(namespace string) (model.Namespace, error) {
 	req := client.Request.
 		SetPathParams(map[string]string{
 			"namespace": namespace,
 		}).SetResult(model.Namespace{}).
 		SetError(cherry.Err{})
-	if userID != nil {
-		req.SetQueryParam("user-id", *userID)
-	}
 	resp, err := req.Get(client.ResourceAddr + resourceNamespacePath)
-	if err := mapErrors(resp, err, http.StatusOK); err != nil {
+	if err := MapErrors(resp, err, http.StatusOK); err != nil {
 		return model.Namespace{}, err
 	}
 	return *resp.Result().(*model.Namespace), nil
@@ -70,18 +67,15 @@ func (client *Client) ResourceGetNamespace(namespace string, userID *string) (mo
 // ResourceGetNamespaceList -- consumes a page number parameter,
 // amount of namespaces per page and optional userID,
 // returns a slice of Namespaces OR a nil slice AND an error
-func (client *Client) ResourceGetNamespaceList(page, perPage uint64, userID string) ([]model.Namespace, error) {
+func (client *Client) ResourceGetNamespaceList(page, perPage uint64) ([]model.Namespace, error) {
 	req := client.Request.
 		SetQueryParams(map[string]string{
 			"page":     strconv.FormatUint(page, 10),
 			"per_page": strconv.FormatUint(perPage, 10),
 		}).SetResult([]model.Namespace{}).
 		SetError(cherry.Err{})
-	if userID != "" {
-		req.SetQueryParam("user-id", userID)
-	}
 	resp, err := req.Get(client.ResourceAddr + resourceNamespacesPath)
-	if err := mapErrors(resp, err, http.StatusOK); err != nil {
+	if err := MapErrors(resp, err, http.StatusOK); err != nil {
 		return nil, err
 	}
 	return *resp.Result().(*[]model.Namespace), nil
@@ -162,7 +156,7 @@ func (client *Client) DeleteNamespace(namespace string) error {
 			"namespace": namespace,
 		}).SetError(cherry.Err{}).
 		Delete(client.ResourceAddr + getNamespace)
-	return mapErrors(resp, err,
+	return MapErrors(resp, err,
 		http.StatusOK,
 		http.StatusAccepted)
 }

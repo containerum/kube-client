@@ -1,4 +1,4 @@
-package requests_tests
+package reqtests
 
 import (
 	"testing"
@@ -7,7 +7,7 @@ import (
 )
 
 func TestTokenMethods(test *testing.T) {
-	client := newResourceClient(test)
+	client := newClient(test)
 	client.UserManagerURL = "http://192.168.88.200:8111"
 	client.AuthURL = "http://192.168.88.200:1111"
 	client.SetHeaders(map[string]string{

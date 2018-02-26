@@ -1,4 +1,4 @@
-package cmd
+package client
 
 import (
 	"net/url"
@@ -12,7 +12,7 @@ import (
 //Client - rest client
 type Client struct {
 	*resty.Request
-	ClientConfig
+	Config
 	User User
 }
 
@@ -21,10 +21,10 @@ type User struct {
 	Role string
 }
 
-// ClientConfig -- provides configuration for Client
+// Config -- provides configuration for Client
 // If APIurl or ResourceAddr is void,
 // trys to get them from envvars
-type ClientConfig struct {
+type Config struct {
 	User           User
 	APIurl         string
 	ResourceAddr   string
@@ -33,7 +33,7 @@ type ClientConfig struct {
 }
 
 //CreateCmdClient -
-func CreateCmdClient(config ClientConfig) (*Client, error) {
+func CreateCmdClient(config Config) (*Client, error) {
 	var APIurl *url.URL
 	var err error
 	if config.APIurl == "" {
@@ -57,9 +57,9 @@ func CreateCmdClient(config ClientConfig) (*Client, error) {
 		config.AuthURL = os.Getenv("AUTH_URL")
 	}
 	client := &Client{
-		Request:      resty.R(),
-		ClientConfig: config,
-		User:         config.User,
+		Request: resty.R(),
+		Config:  config,
+		User:    config.User,
 	}
 	client.SetHeaders(map[string]string{
 		"X-User-Role": client.User.Role,

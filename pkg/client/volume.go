@@ -1,4 +1,4 @@
-package cmd
+package client
 
 import (
 	"net/http"
@@ -21,7 +21,7 @@ func (client *Client) DeleteVolume(volumeName string) error {
 			"volume": volumeName,
 		}).
 		Delete(client.ResourceAddr + resourceVolumePath)
-	return mapErrors(resp, err,
+	return MapErrors(resp, err,
 		http.StatusOK,
 		http.StatusAccepted)
 }
@@ -38,7 +38,7 @@ func (client *Client) GetVolume(volumeName string, userID *string) (model.Volume
 		req.SetQueryParam("user-id", *userID)
 	}
 	resp, err := req.Get(client.ResourceAddr + resourceVolumePath)
-	if err = mapErrors(resp, err, http.StatusOK); err != nil {
+	if err = MapErrors(resp, err, http.StatusOK); err != nil {
 		return model.Volume{}, err
 	}
 	return *resp.Result().(*model.Volume), nil
@@ -59,7 +59,7 @@ func (client *Client) GetVolumeList(userID, filter *string) ([]model.Volume, err
 		req.SetQueryParam("user-id", *filter)
 	}
 	resp, err := req.Get(client.ResourceAddr + resourceVolumeRootPath)
-	if err = mapErrors(resp, err, http.StatusOK); err != nil {
+	if err = MapErrors(resp, err, http.StatusOK); err != nil {
 		return nil, err
 	}
 	return *resp.Result().(*[]model.Volume), nil
@@ -73,7 +73,7 @@ func (client *Client) RenameVolume(volumeName, newName string) error {
 		}).
 		SetBody(model.ResourceUpdateName{Label: newName}).
 		Put(client.ResourceAddr + resourceVolumeNamePath)
-	return mapErrors(resp, err,
+	return MapErrors(resp, err,
 		http.StatusOK,
 		http.StatusAccepted)
 }
@@ -86,7 +86,7 @@ func (client *Client) SetAccess(volumeName string, accessData model.ResourceUpda
 		}).
 		SetBody(accessData).
 		Post(client.ResourceAddr + resourceVolumeAccessPath)
-	return mapErrors(resp, err,
+	return MapErrors(resp, err,
 		http.StatusOK,
 		http.StatusAccepted)
 }
@@ -101,7 +101,7 @@ func (client *Client) DeleteAccess(volumeName, username string) error {
 			Username: username,
 		}).
 		Delete(client.ResourceAddr + resourceVolumeAccessPath)
-	return mapErrors(resp, err,
+	return MapErrors(resp, err,
 		http.StatusOK,
 		http.StatusAccepted)
 }

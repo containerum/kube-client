@@ -1,4 +1,4 @@
-package cmd
+package client
 
 import (
 	"net/http"
@@ -21,7 +21,7 @@ func (client *Client) GetService(namespace, serviceName string) (model.Service, 
 			"service":   serviceName,
 		}).
 		Get(client.APIurl + servicePath)
-	if err := mapErrors(resp, err, http.StatusOK); err != nil {
+	if err := MapErrors(resp, err, http.StatusOK); err != nil {
 		return model.Service{}, err
 	}
 	return *resp.Result().(*model.Service), nil
@@ -36,7 +36,7 @@ func (client *Client) GetServiceList(namespace string) ([]model.Service, error) 
 			"namespace": namespace,
 		}).
 		Get(client.APIurl + servicesPath)
-	if err := mapErrors(resp, err, http.StatusOK); err != nil {
+	if err := MapErrors(resp, err, http.StatusOK); err != nil {
 		return nil, err
 	}
 	return *resp.Result().(*[]model.Service), nil
@@ -65,7 +65,7 @@ func (client *Client) DeleteService(namespace, serviceName string) error {
 			"namespace": namespace,
 			"service":   serviceName,
 		}).Delete(client.ResourceAddr + servicePath)
-	return mapErrors(resp, err,
+	return MapErrors(resp, err,
 		http.StatusOK,
 		http.StatusAccepted)
 }
@@ -80,7 +80,7 @@ func (client *Client) UpdateService(namespace string, service model.Service) (mo
 			"namespace": namespace,
 			"service":   service.Name,
 		}).Put(client.ResourceAddr + servicePath)
-	if err = mapErrors(resp, err, http.StatusOK, http.StatusAccepted); err != nil {
+	if err = MapErrors(resp, err, http.StatusOK, http.StatusAccepted); err != nil {
 		return model.Service{}, err
 	}
 	return *resp.Result().(*model.Service), nil

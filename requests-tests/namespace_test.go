@@ -1,4 +1,4 @@
-package requests_tests
+package reqtests
 
 import (
 	"testing"
@@ -7,8 +7,8 @@ import (
 )
 
 func TestNamespace(test *testing.T) {
-	client := newResourceClient(test)
-	fakeNamespaces := newFakeResourceNamespaces(test)
+	client := newClient(test)
+	fakeNamespaces := newFakeNamespaces(test)
 	Convey("Test KubeAPI methods", test, func() {
 		Convey("get namespace", func() {
 			_, err := client.GetNamespace(kubeAPItestNamespace)

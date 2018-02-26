@@ -1,4 +1,4 @@
-package requests_tests
+package reqtests
 
 import (
 	"bytes"
@@ -7,25 +7,26 @@ import (
 	"io"
 	"io/ioutil"
 	"math/rand"
+	"net/http"
 	"testing"
 	"time"
 
-	"git.containerum.net/ch/kube-client/pkg/cmd"
+	kubeClient "git.containerum.net/ch/kube-client/pkg/client"
 	"git.containerum.net/ch/kube-client/pkg/model"
 )
 
 const (
 	resourceAddr = "http://192.168.88.200:1213"
-	cubeAPIaddr  = "http://192.168.88.200:1214"
+	kubeAPIaddr  = "http://192.168.88.200:1214"
 )
 
-func newResourceClient(test *testing.T) *cmd.Client {
-	client, err := cmd.CreateCmdClient(
-		cmd.ClientConfig{
+func newClient(test *testing.T) *kubeClient.Client {
+	client, err := kubeClient.CreateCmdClient(
+		kubeClient.Config{
 			ResourceAddr: resourceAddr,
-			APIurl:       cubeAPIaddr,
-			User: cmd.User{
-				Role: "admin",
+			APIurl:       kubeAPIaddr,
+			User: kubeClient.User{
+				Role: "user",
 			},
 		})
 	if err != nil {
@@ -35,13 +36,13 @@ func newResourceClient(test *testing.T) *cmd.Client {
 	return client
 }
 
-func newCubeAPIClient(test *testing.T) *cmd.Client {
-	client, err := cmd.CreateCmdClient(
-		cmd.ClientConfig{
+func newCubeAPIClient(test *testing.T) *kubeClient.Client {
+	client, err := kubeClient.CreateCmdClient(
+		kubeClient.Config{
 			ResourceAddr: resourceAddr,
-			APIurl:       cubeAPIaddr,
-			User: cmd.User{
-				Role: "admin",
+			APIurl:       kubeAPIaddr,
+			User: kubeClient.User{
+				Role: "user",
 			},
 		})
 	if err != nil {
@@ -50,44 +51,37 @@ func newCubeAPIClient(test *testing.T) *cmd.Client {
 	return client
 }
 
-func newFakeResourceNamespaces(test *testing.T) []model.ResourceNamespace {
-	var ns []model.ResourceNamespace
-	loadTestJSONdata(test, "test_data/test_namespaces.json", &ns)
-	return ns
-}
-
-func createResourceNamespace(test *testing.T, client *cmd.Client, namespace model.ResourceNamespace) {
-	resp, _ := client.Request.
-		SetBody(namespace).
-		Post(resourceAddr + "/namespace")
-	if resp.Error() != nil {
-		test.Fatalf("error while creating test namespace: %v", resp.Error())
+func newFakeNamespaces(test *testing.T) []model.Namespace {
+	return []model.Namespace{
+		{
+			TariffID: "4563e8c1-fb41-416a-9798-e949a2616260",
+		},
 	}
 }
 
-func newFakeDeployment(test *testing.T, file string) model.Deployment {
-	var deployment model.Deployment
-	loadTestJSONdata(test, file, &deployment)
-	return deployment
+func createNamespace(test *testing.T, client *kubeClient.Client, namespace model.Namespace) {
+	resp, err := client.Request.
+		SetBody(namespace).
+		Post(resourceAddr + "/namespace")
+	if err = kubeClient.MapErrors(resp, err, http.StatusOK, http.StatusAccepted); err != nil {
+		test.Fatalf("error while creating ")
+	}
 }
 
-func newFakeResourceDeployment(test *testing.T) model.ResourceDeployment {
-	deployment := model.ResourceDeployment{
+func newFakeDeployment(test *testing.T) model.Deployment {
+	deployment := model.Deployment{
 		Name:     "gateway",
 		Replicas: 4,
 		Labels:   map[string]string{},
 		Containers: []model.Container{
 			{
 				Name: "proxy", Image: "nginx",
-				Limits: model.Limits{CPU: "1", Memory: "256"},
-				Ports: &[]model.Port{
+				Limits: model.Resource{CPU: "1", Memory: "256"},
+				Ports: []model.ContainerPort{
 					{Name: "Gate", Port: 1080, Protocol: model.TCP},
 				},
-				Env: &[]model.Env{
+				Env: []model.Env{
 					{Name: "TEAPOT", Value: "TRUE"},
-				},
-				Volume: &[]model.Volume{
-					{Name: "Store", MountPath: "/mount/store"},
 				},
 			},
 		},
@@ -95,11 +89,7 @@ func newFakeResourceDeployment(test *testing.T) model.ResourceDeployment {
 	return deployment
 }
 
-func newFakeKubeAPIdeployment(test *testing.T) model.Deployment {
-	return newFakeDeployment(test, "test_data/kubeAPIdeployment.json")
-}
-
-func newFakeResourceUpdateImage(test *testing.T) model.UpdateImage {
+func newFakeUpdateImage(test *testing.T) model.UpdateImage {
 	var updateImage model.UpdateImage
 	loadTestJSONdata(test, "test_data/update_image.json", &updateImage)
 	return updateImage
@@ -111,8 +101,8 @@ func newFakeKubeAPInamespace(test *testing.T) model.Namespace {
 	return namespace
 }
 
-func newFakeResourceVolume(test *testing.T) []model.ResourceVolume {
-	var volume []model.ResourceVolume
+func newFakeVolume(test *testing.T) []model.Volume {
+	var volume []model.Volume
 	loadTestJSONdata(test, "test_data/fake_volumes.json", &volume)
 	return volume
 }
@@ -136,8 +126,8 @@ func newRandomName(size int64) string {
 	return buf.String()
 }
 
-func newResourceUpdateDeployment(test *testing.T) model.ResourceDeployment {
-	var deployment model.ResourceDeployment
+func newUpdateDeployment(test *testing.T) model.Deployment {
+	var deployment model.Deployment
 	loadTestJSONdata(test, "test_data/update_deployment.json", &deployment)
 	return deployment
 }

@@ -1,4 +1,4 @@
-package cmd
+package client
 
 import (
 	"net/http"
@@ -19,7 +19,7 @@ func (client *Client) AddIngress(namespace string, ingress model.Ingress) error 
 			"namespace": namespace,
 		}).SetBody(ingress).
 		Post(client.ResourceAddr + resourceIngressRootPath)
-	return mapErrors(resp, err,
+	return MapErrors(resp, err,
 		http.StatusOK,
 		http.StatusAccepted)
 }
@@ -45,7 +45,7 @@ func (client *Client) GetIngressList(namespace string, userID *string, page, per
 		req.SetQueryParam("per_page", strconv.FormatUint(*perPage, 10))
 	}
 	resp, err := req.Get(client.ResourceAddr + resourceIngressRootPath)
-	if err = mapErrors(resp, err, http.StatusOK); err != nil {
+	if err = MapErrors(resp, err, http.StatusOK); err != nil {
 		return nil, err
 	}
 	return *resp.Result().(*[]model.Ingress), nil
@@ -60,7 +60,7 @@ func (client *Client) UpdateIngress(namespace, domain string, ingress model.Ingr
 			"domain":    domain,
 		}).SetBody(ingress).
 		Put(client.ResourceAddr + resourceIngressPath)
-	return mapErrors(resp, err,
+	return MapErrors(resp, err,
 		http.StatusOK,
 		http.StatusAccepted)
 }
@@ -73,7 +73,7 @@ func (client *Client) DeleteIngress(namespace, domain string) error {
 			"domain":    domain,
 		}).
 		Delete(client.ResourceAddr + resourceIngressPath)
-	return mapErrors(resp, err,
+	return MapErrors(resp, err,
 		http.StatusOK,
 		http.StatusAccepted,
 		http.StatusNoContent)
