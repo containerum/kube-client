@@ -19,23 +19,23 @@ type UpdateReplicas struct {
 
 // Deployment --
 type Deployment struct {
-	Status     *DeploymentStatus `json:"status,omitempty"` //
-	Containers []Container       `json:"containers"`       //
-	Labels     map[string]string `json:"labels,omitempty"` //
-	Name       string            `json:"name"`             // not UUID!
-	Replicas   int               `json:"replicas"`         //
+	Status     *DeploymentStatus `json:"status,omitempty"`
+	Containers []Container       `json:"containers"`
+	Labels     map[string]string `json:"labels,omitempty"`
+	Name       string            `json:"name"`
+	Replicas   int               `json:"replicas"`
 }
 
 // Container --
 type Container struct {
-	Image        string            `json:"image"`                   //
-	Name         string            `json:"name"`                    // not UUID!
-	Limits       Resource          `json:"limits"`                  //
-	Env          []Env             `json:"env,omitempty"`           //
-	Commands     []string          `json:"commands,omitempty"`      //
-	Ports        []ContainerPort   `json:"ports,omitempty"`         //
-	VolumeMounts []ContainerVolume `json:"volume_mounts,omitempty"` //
-	ConfigMaps   []ContainerVolume `json:"config_maps,omitempty"`   //
+	Image        string            `json:"image"`
+	Name         string            `json:"name"`
+	Limits       Resource          `json:"limits"`
+	Env          []Env             `json:"env,omitempty"`
+	Commands     []string          `json:"commands,omitempty"`
+	Ports        []ContainerPort   `json:"ports,omitempty"`
+	VolumeMounts []ContainerVolume `json:"volume_mounts,omitempty"`
+	ConfigMaps   []ContainerVolume `json:"config_maps,omitempty"`
 }
 
 // Env -- represents key value pair of enviroment variable
