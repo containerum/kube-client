@@ -3,6 +3,7 @@ package client
 import (
 	"net/http"
 
+	"git.containerum.net/ch/kube-client/pkg/cherry"
 	"git.containerum.net/ch/kube-client/pkg/model"
 )
 
@@ -37,6 +38,7 @@ func (client *Client) ExtendToken(refreshToken string) (model.Tokens, error) {
 			"refresh_token": refreshToken,
 		}).
 		SetResult(model.Tokens{}).
+		SetError(cherry.Err{}).
 		Put(client.AuthURL + getExtendToken)
 	if err = MapErrors(resp, err, http.StatusOK); err != nil {
 		return model.Tokens{}, err

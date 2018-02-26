@@ -3,6 +3,7 @@ package client
 import (
 	"net/http"
 
+	"git.containerum.net/ch/kube-client/pkg/cherry"
 	"git.containerum.net/ch/kube-client/pkg/model"
 )
 
@@ -17,6 +18,7 @@ func (client *Client) DeletePod(namespace, pod string) error {
 		SetPathParams(map[string]string{
 			"pod": pod,
 		}).
+		SetError(cherry.Err{}).
 		Delete(client.APIurl + kubeAPIpodPath)
 	return MapErrors(resp, err,
 		http.StatusOK,
@@ -30,6 +32,7 @@ func (client *Client) GetPod(namespace, pod string) (model.Pod, error) {
 			"namespace": namespace,
 			"pod":       pod,
 		}).
+		SetError(cherry.Err{}).
 		Get(client.APIurl + kubeAPIpodPath)
 	if err = MapErrors(resp, err, http.StatusOK, http.StatusAccepted); err != nil {
 		return model.Pod{}, err
@@ -42,6 +45,7 @@ func (client *Client) GetPodList(namespace string) ([]model.Pod, error) {
 		SetPathParams(map[string]string{
 			"namespace": namespace,
 		}).
+		SetError(cherry.Err{}).
 		Get(client.APIurl + kubeAPIpodRootPath)
 	if err = MapErrors(resp, err, http.StatusOK, http.StatusAccepted); err != nil {
 		return nil, err

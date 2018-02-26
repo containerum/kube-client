@@ -20,6 +20,7 @@ func (client *Client) DeleteVolume(volumeName string) error {
 		SetPathParams(map[string]string{
 			"volume": volumeName,
 		}).
+		SetError(cherry.Err{}).
 		Delete(client.ResourceAddr + resourceVolumePath)
 	return MapErrors(resp, err,
 		http.StatusOK,
@@ -33,6 +34,7 @@ func (client *Client) GetVolume(volumeName string, userID *string) (model.Volume
 		SetPathParams(map[string]string{
 			"volume": volumeName,
 		}).
+		SetError(cherry.Err{}).
 		SetResult(model.Volume{})
 	if userID != nil {
 		req.SetQueryParam("user-id", *userID)
@@ -71,6 +73,7 @@ func (client *Client) RenameVolume(volumeName, newName string) error {
 		SetPathParams(map[string]string{
 			"volume": volumeName,
 		}).
+		SetError(cherry.Err{}).
 		SetBody(model.ResourceUpdateName{Label: newName}).
 		Put(client.ResourceAddr + resourceVolumeNamePath)
 	return MapErrors(resp, err,
@@ -84,6 +87,7 @@ func (client *Client) SetAccess(volumeName string, accessData model.ResourceUpda
 		SetPathParams(map[string]string{
 			"volume": volumeName,
 		}).
+		SetError(cherry.Err{}).
 		SetBody(accessData).
 		Post(client.ResourceAddr + resourceVolumeAccessPath)
 	return MapErrors(resp, err,
@@ -100,6 +104,7 @@ func (client *Client) DeleteAccess(volumeName, username string) error {
 		SetBody(model.ResourceUpdateUserAccess{
 			Username: username,
 		}).
+		SetError(cherry.Err{}).
 		Delete(client.ResourceAddr + resourceVolumeAccessPath)
 	return MapErrors(resp, err,
 		http.StatusOK,

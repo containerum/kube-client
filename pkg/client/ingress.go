@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"git.containerum.net/ch/kube-client/pkg/cherry"
 	"git.containerum.net/ch/kube-client/pkg/model"
 )
 
@@ -18,6 +19,7 @@ func (client *Client) AddIngress(namespace string, ingress model.Ingress) error 
 		SetPathParams(map[string]string{
 			"namespace": namespace,
 		}).SetBody(ingress).
+		SetError(cherry.Err{}).
 		Post(client.ResourceAddr + resourceIngressRootPath)
 	return MapErrors(resp, err,
 		http.StatusOK,
@@ -34,7 +36,8 @@ func (client *Client) GetIngressList(namespace string, userID *string, page, per
 		SetPathParams(map[string]string{
 			"namespace": namespace,
 		}).
-		SetResult([]model.Ingress{})
+		SetResult([]model.Ingress{}).
+		SetError(cherry.Err{})
 	if userID != nil {
 		req.SetQueryParam("user-id", *userID)
 	}
@@ -59,6 +62,7 @@ func (client *Client) UpdateIngress(namespace, domain string, ingress model.Ingr
 			"namespace": namespace,
 			"domain":    domain,
 		}).SetBody(ingress).
+		SetError(cherry.Err{}).
 		Put(client.ResourceAddr + resourceIngressPath)
 	return MapErrors(resp, err,
 		http.StatusOK,
@@ -72,6 +76,7 @@ func (client *Client) DeleteIngress(namespace, domain string) error {
 			"namespace": namespace,
 			"domain":    domain,
 		}).
+		SetError(cherry.Err{}).
 		Delete(client.ResourceAddr + resourceIngressPath)
 	return MapErrors(resp, err,
 		http.StatusOK,
