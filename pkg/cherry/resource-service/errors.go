@@ -6,7 +6,7 @@ import (
 	"git.containerum.net/ch/kube-client/pkg/cherry"
 )
 
-var buildErr = cherry.BuildErr(3)
+var buildErr = cherry.BuildErr(cherry.ResourceService)
 
 var (
 	ErrDatabase              = buildErr("Database error", http.StatusInternalServerError, 1)
