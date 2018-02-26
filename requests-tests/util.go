@@ -17,14 +17,14 @@ import (
 
 const (
 	resourceAddr = "http://192.168.88.200:1213"
-	cubeAPIaddr  = "http://192.168.88.200:1214"
+	kubeAPIaddr  = "http://192.168.88.200:1214"
 )
 
 func newClient(test *testing.T) *kubeClient.Client {
 	client, err := kubeClient.CreateCmdClient(
 		kubeClient.Config{
 			ResourceAddr: resourceAddr,
-			APIurl:       cubeAPIaddr,
+			APIurl:       kubeAPIaddr,
 			User: kubeClient.User{
 				Role: "admin",
 			},
@@ -40,7 +40,7 @@ func newCubeAPIClient(test *testing.T) *kubeClient.Client {
 	client, err := kubeClient.CreateCmdClient(
 		kubeClient.Config{
 			ResourceAddr: resourceAddr,
-			APIurl:       cubeAPIaddr,
+			APIurl:       kubeAPIaddr,
 			User: kubeClient.User{
 				Role: "admin",
 			},
