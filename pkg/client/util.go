@@ -7,6 +7,16 @@ import (
 	"github.com/go-resty/resty"
 )
 
+// UnexpectedHTTPstatusError -- contains HTTP status code and message
+type UnexpectedHTTPstatusError struct {
+	Code int
+	Msg  string
+}
+
+func (err *UnexpectedHTTPstatusError) Error() string {
+	return "unexpected status: " + err.Msg
+}
+
 func MapErrors(resp *resty.Response, err error, okCodes ...int) error {
 	if err != nil {
 		return err
@@ -22,5 +32,8 @@ func MapErrors(resp *resty.Response, err error, okCodes ...int) error {
 		}
 		return fmt.Errorf("%q", string(resp.Body()))
 	}
-	return fmt.Errorf("%s", resp.Status())
+	return &UnexpectedHTTPstatusError{
+		Code: resp.StatusCode(),
+		Msg:  resp.Status(),
+	}
 }
