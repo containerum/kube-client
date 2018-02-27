@@ -15,6 +15,6 @@ func (a *LogrusAdapter) Log(origin error, returning *cherry.Err) {
 }
 
 // NewLogrusAdpater -- for more convenient usage
-func NewLogrusAdapter(e *logrus.Entry) LogrusAdapter {
-	return LogrusAdapter{Entry: e}
+func NewLogrusAdapter(e *logrus.Entry) *LogrusAdapter {
+	return &LogrusAdapter{Entry: e}
 }
