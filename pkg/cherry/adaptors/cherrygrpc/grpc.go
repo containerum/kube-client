@@ -34,8 +34,7 @@ var httpToGRPCCode = map[int]codes.Code{
 	http.StatusUnauthorized:                 codes.Unauthenticated,
 }
 
-// ToGRPC -- convert cherry error to grpc error for passing between services using grpc
-func ToGRPC(errToPass *cherry.Err) error {
+func toGRPC(errToPass *cherry.Err) error {
 	data, err := JSONMarshal(errToPass)
 	if err != nil {
 		data = append(data, []byte("; with error "+err.Error())...)
@@ -54,17 +53,16 @@ func UnaryServerInterceptor(defaultErr *cherry.Err) grpc.UnaryServerInterceptor 
 
 		switch err.(type) {
 		case *cherry.Err:
-			err = ToGRPC(err.(*cherry.Err))
+			err = toGRPC(err.(*cherry.Err))
 		default:
-			err = ToGRPC(defaultErr.AddDetailsErr(err))
+			err = toGRPC(defaultErr.AddDetailsErr(err))
 		}
 
 		return
 	}
 }
 
-// FromGRPC -- convert grpc error to cherry error. Sets ok to true if conversion was successful, false otherwise
-func FromGRPC(errToCheck error) (ret *cherry.Err, ok bool) {
+func fromGRPC(errToCheck error) (ret *cherry.Err, ok bool) {
 	grpcErr, ok := status.FromError(errToCheck)
 	if !ok {
 		return
@@ -79,7 +77,7 @@ func UnaryClientInterceptor(defaultErr *cherry.Err) grpc.UnaryClientInterceptor 
 	return func(ctx context.Context, method string, req, reply interface{}, cc *grpc.ClientConn, invoker grpc.UnaryInvoker, opts ...grpc.CallOption) error {
 		err := invoker(ctx, method, req, reply, cc, opts...)
 
-		cherryErr, ok := FromGRPC(err)
+		cherryErr, ok := fromGRPC(err)
 		if !ok {
 			return defaultErr.AddDetailsErr(err)
 		}
