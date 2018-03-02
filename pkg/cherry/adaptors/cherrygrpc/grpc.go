@@ -1,10 +1,12 @@
 package cherrygrpc
 
 import (
+	"context"
 	"encoding/json"
 	"net/http"
 
 	"git.containerum.net/ch/kube-client/pkg/cherry"
+	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -45,6 +47,22 @@ func ToGRPC(errToPass *cherry.Err) error {
 	return status.Error(code, string(data))
 }
 
+// WithCherryEncoding -- middleware for grpc server to encode cherry error to grpc error
+func WithCherryEncoding(defaultErr *cherry.Err) grpc.UnaryServerInterceptor {
+	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (resp interface{}, err error) {
+		resp, err = handler(ctx, req)
+
+		switch err.(type) {
+		case *cherry.Err:
+			err = ToGRPC(err.(*cherry.Err))
+		default:
+			err = ToGRPC(defaultErr.AddDetailsErr(err))
+		}
+
+		return
+	}
+}
+
 // FromGRPC -- convert grpc error to cherry error. Sets ok to true if conversion was successful, false otherwise
 func FromGRPC(errToCheck error) (ret *cherry.Err, ok bool) {
 	grpcErr, ok := status.FromError(errToCheck)
@@ -54,4 +72,17 @@ func FromGRPC(errToCheck error) (ret *cherry.Err, ok bool) {
 	err := JSONUnmarshal([]byte(grpcErr.Message()), &ret)
 	ok = err == nil
 	return
+}
+
+// WithCherryDecoding -- grpc client middleware to decode cherry error from grpc error
+func WithCherryDecoding(defaultErr *cherry.Err) grpc.UnaryClientInterceptor {
+	return func(ctx context.Context, method string, req, reply interface{}, cc *grpc.ClientConn, invoker grpc.UnaryInvoker, opts ...grpc.CallOption) error {
+		err := invoker(ctx, method, req, reply, cc, opts...)
+
+		cherryErr, ok := FromGRPC(err)
+		if !ok {
+			return defaultErr.AddDetailsErr(err)
+		}
+		return cherryErr
+	}
 }
