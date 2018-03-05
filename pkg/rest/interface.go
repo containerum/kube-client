@@ -2,11 +2,21 @@ package rest
 
 // P -- URL path params
 type P map[string]string
+type Q map[string]string
 
 // REST -- rest client interface
+
+type Rq struct {
+	Result interface{}
+	Body   interface{}
+	Params P
+	Query  Q
+	Path   string
+}
+
 type REST interface {
-	Get(result interface{}, params P, path ...string) error
-	Put(result, body interface{}, params P, path ...string) error
-	Post(result, body interface{}, params P, path ...string) error
-	Delete(params P, path ...string) error
+	Get(Rq) error
+	Put(Rq) error
+	Post(Rq) error
+	Delete(Rq) error
 }
