@@ -12,10 +12,13 @@ var (
 	_ REST = &Resty{}
 )
 
+// Resty -- resty client,
+// implements REST interface
 type Resty struct {
 	request *resty.Request
 }
 
+// Get -- http get method
 func (re *Resty) Get(body interface{}, params P, path ...string) error {
 	resp, err := re.request.
 		SetBody(body).
@@ -29,6 +32,7 @@ func (re *Resty) Get(body interface{}, params P, path ...string) error {
 	return nil
 }
 
+// Put -- http put method
 func (re *Resty) Put(body interface{}, params P, path ...string) error {
 	resp, err := re.request.
 		SetBody(body).
@@ -43,6 +47,8 @@ func (re *Resty) Put(body interface{}, params P, path ...string) error {
 	copyInterface(body, resp.Result())
 	return nil
 }
+
+// Post -- http post method
 func (re *Resty) Post(body interface{}, params P, path ...string) error {
 	resp, err := re.request.
 		SetBody(body).
@@ -58,6 +64,7 @@ func (re *Resty) Post(body interface{}, params P, path ...string) error {
 	return nil
 }
 
+// Delete -- http delete method
 func (re *Resty) Delete(params P, path ...string) error {
 	resp, err := re.request.
 		SetError(cherry.Err{}).
