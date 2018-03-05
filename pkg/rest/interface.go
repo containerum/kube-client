@@ -17,7 +17,7 @@ type URL struct {
 	Params P
 }
 
-func (u *URL) compile() string {
+func (u *URL) Build() string {
 	addr := u.Templ
 	for k, v := range u.Params {
 		addr = strings.Replace(addr,
