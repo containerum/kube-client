@@ -63,10 +63,7 @@ func (re *Resty) Delete(params P, path ...string) error {
 		SetError(cherry.Err{}).
 		SetPathParams(params).
 		Post(strings.Join(path, ""))
-	if err = MapErrors(resp, err,
+	return MapErrors(resp, err,
 		http.StatusOK,
-		http.StatusAccepted); err != nil {
-		return err
-	}
-	return nil
+		http.StatusAccepted)
 }
