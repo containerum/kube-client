@@ -35,9 +35,15 @@ func ErrDeleteOwnerAccess() *cherry.Err {
 func ErrAccessRecordNotExists() *cherry.Err {
 	return resourceErr("Access record for user not exists", http.StatusNotFound, 9)
 }
-func ErrOther() *cherry.Err {
-	return resourceErr("Other error", http.StatusInternalServerError, 10)
+func ErrInternal() *cherry.Err {
+	return resourceErr("Internal error", http.StatusInternalServerError, 10)
 }
 func ErrValidation() *cherry.Err {
 	return resourceErr("Validation error", http.StatusBadRequest, 11)
+}
+func ErrServiceNotExternal() *cherry.Err {
+	return resourceErr("Service is not external", http.StatusBadRequest, 12)
+}
+func ErrNoTCPPorts() *cherry.Err {
+	return resourceErr("Service doesn`t have TCP ports in it", http.StatusBadRequest, 13)
 }
