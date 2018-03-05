@@ -18,6 +18,12 @@ type Resty struct {
 	request *resty.Request
 }
 
+func NewResty() *Resty {
+	return &Resty{
+		request: resty.R(),
+	}
+}
+
 // Get -- http get method
 func (re *Resty) Get(body interface{}, params P, path ...string) error {
 	resp, err := re.request.
