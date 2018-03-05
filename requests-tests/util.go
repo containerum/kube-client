@@ -21,7 +21,7 @@ const (
 )
 
 func newClient(test *testing.T) *kubeClient.Client {
-	client, err := kubeClient.CreateCmdClient(
+	client, err := kubeClient.NewClient(
 		kubeClient.Config{
 			ResourceAddr: resourceAddr,
 			APIurl:       kubeAPIaddr,
@@ -37,7 +37,7 @@ func newClient(test *testing.T) *kubeClient.Client {
 }
 
 func newCubeAPIClient(test *testing.T) *kubeClient.Client {
-	client, err := kubeClient.CreateCmdClient(
+	client, err := kubeClient.NewClient(
 		kubeClient.Config{
 			ResourceAddr: resourceAddr,
 			APIurl:       kubeAPIaddr,
