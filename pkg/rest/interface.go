@@ -1,18 +1,33 @@
 package rest
 
+import "strings"
+
 // P -- URL path params
 type P map[string]string
 
 // Q -- URL query params
 type Q map[string]string
 
+type URL struct {
+	Templ  string
+	Params P
+}
+
+func (u *URL) compile() string {
+	addr := u.Templ
+	for k, v := range u.Params {
+		addr = strings.Replace(addr,
+			"{"+k+"}", v, -1)
+	}
+	return addr
+}
+
 // Rq -- request params
 type Rq struct {
 	Result interface{}
 	Body   interface{}
-	Params P
+	Path   URL
 	Query  Q
-	Path   string
 }
 
 // REST -- rest client interface
