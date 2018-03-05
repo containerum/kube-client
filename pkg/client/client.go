@@ -42,7 +42,7 @@ func NewClient(config Config) (*Client, error) {
 		config.RestAPI = rest.NewResty()
 	}
 	client := &Client{
-		re:     rest.NewResty(),
+		re:     config.RestAPI,
 		Config: config,
 		User:   config.User,
 	}
