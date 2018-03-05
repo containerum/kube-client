@@ -2,7 +2,7 @@ package client
 
 import (
 	"git.containerum.net/ch/kube-client/pkg/model"
-	. "git.containerum.net/ch/kube-client/pkg/rest"
+	"git.containerum.net/ch/kube-client/pkg/rest"
 )
 
 const (
@@ -19,11 +19,11 @@ const (
 // returns a Deployment data OR uninitialized struct AND an error
 func (client *Client) GetDeployment(namespace, deployment string) (model.Deployment, error) {
 	var depl model.Deployment
-	err := client.re.Get(Rq{
+	err := client.re.Get(rest.Rq{
 		Result: &depl,
-		Path: URL{
+		Path: rest.URL{
 			Templ: client.APIurl + kubeAPIdeploymentPath,
-			Params: P{
+			Params: rest.P{
 				"namespace":  namespace,
 				"deployment": deployment,
 			},
@@ -36,11 +36,11 @@ func (client *Client) GetDeployment(namespace, deployment string) (model.Deploym
 // returns a list of Deployments OR nil slice AND an error
 func (client *Client) GetDeploymentList(namespace string) ([]model.Deployment, error) {
 	var depls []model.Deployment
-	err := client.re.Get(Rq{
+	err := client.re.Get(rest.Rq{
 		Result: &depls,
-		Path: URL{
+		Path: rest.URL{
 			Templ: client.APIurl + kubeAPIdeploymentsPath,
-			Params: P{
+			Params: rest.P{
 				"namespace": namespace,
 			},
 		},
@@ -51,10 +51,10 @@ func (client *Client) GetDeploymentList(namespace string) ([]model.Deployment, e
 // DeleteDeployment -- consumes a namespace, a deployment,
 // an user role and an ID
 func (client *Client) DeleteDeployment(namespace, deployment string) error {
-	return client.re.Delete(Rq{
-		Path: URL{
+	return client.re.Delete(rest.Rq{
+		Path: rest.URL{
 			Templ: client.APIurl + resourceDeploymentPath,
-			Params: P{
+			Params: rest.P{
 				"namespace":  namespace,
 				"deployment": deployment,
 			},
@@ -65,11 +65,11 @@ func (client *Client) DeleteDeployment(namespace, deployment string) error {
 // CreateDeployment -- consumes a namespace, an user ID and a Role,
 // returns nil if OK
 func (client *Client) CreateDeployment(namespace string, deployment model.Deployment) error {
-	return client.re.Post(Rq{
+	return client.re.Post(rest.Rq{
 		Body: deployment,
-		Path: URL{
+		Path: rest.URL{
 			Templ: client.APIurl + resourceDeploymentRootPath,
-			Params: P{
+			Params: rest.P{
 				"namespace": namespace,
 			},
 		},
@@ -79,11 +79,11 @@ func (client *Client) CreateDeployment(namespace string, deployment model.Deploy
 // SetContainerImage -- set or changes deployment container image
 // Consumes namespace, deployment and container data
 func (client *Client) SetContainerImage(namespace, deployment string, updateImage model.UpdateImage) error {
-	return client.re.Put(Rq{
+	return client.re.Put(rest.Rq{
 		Body: updateImage,
-		Path: URL{
+		Path: rest.URL{
 			Templ: client.APIurl + resourceImagePath,
-			Params: P{
+			Params: rest.P{
 				"namespace":  namespace,
 				"deployment": deployment,
 			},
@@ -93,11 +93,11 @@ func (client *Client) SetContainerImage(namespace, deployment string, updateImag
 
 // ReplaceDeployment -- replaces deployment in provided namespace with new one
 func (client *Client) ReplaceDeployment(namespace string, deployment model.Deployment) error {
-	return client.re.Put(Rq{
+	return client.re.Put(rest.Rq{
 		Body: deployment,
-		Path: URL{
+		Path: rest.URL{
 			Templ: client.APIurl + resourceDeploymentPath,
-			Params: P{
+			Params: rest.P{
 				"namespace":  namespace,
 				"deployment": deployment.Name,
 			},
@@ -107,13 +107,13 @@ func (client *Client) ReplaceDeployment(namespace string, deployment model.Deplo
 
 // SetReplicas -- sets or changes deployment replicas
 func (client *Client) SetReplicas(namespace, deployment string, replicas int) error {
-	return client.re.Put(Rq{
+	return client.re.Put(rest.Rq{
 		Body: model.UpdateReplicas{
 			Replicas: replicas,
 		},
-		Path: URL{
+		Path: rest.URL{
 			Templ: client.APIurl + resourceReplicasPath,
-			Params: P{
+			Params: rest.P{
 				"namespace":  namespace,
 				"deployment": deployment,
 			},
