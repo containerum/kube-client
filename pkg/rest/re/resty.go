@@ -1,14 +1,15 @@
-package rest
+package re
 
 import (
 	"net/http"
 
 	"git.containerum.net/ch/kube-client/pkg/cherry"
+	"git.containerum.net/ch/kube-client/pkg/rest"
 	resty "github.com/go-resty/resty"
 )
 
 var (
-	_ REST = &Resty{}
+	_ rest.REST = &Resty{}
 )
 
 // Resty -- resty client,
@@ -25,66 +26,66 @@ func NewResty() *Resty {
 }
 
 // Get -- http get method
-func (re *Resty) Get(reqconfig Rq) error {
-	resp, err := reqconfig.ToResty(re.request).
-		Get(reqconfig.Path.compile())
-	if err = MapErrors(resp, err, http.StatusOK); err != nil {
+func (re *Resty) Get(reqconfig rest.Rq) error {
+	resp, err := ToResty(reqconfig, re.request).
+		Get(reqconfig.Path.Build())
+	if err = rest.MapErrors(resp, err, http.StatusOK); err != nil {
 		return err
 	}
 	if reqconfig.Result != nil {
-		copyInterface(reqconfig.Result, resp.Result())
+		rest.CopyInterface(reqconfig.Result, resp.Result())
 	}
 	return nil
 }
 
 // Put -- http put method
-func (re *Resty) Put(reqconfig Rq) error {
-	resp, err := reqconfig.ToResty(re.request).
-		Put(reqconfig.Path.compile())
-	if err = MapErrors(resp, err,
+func (re *Resty) Put(reqconfig rest.Rq) error {
+	resp, err := ToResty(reqconfig, re.request).
+		Put(reqconfig.Path.Build())
+	if err = rest.MapErrors(resp, err,
 		http.StatusOK,
 		http.StatusAccepted,
 		http.StatusCreated); err != nil {
 		return err
 	}
 	if reqconfig.Result != nil {
-		copyInterface(reqconfig.Result, resp.Result())
+		rest.CopyInterface(reqconfig.Result, resp.Result())
 	}
 	return nil
 }
 
 // Post -- http post method
-func (re *Resty) Post(reqconfig Rq) error {
-	resp, err := reqconfig.ToResty(re.request).
-		Post(reqconfig.Path.compile())
-	if err = MapErrors(resp, err,
+func (re *Resty) Post(reqconfig rest.Rq) error {
+	resp, err := ToResty(reqconfig, re.request).
+		Post(reqconfig.Path.Build())
+	if err = rest.MapErrors(resp, err,
 		http.StatusOK,
 		http.StatusAccepted,
 		http.StatusCreated); err != nil {
 		return err
 	}
 	if reqconfig.Result != nil {
-		copyInterface(reqconfig.Result, resp.Result())
+		rest.CopyInterface(reqconfig.Result, resp.Result())
 	}
 	return nil
 }
 
 // Delete -- http delete method
-func (re *Resty) Delete(reqconfig Rq) error {
-	resp, err := reqconfig.ToResty(re.request).
-		Post(reqconfig.Path.compile())
-	return MapErrors(resp, err,
+func (re *Resty) Delete(reqconfig rest.Rq) error {
+	resp, err := ToResty(reqconfig, re.request).
+		Post(reqconfig.Path.Build())
+	return rest.MapErrors(resp, err,
 		http.StatusOK,
 		http.StatusAccepted,
 		http.StatusNoContent)
 }
 
 func (re *Resty) SetToken(token string) {
-	re.request.SetHeader(HeaderUserToken, token)
+	re.request.SetHeader(rest.HeaderUserToken, token)
 }
 
 // ToResty -- maps Rq data to resty request
-func (rq *Rq) ToResty(req *resty.Request) *resty.Request {
+func ToResty(rq rest.Rq, req *resty.Request) *resty.Request {
 	if rq.Result != nil {
 		req = req.SetResult(rq.Result)
 	}
