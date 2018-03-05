@@ -44,6 +44,6 @@ func ErrValidation() *cherry.Err {
 func ErrServiceNotExternal() *cherry.Err {
 	return resourceErr("Service is not external", http.StatusBadRequest, 12)
 }
-func ErrNoTCPPorts() *cherry.Err {
-	return resourceErr("Service doesn`t have TCP ports in it", http.StatusBadRequest, 13)
+func ErrTCPPortNotFound() *cherry.Err {
+	return resourceErr("TCP Port was not found in service", http.StatusNotFound, 13)
 }
