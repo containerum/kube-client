@@ -18,6 +18,7 @@ type Resty struct {
 	request *resty.Request
 }
 
+// NewResty -- Resty constuctor
 func NewResty() *Resty {
 	return &Resty{
 		request: resty.R(),
