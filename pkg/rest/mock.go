@@ -31,22 +31,22 @@ func NewMock() *Mock {
 	}
 }
 func (mock *Mock) Get(req Rq) error {
-	mock.log.Infof("GET %q", req.Path.compile())
+	mock.log.Infof("GET %q", req.Path.Build())
 	return nil
 }
 
 func (mock *Mock) Put(req Rq) error {
-	mock.log.Infof("PUT %q", req.Path.compile())
+	mock.log.Infof("PUT %q", req.Path.Build())
 	return nil
 }
 
 func (mock *Mock) Post(req Rq) error {
-	mock.log.Infof("POST %q", req.Path.compile())
+	mock.log.Infof("POST %q", req.Path.Build())
 	return nil
 }
 
 func (mock *Mock) Delete(req Rq) error {
-	mock.log.Infof("DELETE %q", req.Path.compile())
+	mock.log.Infof("DELETE %q", req.Path.Build())
 	return nil
 }
 
