@@ -42,6 +42,9 @@ func MapErrors(resp *resty.Response, err error, okCodes ...int) error {
 }
 
 func copyInterface(dst, src interface{}) {
+	if src == nil {
+		return
+	}
 	value := reflect.ValueOf(dst).Elem()
 	if value.CanSet() {
 		value.Set(reflect.ValueOf(src))
