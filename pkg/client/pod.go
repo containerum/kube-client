@@ -39,6 +39,7 @@ func (client *Client) GetPod(namespace, pod string) (model.Pod, error) {
 	return gainedPod, err
 }
 
+// GetPodList -- returns list of pods in provided namespace
 func (client *Client) GetPodList(namespace string) ([]model.Pod, error) {
 	var podList []model.Pod
 	err := client.re.Get(rest.Rq{
