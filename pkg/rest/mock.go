@@ -49,3 +49,7 @@ func (mock *Mock) Delete(req Rq) error {
 	mock.log.Infof("DELETE %q", req.Path.compile())
 	return nil
 }
+
+func (mock *Mock) SetToken(token string) {
+
+}

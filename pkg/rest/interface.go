@@ -2,6 +2,10 @@ package rest
 
 import "strings"
 
+const (
+	HeaderUserToken = "User-Token"
+)
+
 // P -- URL path params
 type P map[string]string
 
@@ -28,10 +32,12 @@ type Rq struct {
 	Body   interface{}
 	Path   URL
 	Query  Q
+	Token  string
 }
 
 // REST -- rest client interface
 type REST interface {
+	SetToken(string)
 	Get(Rq) error
 	Put(Rq) error
 	Post(Rq) error
