@@ -31,7 +31,9 @@ func (re *Resty) Get(reqconfig Rq) error {
 	if err = MapErrors(resp, err, http.StatusOK); err != nil {
 		return err
 	}
-	copyInterface(reqconfig.Result, resp.Result())
+	if reqconfig.Result != nil {
+		copyInterface(reqconfig.Result, resp.Result())
+	}
 	return nil
 }
 
@@ -79,9 +81,14 @@ func (re *Resty) Delete(reqconfig Rq) error {
 
 // ToResty -- maps Rq data to resty request
 func (rq *Rq) ToResty(req *resty.Request) *resty.Request {
-	return req.
-		SetBody(rq.Body).
-		SetResult(rq.Result).
-		SetError(cherry.Err{}).
-		SetQueryParams(rq.Query)
+	if rq.Result != nil {
+		req = req.SetResult(rq.Result)
+	}
+	if rq.Body != nil {
+		req = req.SetBody(rq.Body)
+	}
+	if len(rq.Query) > 0 {
+		req = req.SetQueryParams(rq.Query)
+	}
+	return req.SetError(cherry.Err{})
 }
