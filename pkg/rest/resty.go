@@ -25,22 +25,23 @@ func NewResty() *Resty {
 }
 
 // Get -- http get method
-func (re *Resty) Get(body interface{}, params P, path ...string) error {
+func (re *Resty) Get(result interface{}, params P, path ...string) error {
 	resp, err := re.request.
-		SetBody(body).
+		SetResult(result).
 		SetError(cherry.Err{}).
 		SetPathParams(params).
 		Get(strings.Join(path, ""))
 	if err = MapErrors(resp, err, http.StatusOK); err != nil {
 		return err
 	}
-	copyInterface(body, resp.Result())
+	copyInterface(result, resp.Result())
 	return nil
 }
 
 // Put -- http put method
-func (re *Resty) Put(body interface{}, params P, path ...string) error {
+func (re *Resty) Put(result, body interface{}, params P, path ...string) error {
 	resp, err := re.request.
+		SetResult(result).
 		SetBody(body).
 		SetError(cherry.Err{}).
 		SetPathParams(params).
@@ -50,13 +51,14 @@ func (re *Resty) Put(body interface{}, params P, path ...string) error {
 		http.StatusAccepted); err != nil {
 		return err
 	}
-	copyInterface(body, resp.Result())
+	copyInterface(result, resp.Result())
 	return nil
 }
 
 // Post -- http post method
-func (re *Resty) Post(body interface{}, params P, path ...string) error {
+func (re *Resty) Post(result, body interface{}, params P, path ...string) error {
 	resp, err := re.request.
+		SetResult(result).
 		SetBody(body).
 		SetError(cherry.Err{}).
 		SetPathParams(params).
@@ -66,7 +68,7 @@ func (re *Resty) Post(body interface{}, params P, path ...string) error {
 		http.StatusAccepted); err != nil {
 		return err
 	}
-	copyInterface(body, resp.Result())
+	copyInterface(result, resp.Result())
 	return nil
 }
 
