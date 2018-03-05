@@ -2,6 +2,7 @@ package rest
 
 import (
 	"fmt"
+	"net/http"
 	"reflect"
 
 	"git.containerum.net/ch/kube-client/pkg/cherry"
@@ -10,12 +11,13 @@ import (
 
 // UnexpectedHTTPstatusError -- contains HTTP status code and message
 type UnexpectedHTTPstatusError struct {
-	Code int
-	Msg  string
+	Status  int
+	Message string
 }
 
 func (err *UnexpectedHTTPstatusError) Error() string {
-	return "unexpected status: " + err.Msg
+	return fmt.Sprintf("unexpected status [HTTP %d %s] %q",
+		err.Status, http.StatusText(err.Status), err.Message)
 }
 
 // MapErrors -- trys to extract errors from resty response,
@@ -25,19 +27,20 @@ func MapErrors(resp *resty.Response, err error, okCodes ...int) error {
 		return err
 	}
 	for _, code := range okCodes {
-		if resp.StatusCode() == code && resp.Error() != nil {
+		if resp.StatusCode() == code {
 			return nil
 		}
 	}
 	if resp.Error() != nil {
-		if err, ok := resp.Error().(*cherry.Err); ok {
+		if err, ok := resp.Error().(*cherry.Err); ok &&
+			err != nil &&
+			err.ID != (cherry.ErrID{}) {
 			return err
 		}
-		return fmt.Errorf("%q", string(resp.Body()))
 	}
 	return &UnexpectedHTTPstatusError{
-		Code: resp.StatusCode(),
-		Msg:  resp.Status(),
+		Status:  resp.StatusCode(),
+		Message: string(resp.Body()),
 	}
 }
 
