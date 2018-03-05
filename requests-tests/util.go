@@ -7,7 +7,6 @@ import (
 	"io"
 	"io/ioutil"
 	"math/rand"
-	"net/http"
 	"testing"
 	"time"
 
@@ -23,8 +22,7 @@ const (
 func newClient(test *testing.T) *kubeClient.Client {
 	client, err := kubeClient.NewClient(
 		kubeClient.Config{
-			ResourceAddr: resourceAddr,
-			APIurl:       kubeAPIaddr,
+			APIurl: kubeAPIaddr,
 			User: kubeClient.User{
 				Role: "user",
 			},
@@ -32,15 +30,13 @@ func newClient(test *testing.T) *kubeClient.Client {
 	if err != nil {
 		test.Fatalf("error while creating client: %v", err)
 	}
-	client.SetHeader("X-User-ID", "20b616d8-1ea7-4842-b8ec-c6e8226fda5b")
 	return client
 }
 
 func newCubeAPIClient(test *testing.T) *kubeClient.Client {
 	client, err := kubeClient.NewClient(
 		kubeClient.Config{
-			ResourceAddr: resourceAddr,
-			APIurl:       kubeAPIaddr,
+			APIurl: kubeAPIaddr,
 			User: kubeClient.User{
 				Role: "user",
 			},
@@ -56,15 +52,6 @@ func newFakeNamespaces(test *testing.T) []model.Namespace {
 		{
 			TariffID: "4563e8c1-fb41-416a-9798-e949a2616260",
 		},
-	}
-}
-
-func createNamespace(test *testing.T, client *kubeClient.Client, namespace model.Namespace) {
-	resp, err := client.Request.
-		SetBody(namespace).
-		Post(resourceAddr + "/namespace")
-	if err = kubeClient.MapErrors(resp, err, http.StatusOK, http.StatusAccepted); err != nil {
-		test.Fatalf("error while creating ")
 	}
 }
 
