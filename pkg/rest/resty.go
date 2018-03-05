@@ -2,7 +2,6 @@ package rest
 
 import (
 	"net/http"
-	"strings"
 
 	"git.containerum.net/ch/kube-client/pkg/cherry"
 	resty "github.com/go-resty/resty"
@@ -26,75 +25,63 @@ func NewResty() *Resty {
 }
 
 // Get -- http get method
-func (re *Resty) Get(result interface{}, params P, path ...string) error {
-	resp, err := re.request.
-		SetResult(result).
-		SetError(cherry.Err{}).
-		SetPathParams(params).
-		Get(strings.Join(path, ""))
+func (re *Resty) Get(reqconfig Rq) error {
+	resp, err := reqconfig.ToResty(re.request).
+		Get(reqconfig.Path)
 	if err = MapErrors(resp, err, http.StatusOK); err != nil {
 		return err
 	}
-	copyInterface(result, resp.Result())
+	copyInterface(reqconfig.Result, resp.Result())
 	return nil
 }
 
 // Put -- http put method
-func (re *Resty) Put(result, body interface{}, params P, path ...string) error {
-	req := re.request.
-		SetError(cherry.Err{}).
-		SetPathParams(params)
-	if result != nil {
-		req = req.SetResult(result)
-	}
-	if body != nil {
-		req = req.SetBody(body)
-	}
-	resp, err := req.Put(strings.Join(path, ""))
+func (re *Resty) Put(reqconfig Rq) error {
+	resp, err := reqconfig.ToResty(re.request).
+		Put(reqconfig.Path)
 	if err = MapErrors(resp, err,
 		http.StatusOK,
 		http.StatusAccepted,
 		http.StatusCreated); err != nil {
 		return err
 	}
-	if result != nil {
-		copyInterface(result, resp.Result())
+	if reqconfig.Result != nil {
+		copyInterface(reqconfig.Result, resp.Result())
 	}
 	return nil
 }
 
 // Post -- http post method
-func (re *Resty) Post(result, body interface{}, params P, path ...string) error {
-	req := re.request.
-		SetError(cherry.Err{}).
-		SetPathParams(params)
-	if result != nil {
-		req = req.SetResult(result)
-	}
-	if body != nil {
-		req = req.SetBody(body)
-	}
-	resp, err := req.Post(strings.Join(path, ""))
+func (re *Resty) Post(reqconfig Rq) error {
+	resp, err := reqconfig.ToResty(re.request).
+		Post(reqconfig.Path)
 	if err = MapErrors(resp, err,
 		http.StatusOK,
 		http.StatusAccepted,
 		http.StatusCreated); err != nil {
 		return err
 	}
-	if result != nil {
-		copyInterface(result, resp.Result())
+	if reqconfig.Result != nil {
+		copyInterface(reqconfig.Result, resp.Result())
 	}
 	return nil
 }
 
 // Delete -- http delete method
-func (re *Resty) Delete(params P, path ...string) error {
-	resp, err := re.request.
-		SetError(cherry.Err{}).
-		SetPathParams(params).
-		Post(strings.Join(path, ""))
+func (re *Resty) Delete(reqconfig Rq) error {
+	resp, err := reqconfig.ToResty(re.request).
+		Post(reqconfig.Path)
 	return MapErrors(resp, err,
 		http.StatusOK,
 		http.StatusAccepted,
 		http.StatusNoContent)
+}
+
+func (rq *Rq) ToResty(req *resty.Request) *resty.Request {
+	return req.
+		SetBody(rq.Body).
+		SetResult(rq.Result).
+		SetError(cherry.Err{}).
+		SetPathParams(rq.Params).
+		SetQueryParams(rq.Query)
 }
