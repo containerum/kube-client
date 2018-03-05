@@ -4,14 +4,14 @@ import (
 	"net/url"
 	"os"
 
-	"github.com/go-resty/resty"
+	"git.containerum.net/ch/kube-client/pkg/rest"
 )
 
 //TODO: Make Interface
 
 //Client - rest client
 type Client struct {
-	*resty.Request
+	re rest.REST
 	Config
 	User User
 }
@@ -25,15 +25,12 @@ type User struct {
 // If APIurl or ResourceAddr is void,
 // trys to get them from envvars
 type Config struct {
-	User           User
-	APIurl         string
-	ResourceAddr   string
-	UserManagerURL string
-	AuthURL        string
+	User   User
+	APIurl string
 }
 
-//CreateCmdClient -
-func CreateCmdClient(config Config) (*Client, error) {
+//NewClient -
+func NewClient(config Config) (*Client, error) {
 	var APIurl *url.URL
 	var err error
 	if config.APIurl == "" {
@@ -45,24 +42,10 @@ func CreateCmdClient(config Config) (*Client, error) {
 		return nil, err
 	}
 	config.APIurl = APIurl.String()
-
-	if config.ResourceAddr == "" {
-		// TODO: addr validation
-		config.ResourceAddr = os.Getenv("RESOURCE_ADDR")
-	}
-	if config.UserManagerURL == "" {
-		config.UserManagerURL = os.Getenv("USER_MANAGER_URL")
-	}
-	if config.AuthURL == "" {
-		config.AuthURL = os.Getenv("AUTH_URL")
-	}
 	client := &Client{
-		Request: resty.R(),
-		Config:  config,
-		User:    config.User,
+		re:     rest.NewResty(),
+		Config: config,
+		User:   config.User,
 	}
-	client.SetHeaders(map[string]string{
-		"X-User-Role": client.User.Role,
-	})
 	return client, nil
 }
