@@ -46,8 +46,12 @@ func copyInterface(dst, src interface{}) {
 		return
 	}
 	value := reflect.ValueOf(dst).Elem()
+	srcValue := reflect.ValueOf(src)
+	if srcValue.Kind() == reflect.Ptr {
+		srcValue = srcValue.Elem()
+	}
 	if value.CanSet() {
-		value.Set(reflect.ValueOf(src))
+		value.Set(srcValue)
 	} else {
 		panic(fmt.Sprintf("[rest] can't set %v value", value.Type()))
 	}
