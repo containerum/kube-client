@@ -49,7 +49,8 @@ func (re *Resty) Put(result, body interface{}, params P, path ...string) error {
 		Put(strings.Join(path, ""))
 	if err = MapErrors(resp, err,
 		http.StatusOK,
-		http.StatusAccepted); err != nil {
+		http.StatusAccepted,
+		http.StatusCreated); err != nil {
 		return err
 	}
 	copyInterface(result, resp.Result())
@@ -66,7 +67,8 @@ func (re *Resty) Post(result, body interface{}, params P, path ...string) error 
 		Post(strings.Join(path, ""))
 	if err = MapErrors(resp, err,
 		http.StatusOK,
-		http.StatusAccepted); err != nil {
+		http.StatusAccepted,
+		http.StatusCreated); err != nil {
 		return err
 	}
 	copyInterface(result, resp.Result())
@@ -81,5 +83,6 @@ func (re *Resty) Delete(params P, path ...string) error {
 		Post(strings.Join(path, ""))
 	return MapErrors(resp, err,
 		http.StatusOK,
-		http.StatusAccepted)
+		http.StatusAccepted,
+		http.StatusNoContent)
 }
