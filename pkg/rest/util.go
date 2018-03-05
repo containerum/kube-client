@@ -44,7 +44,7 @@ func MapErrors(resp *resty.Response, err error, okCodes ...int) error {
 	}
 }
 
-func copyInterface(dst, src interface{}) {
+func CopyInterface(dst, src interface{}) {
 	if src == nil || dst == nil {
 		return
 	}
