@@ -2,10 +2,11 @@ package rest
 
 // P -- URL path params
 type P map[string]string
+
+// Q -- URL query params
 type Q map[string]string
 
-// REST -- rest client interface
-
+// Rq -- request params
 type Rq struct {
 	Result interface{}
 	Body   interface{}
@@ -14,6 +15,7 @@ type Rq struct {
 	Path   string
 }
 
+// REST -- rest client interface
 type REST interface {
 	Get(Rq) error
 	Put(Rq) error

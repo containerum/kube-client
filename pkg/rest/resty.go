@@ -77,6 +77,7 @@ func (re *Resty) Delete(reqconfig Rq) error {
 		http.StatusNoContent)
 }
 
+// ToResty -- maps Rq data to resty request
 func (rq *Rq) ToResty(req *resty.Request) *resty.Request {
 	return req.
 		SetBody(rq.Body).
