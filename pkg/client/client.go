@@ -2,7 +2,6 @@ package client
 
 import (
 	"net/url"
-	"os"
 
 	"git.containerum.net/ch/kube-client/pkg/rest"
 )
@@ -25,23 +24,23 @@ type User struct {
 // If APIurl or ResourceAddr is void,
 // trys to get them from envvars
 type Config struct {
-	User   User
-	APIurl string
+	User    User
+	APIurl  string
+	RestAPI rest.REST
 }
 
 //NewClient -
 func NewClient(config Config) (*Client, error) {
 	var APIurl *url.URL
 	var err error
-	if config.APIurl == "" {
-		APIurl, err = url.Parse(os.Getenv("API_URL"))
-	} else {
-		APIurl, err = url.Parse(config.APIurl)
-	}
+	APIurl, err = url.Parse(config.APIurl)
 	if err != nil {
 		return nil, err
 	}
 	config.APIurl = APIurl.String()
+	if config.RestAPI == nil {
+		config.RestAPI = rest.NewResty()
+	}
 	client := &Client{
 		re:     rest.NewResty(),
 		Config: config,
