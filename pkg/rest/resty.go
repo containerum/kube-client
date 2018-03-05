@@ -41,37 +41,49 @@ func (re *Resty) Get(result interface{}, params P, path ...string) error {
 
 // Put -- http put method
 func (re *Resty) Put(result, body interface{}, params P, path ...string) error {
-	resp, err := re.request.
-		SetResult(result).
-		SetBody(body).
+	req := re.request.
 		SetError(cherry.Err{}).
-		SetPathParams(params).
-		Put(strings.Join(path, ""))
+		SetPathParams(params)
+	if result != nil {
+		req = req.SetResult(result)
+	}
+	if body != nil {
+		req = req.SetBody(body)
+	}
+	resp, err := req.Put(strings.Join(path, ""))
 	if err = MapErrors(resp, err,
 		http.StatusOK,
 		http.StatusAccepted,
 		http.StatusCreated); err != nil {
 		return err
 	}
-	copyInterface(result, resp.Result())
+	if result != nil {
+		copyInterface(result, resp.Result())
+	}
 	return nil
 }
 
 // Post -- http post method
 func (re *Resty) Post(result, body interface{}, params P, path ...string) error {
-	resp, err := re.request.
-		SetResult(result).
-		SetBody(body).
+	req := re.request.
 		SetError(cherry.Err{}).
-		SetPathParams(params).
-		Post(strings.Join(path, ""))
+		SetPathParams(params)
+	if result != nil {
+		req = req.SetResult(result)
+	}
+	if body != nil {
+		req = req.SetBody(body)
+	}
+	resp, err := req.Post(strings.Join(path, ""))
 	if err = MapErrors(resp, err,
 		http.StatusOK,
 		http.StatusAccepted,
 		http.StatusCreated); err != nil {
 		return err
 	}
-	copyInterface(result, resp.Result())
+	if result != nil {
+		copyInterface(result, resp.Result())
+	}
 	return nil
 }
 
