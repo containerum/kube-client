@@ -28,3 +28,45 @@ func (re *Resty) Get(body interface{}, params P, path ...string) error {
 	copyInterface(body, resp.Result())
 	return nil
 }
+
+func (re *Resty) Put(body interface{}, params P, path ...string) error {
+	resp, err := re.request.
+		SetBody(body).
+		SetError(cherry.Err{}).
+		SetPathParams(params).
+		Put(strings.Join(path, ""))
+	if err = MapErrors(resp, err,
+		http.StatusOK,
+		http.StatusAccepted); err != nil {
+		return err
+	}
+	copyInterface(body, resp.Result())
+	return nil
+}
+func (re *Resty) Post(body interface{}, params P, path ...string) error {
+	resp, err := re.request.
+		SetBody(body).
+		SetError(cherry.Err{}).
+		SetPathParams(params).
+		Post(strings.Join(path, ""))
+	if err = MapErrors(resp, err,
+		http.StatusOK,
+		http.StatusAccepted); err != nil {
+		return err
+	}
+	copyInterface(body, resp.Result())
+	return nil
+}
+
+func (re *Resty) Delete(params P, path ...string) error {
+	resp, err := re.request.
+		SetError(cherry.Err{}).
+		SetPathParams(params).
+		Post(strings.Join(path, ""))
+	if err = MapErrors(resp, err,
+		http.StatusOK,
+		http.StatusAccepted); err != nil {
+		return err
+	}
+	return nil
+}
