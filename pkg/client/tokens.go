@@ -45,3 +45,8 @@ func (client *Client) ExtendToken(refreshToken string) (model.Tokens, error) {
 	})
 	return tokens, err
 }
+
+// SetToken -- sets access token
+func (client *Client) SetToken(token string) {
+	client.re.SetToken(token)
+}
