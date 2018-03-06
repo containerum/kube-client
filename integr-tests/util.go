@@ -24,8 +24,8 @@ func newMockClient(test *testing.T) *kubeClient.Client {
 func newClient(test *testing.T) *kubeClient.Client {
 	client, err := kubeClient.NewClient(
 		kubeClient.Config{
-			RestAPI: re.NewResty(),
-			APIurl:  "http://192.168.88.200",
+			RestAPI: re.NewResty(re.SkipTLSVerify),
+			APIurl:  "https://192.168.88.200",
 			User: kubeClient.User{
 				Role: "user",
 			},
