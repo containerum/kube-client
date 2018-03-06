@@ -3,7 +3,8 @@ package rest
 import "strings"
 
 const (
-	HeaderUserToken = "User-Token"
+	HeaderUserToken       = "User-Token"
+	HeaderUserFingerprint = "User-Client"
 )
 
 // P -- URL path params
