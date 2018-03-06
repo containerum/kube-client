@@ -21,8 +21,8 @@ func (client *Client) GetDeployment(namespace, deployment string) (model.Deploym
 	var depl model.Deployment
 	err := client.re.Get(rest.Rq{
 		Result: &depl,
-		Path: rest.URL{
-			Templ: client.APIurl + kubeAPIdeploymentPath,
+		URL: rest.URL{
+			Path: client.APIurl + kubeAPIdeploymentPath,
 			Params: rest.P{
 				"namespace":  namespace,
 				"deployment": deployment,
@@ -38,8 +38,8 @@ func (client *Client) GetDeploymentList(namespace string) ([]model.Deployment, e
 	var depls []model.Deployment
 	err := client.re.Get(rest.Rq{
 		Result: &depls,
-		Path: rest.URL{
-			Templ: client.APIurl + kubeAPIdeploymentsPath,
+		URL: rest.URL{
+			Path: client.APIurl + kubeAPIdeploymentsPath,
 			Params: rest.P{
 				"namespace": namespace,
 			},
@@ -52,8 +52,8 @@ func (client *Client) GetDeploymentList(namespace string) ([]model.Deployment, e
 // an user role and an ID
 func (client *Client) DeleteDeployment(namespace, deployment string) error {
 	return client.re.Delete(rest.Rq{
-		Path: rest.URL{
-			Templ: client.APIurl + resourceDeploymentPath,
+		URL: rest.URL{
+			Path: client.APIurl + resourceDeploymentPath,
 			Params: rest.P{
 				"namespace":  namespace,
 				"deployment": deployment,
@@ -67,8 +67,8 @@ func (client *Client) DeleteDeployment(namespace, deployment string) error {
 func (client *Client) CreateDeployment(namespace string, deployment model.Deployment) error {
 	return client.re.Post(rest.Rq{
 		Body: deployment,
-		Path: rest.URL{
-			Templ: client.APIurl + resourceDeploymentRootPath,
+		URL: rest.URL{
+			Path: client.APIurl + resourceDeploymentRootPath,
 			Params: rest.P{
 				"namespace": namespace,
 			},
@@ -81,8 +81,8 @@ func (client *Client) CreateDeployment(namespace string, deployment model.Deploy
 func (client *Client) SetContainerImage(namespace, deployment string, updateImage model.UpdateImage) error {
 	return client.re.Put(rest.Rq{
 		Body: updateImage,
-		Path: rest.URL{
-			Templ: client.APIurl + resourceImagePath,
+		URL: rest.URL{
+			Path: client.APIurl + resourceImagePath,
 			Params: rest.P{
 				"namespace":  namespace,
 				"deployment": deployment,
@@ -95,8 +95,8 @@ func (client *Client) SetContainerImage(namespace, deployment string, updateImag
 func (client *Client) ReplaceDeployment(namespace string, deployment model.Deployment) error {
 	return client.re.Put(rest.Rq{
 		Body: deployment,
-		Path: rest.URL{
-			Templ: client.APIurl + resourceDeploymentPath,
+		URL: rest.URL{
+			Path: client.APIurl + resourceDeploymentPath,
 			Params: rest.P{
 				"namespace":  namespace,
 				"deployment": deployment.Name,
@@ -111,8 +111,8 @@ func (client *Client) SetReplicas(namespace, deployment string, replicas int) er
 		Body: model.UpdateReplicas{
 			Replicas: replicas,
 		},
-		Path: rest.URL{
-			Templ: client.APIurl + resourceReplicasPath,
+		URL: rest.URL{
+			Path: client.APIurl + resourceReplicasPath,
 			Params: rest.P{
 				"namespace":  namespace,
 				"deployment": deployment,

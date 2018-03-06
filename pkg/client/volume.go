@@ -16,8 +16,8 @@ const (
 // DeleteVolume -- deletes Volume with provided volume name
 func (client *Client) DeleteVolume(volumeName string) error {
 	return client.re.Delete(rest.Rq{
-		Path: rest.URL{
-			Templ: client.APIurl + resourceVolumePath,
+		URL: rest.URL{
+			Path: client.APIurl + resourceVolumePath,
 			Params: rest.P{
 				"volume": volumeName,
 			},
@@ -31,8 +31,8 @@ func (client *Client) GetVolume(volumeName string) (model.Volume, error) {
 	var volume model.Volume
 	err := client.re.Get(rest.Rq{
 		Result: &volume,
-		Path: rest.URL{
-			Templ: client.APIurl + resourceVolumePath,
+		URL: rest.URL{
+			Path: client.APIurl + resourceVolumePath,
 			Params: rest.P{
 				"volume": volumeName,
 			},
@@ -53,8 +53,8 @@ func (client *Client) GetVolumeList(filter *string) ([]model.Volume, error) {
 	}
 	err := client.re.Get(rest.Rq{
 		Result: &volumeList,
-		Path: rest.URL{
-			Templ:  client.APIurl + resourceVolumeRootPath,
+		URL: rest.URL{
+			Path:   client.APIurl + resourceVolumeRootPath,
 			Params: rest.P{},
 		},
 	})
@@ -67,8 +67,8 @@ func (client *Client) RenameVolume(volumeName, newName string) error {
 		Body: model.ResourceUpdateName{
 			Label: newName,
 		},
-		Path: rest.URL{
-			Templ: client.APIurl + resourceVolumeNamePath,
+		URL: rest.URL{
+			Path: client.APIurl + resourceVolumeNamePath,
 			Params: rest.P{
 				"volume": volumeName,
 			},
@@ -80,8 +80,8 @@ func (client *Client) RenameVolume(volumeName, newName string) error {
 func (client *Client) SetAccess(volumeName string, accessData model.ResourceUpdateUserAccess) error {
 	return client.re.Post(rest.Rq{
 		Body: accessData,
-		Path: rest.URL{
-			Templ: client.APIurl + resourceVolumeAccessPath,
+		URL: rest.URL{
+			Path: client.APIurl + resourceVolumeAccessPath,
 			Params: rest.P{
 				"volume": volumeName,
 			},
@@ -95,8 +95,8 @@ func (client *Client) DeleteAccess(volumeName, username string) error {
 		Body: model.ResourceUpdateUserAccess{
 			Username: username,
 		},
-		Path: rest.URL{
-			Templ: client.APIurl + resourceVolumeAccessPath,
+		URL: rest.URL{
+			Path: client.APIurl + resourceVolumeAccessPath,
 			Params: rest.P{
 				"volume": volumeName,
 			},

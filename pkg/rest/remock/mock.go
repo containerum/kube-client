@@ -33,7 +33,7 @@ func NewMock() *Mock {
 	}
 }
 func (mock *Mock) Get(req rest.Rq) error {
-	mock.log.Infof("GET %q", req.Path.Build())
+	mock.log.Infof("GET %q", req.URL.Build())
 	validator := RqValidator{req}
 	if err := validator.ValidateURL(); err != nil {
 		return err
@@ -42,7 +42,7 @@ func (mock *Mock) Get(req rest.Rq) error {
 }
 
 func (mock *Mock) Put(req rest.Rq) error {
-	mock.log.Infof("PUT %q", req.Path.Build())
+	mock.log.Infof("PUT %q", req.URL.Build())
 	validator := RqValidator{req}
 	if err := validator.ValidateURL(); err != nil {
 		return err
@@ -51,7 +51,7 @@ func (mock *Mock) Put(req rest.Rq) error {
 }
 
 func (mock *Mock) Post(req rest.Rq) error {
-	mock.log.Infof("POST %q", req.Path.Build())
+	mock.log.Infof("POST %q", req.URL.Build())
 	validator := RqValidator{req}
 	if err := validator.ValidateURL(); err != nil {
 		return err
@@ -60,7 +60,7 @@ func (mock *Mock) Post(req rest.Rq) error {
 }
 
 func (mock *Mock) Delete(req rest.Rq) error {
-	mock.log.Infof("DELETE %q", req.Path.Build())
+	mock.log.Infof("DELETE %q", req.URL.Build())
 	validator := RqValidator{req}
 	if err := validator.ValidateURL(); err != nil {
 		return err
@@ -77,6 +77,6 @@ type RqValidator struct {
 }
 
 func (rqv *RqValidator) ValidateURL() error {
-	_, err := url.ParseRequestURI(rqv.Path.Build())
+	_, err := url.ParseRequestURI(rqv.URL.Build())
 	return err
 }

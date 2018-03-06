@@ -14,8 +14,8 @@ const (
 // DeletePod -- deletes pod in provided namespace
 func (client *Client) DeletePod(namespace, pod string) error {
 	return client.re.Delete(rest.Rq{
-		Path: rest.URL{
-			Templ: client.APIurl + kubeAPIpodPath,
+		URL: rest.URL{
+			Path: client.APIurl + kubeAPIpodPath,
 			Params: rest.P{
 				"pod": pod,
 			},
@@ -28,8 +28,8 @@ func (client *Client) GetPod(namespace, pod string) (model.Pod, error) {
 	var gainedPod model.Pod
 	err := client.re.Get(rest.Rq{
 		Result: &gainedPod,
-		Path: rest.URL{
-			Templ: client.APIurl + kubeAPIpodPath,
+		URL: rest.URL{
+			Path: client.APIurl + kubeAPIpodPath,
 			Params: rest.P{
 				"namespace": namespace,
 				"pod":       pod,
@@ -44,8 +44,8 @@ func (client *Client) GetPodList(namespace string) ([]model.Pod, error) {
 	var podList []model.Pod
 	err := client.re.Get(rest.Rq{
 		Result: &podList,
-		Path: rest.URL{
-			Templ: client.APIurl + kubeAPIpodRootPath,
+		URL: rest.URL{
+			Path: client.APIurl + kubeAPIpodRootPath,
 			Params: rest.P{
 				"namespace": namespace,
 			},

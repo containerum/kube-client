@@ -28,7 +28,7 @@ func NewResty() *Resty {
 // Get -- http get method
 func (re *Resty) Get(reqconfig rest.Rq) error {
 	resp, err := ToResty(reqconfig, re.request).
-		Get(reqconfig.Path.Build())
+		Get(reqconfig.URL.Build())
 	if err = rest.MapErrors(resp, err, http.StatusOK); err != nil {
 		return err
 	}
@@ -41,7 +41,7 @@ func (re *Resty) Get(reqconfig rest.Rq) error {
 // Put -- http put method
 func (re *Resty) Put(reqconfig rest.Rq) error {
 	resp, err := ToResty(reqconfig, re.request).
-		Put(reqconfig.Path.Build())
+		Put(reqconfig.URL.Build())
 	if err = rest.MapErrors(resp, err,
 		http.StatusOK,
 		http.StatusAccepted,
@@ -57,7 +57,7 @@ func (re *Resty) Put(reqconfig rest.Rq) error {
 // Post -- http post method
 func (re *Resty) Post(reqconfig rest.Rq) error {
 	resp, err := ToResty(reqconfig, re.request).
-		Post(reqconfig.Path.Build())
+		Post(reqconfig.URL.Build())
 	if err = rest.MapErrors(resp, err,
 		http.StatusOK,
 		http.StatusAccepted,
@@ -73,7 +73,7 @@ func (re *Resty) Post(reqconfig rest.Rq) error {
 // Delete -- http delete method
 func (re *Resty) Delete(reqconfig rest.Rq) error {
 	resp, err := ToResty(reqconfig, re.request).
-		Post(reqconfig.Path.Build())
+		Post(reqconfig.URL.Build())
 	return rest.MapErrors(resp, err,
 		http.StatusOK,
 		http.StatusAccepted,
