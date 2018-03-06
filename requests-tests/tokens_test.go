@@ -7,7 +7,7 @@ import (
 )
 
 func TestTokenMethods(test *testing.T) {
-	client := newClient(test)
+	client := newMockClient(test)
 	username := "helpik94@yandex.ru"
 	password := "12345678"
 	recaptcha := "03AHhf_52156hcrzZpAgJse24k1JVDN4nGjujmnlYW7KTjV-JuxmNE13SUfJNfxEC1Rj4"
