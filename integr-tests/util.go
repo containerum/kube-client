@@ -1,4 +1,4 @@
-package untests
+package test
 
 import (
 	"testing"
