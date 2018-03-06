@@ -1,6 +1,7 @@
 package re
 
 import (
+	"crypto/tls"
 	"net/http"
 
 	"git.containerum.net/ch/kube-client/pkg/cherry"
@@ -19,10 +20,20 @@ type Resty struct {
 }
 
 // NewResty -- Resty constuctor
-func NewResty() *Resty {
-	return &Resty{
+func NewResty(configs ...func(*Resty)) *Resty {
+	re := &Resty{
 		request: resty.R(),
 	}
+	for _, config := range configs {
+		config(re)
+	}
+	return re
+}
+
+func SkipTLSVerify(re *Resty) {
+	re.request = resty.New().
+		SetTLSClientConfig(&tls.Config{InsecureSkipVerify: true}).
+		R()
 }
 
 // Get -- http get method
