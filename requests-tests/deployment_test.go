@@ -11,10 +11,6 @@ import (
 )
 
 const (
-	testAPIurl = "http://192.168.88.200"
-)
-
-const (
 	kubeAPItestNamespace  = "5020aa84-4827-47da-87ee-5fc2cf18c111"
 	kubeAPItestDeployment = "roma"
 )
