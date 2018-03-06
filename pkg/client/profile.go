@@ -51,3 +51,8 @@ func (client *Client) Login(login model.Login) (model.Tokens, error) {
 	})
 	return tokens, err
 }
+
+// SetFingerprint -- sets fingerprint
+func (client *Client) SetFingerprint(fingerprint string) {
+	client.re.SetFingerprint(fingerprint)
+}
