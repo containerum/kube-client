@@ -73,6 +73,10 @@ func (mock *Mock) SetToken(token string) {
 
 }
 
+func (mock *Mock) SetFingerprint(fingerprint string) {
+
+}
+
 type RqValidator struct {
 	rest.Rq
 }
