@@ -84,6 +84,10 @@ func (re *Resty) SetToken(token string) {
 	re.request.SetHeader(rest.HeaderUserToken, token)
 }
 
+func (re *Resty) SetFingerprint(fingerprint string) {
+	re.request.SetHeader(rest.HeaderUserFingerprint, fingerprint)
+}
+
 // ToResty -- maps Rq data to resty request
 func ToResty(rq rest.Rq, req *resty.Request) *resty.Request {
 	if rq.Result != nil {
