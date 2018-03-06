@@ -1,10 +1,12 @@
 package remock
 
 import (
+	"fmt"
 	"math/rand"
 	"net/url"
 	"time"
 
+	"git.containerum.net/ch/kube-client/pkg/model"
 	"git.containerum.net/ch/kube-client/pkg/rest"
 	"github.com/sirupsen/logrus"
 )
@@ -47,7 +49,14 @@ func (mock *Mock) Put(req rest.Rq) error {
 	if err := validator.ValidateURL(); err != nil {
 		return err
 	}
-	return nil
+	switch body := req.Body.(type) {
+	case model.Deployment:
+		return ValidateDeployment(body)
+	case nil:
+		return fmt.Errorf("nil body in PUT request: %q", req.URL.Build())
+	default:
+		return nil
+	}
 }
 
 func (mock *Mock) Post(req rest.Rq) error {
