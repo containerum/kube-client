@@ -16,7 +16,7 @@ type UnexpectedHTTPstatusError struct {
 }
 
 func (err *UnexpectedHTTPstatusError) Error() string {
-	return fmt.Sprintf("unexpected status [HTTP %d %s] %q",
+	return fmt.Sprintf("unexpected status [HTTP %d %s] %s",
 		err.Status, http.StatusText(err.Status), err.Message)
 }
 
@@ -31,16 +31,18 @@ func MapErrors(resp *resty.Response, err error, okCodes ...int) error {
 			return nil
 		}
 	}
+	request := fmt.Sprintf("[%s] %q", resp.Request.Method, resp.Request.URL)
 	if resp.Error() != nil {
 		if err, ok := resp.Error().(*cherry.Err); ok &&
 			err != nil &&
 			err.ID != (cherry.ErrID{}) {
-			return err
+			return err.
+				AddDetails("on " + request)
 		}
 	}
 	return &UnexpectedHTTPstatusError{
 		Status:  resp.StatusCode(),
-		Message: string(resp.Body()),
+		Message: "on " + request,
 	}
 }
 

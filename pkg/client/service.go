@@ -17,8 +17,8 @@ func (client *Client) GetService(namespace, serviceName string) (model.Service, 
 	var service model.Service
 	err := client.re.Get(rest.Rq{
 		Result: &service,
-		Path: rest.URL{
-			Templ: client.APIurl + servicePath,
+		URL: rest.URL{
+			Path: client.APIurl + servicePath,
 			Params: rest.P{
 				"namespace": namespace,
 				"service":   serviceName,
@@ -34,8 +34,8 @@ func (client *Client) GetServiceList(namespace string) ([]model.Service, error) 
 	var serviceList []model.Service
 	err := client.re.Get(rest.Rq{
 		Result: &serviceList,
-		Path: rest.URL{
-			Templ: client.APIurl + servicesPath,
+		URL: rest.URL{
+			Path: client.APIurl + servicesPath,
 			Params: rest.P{
 				"namespace": namespace,
 			},
@@ -51,8 +51,8 @@ func (client *Client) CreateService(namespace string, service model.Service) (mo
 	err := client.re.Post(rest.Rq{
 		Body:   service,
 		Result: &gainedService,
-		Path: rest.URL{
-			Templ: client.APIurl + servicesPath,
+		URL: rest.URL{
+			Path: client.APIurl + servicesPath,
 			Params: rest.P{
 				"namespace": namespace,
 			},
@@ -65,8 +65,8 @@ func (client *Client) CreateService(namespace string, service model.Service) (mo
 // returns error in case of problem
 func (client *Client) DeleteService(namespace, serviceName string) error {
 	return client.re.Delete(rest.Rq{
-		Path: rest.URL{
-			Templ: client.APIurl + servicePath,
+		URL: rest.URL{
+			Path: client.APIurl + servicePath,
 			Params: rest.P{
 				"namespace": namespace,
 				"service":   serviceName,
@@ -82,8 +82,8 @@ func (client *Client) UpdateService(namespace string, service model.Service) (mo
 	err := client.re.Put(rest.Rq{
 		Body:   service,
 		Result: &gainedService,
-		Path: rest.URL{
-			Templ: client.APIurl + servicePath,
+		URL: rest.URL{
+			Path: client.APIurl + servicePath,
 			Params: rest.P{
 				"namespace": namespace,
 				"service":   service.Name,

@@ -3,7 +3,8 @@ package rest
 import "strings"
 
 const (
-	HeaderUserToken = "User-Token"
+	HeaderUserToken       = "User-Token"
+	HeaderUserFingerprint = "User-Client"
 )
 
 // P -- URL path params
@@ -13,12 +14,12 @@ type P map[string]string
 type Q map[string]string
 
 type URL struct {
-	Templ  string
+	Path   string
 	Params P
 }
 
 func (u *URL) Build() string {
-	addr := u.Templ
+	addr := u.Path
 	for k, v := range u.Params {
 		addr = strings.Replace(addr,
 			"{"+k+"}", v, -1)
@@ -30,7 +31,7 @@ func (u *URL) Build() string {
 type Rq struct {
 	Result interface{}
 	Body   interface{}
-	Path   URL
+	URL    URL
 	Query  Q
 	Token  string
 }
@@ -38,6 +39,7 @@ type Rq struct {
 // REST -- rest client interface
 type REST interface {
 	SetToken(string)
+	SetFingerprint(string)
 	Get(Rq) error
 	Put(Rq) error
 	Post(Rq) error

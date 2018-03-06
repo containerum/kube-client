@@ -4,14 +4,8 @@ import (
 	"fmt"
 	"testing"
 
-	kubeClient "git.containerum.net/ch/kube-client/pkg/client"
 	"git.containerum.net/ch/kube-client/pkg/model"
-	"git.containerum.net/ch/kube-client/pkg/rest/remock"
 	. "github.com/smartystreets/goconvey/convey"
-)
-
-const (
-	testAPIurl = "http://192.168.88.200"
 )
 
 const (
@@ -20,16 +14,7 @@ const (
 )
 
 func TestDeployment(test *testing.T) {
-	client, err := kubeClient.NewClient(kubeClient.Config{
-		APIurl:  testAPIurl,
-		RestAPI: remock.NewMock(),
-		User: kubeClient.User{
-			Role: "user",
-		},
-	})
-	if err != nil {
-		test.Fatalf("error while test cli init: %v", err)
-	}
+	client := newMockClient(test)
 	Convey("Test deployment methods", test, func() {
 		Convey("resource service methods", func() {
 			deployment := newFakeDeployment(test)
@@ -43,7 +28,7 @@ func TestDeployment(test *testing.T) {
 			fmt.Printf("%#v", er)
 			So(er, ShouldBeNil)
 
-			err = client.SetContainerImage(namespace,
+			err := client.SetContainerImage(namespace,
 				deployment.Name, updateImage)
 			So(err, ShouldBeNil)
 			deployment.Labels["color"] = "blue"

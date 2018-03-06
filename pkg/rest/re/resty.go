@@ -1,6 +1,7 @@
 package re
 
 import (
+	"crypto/tls"
 	"net/http"
 
 	"git.containerum.net/ch/kube-client/pkg/cherry"
@@ -19,16 +20,26 @@ type Resty struct {
 }
 
 // NewResty -- Resty constuctor
-func NewResty() *Resty {
-	return &Resty{
+func NewResty(configs ...func(*Resty)) *Resty {
+	re := &Resty{
 		request: resty.R(),
 	}
+	for _, config := range configs {
+		config(re)
+	}
+	return re
+}
+
+func SkipTLSVerify(re *Resty) {
+	re.request = resty.New().
+		SetTLSClientConfig(&tls.Config{InsecureSkipVerify: true}).
+		R()
 }
 
 // Get -- http get method
 func (re *Resty) Get(reqconfig rest.Rq) error {
 	resp, err := ToResty(reqconfig, re.request).
-		Get(reqconfig.Path.Build())
+		Get(reqconfig.URL.Build())
 	if err = rest.MapErrors(resp, err, http.StatusOK); err != nil {
 		return err
 	}
@@ -41,7 +52,7 @@ func (re *Resty) Get(reqconfig rest.Rq) error {
 // Put -- http put method
 func (re *Resty) Put(reqconfig rest.Rq) error {
 	resp, err := ToResty(reqconfig, re.request).
-		Put(reqconfig.Path.Build())
+		Put(reqconfig.URL.Build())
 	if err = rest.MapErrors(resp, err,
 		http.StatusOK,
 		http.StatusAccepted,
@@ -57,7 +68,7 @@ func (re *Resty) Put(reqconfig rest.Rq) error {
 // Post -- http post method
 func (re *Resty) Post(reqconfig rest.Rq) error {
 	resp, err := ToResty(reqconfig, re.request).
-		Post(reqconfig.Path.Build())
+		Post(reqconfig.URL.Build())
 	if err = rest.MapErrors(resp, err,
 		http.StatusOK,
 		http.StatusAccepted,
@@ -73,7 +84,7 @@ func (re *Resty) Post(reqconfig rest.Rq) error {
 // Delete -- http delete method
 func (re *Resty) Delete(reqconfig rest.Rq) error {
 	resp, err := ToResty(reqconfig, re.request).
-		Post(reqconfig.Path.Build())
+		Post(reqconfig.URL.Build())
 	return rest.MapErrors(resp, err,
 		http.StatusOK,
 		http.StatusAccepted,
@@ -82,6 +93,10 @@ func (re *Resty) Delete(reqconfig rest.Rq) error {
 
 func (re *Resty) SetToken(token string) {
 	re.request.SetHeader(rest.HeaderUserToken, token)
+}
+
+func (re *Resty) SetFingerprint(fingerprint string) {
+	re.request.SetHeader(rest.HeaderUserFingerprint, fingerprint)
 }
 
 // ToResty -- maps Rq data to resty request

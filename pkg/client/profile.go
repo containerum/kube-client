@@ -17,8 +17,8 @@ func (client *Client) GetProfileInfo() (model.User, error) {
 	var user model.User
 	err := client.re.Get(rest.Rq{
 		Result: &user,
-		Path: rest.URL{
-			Templ:  client.APIurl + userInfoPath,
+		URL: rest.URL{
+			Path:   client.APIurl + userInfoPath,
 			Params: rest.P{},
 		},
 	})
@@ -30,8 +30,8 @@ func (client *Client) ChangePassword(currentPassword, newPassword string) (model
 	var tokens model.Tokens
 	err := client.re.Put(rest.Rq{
 		Result: &tokens,
-		Path: rest.URL{
-			Templ:  client.APIurl + userPasswordChangePath,
+		URL: rest.URL{
+			Path:   client.APIurl + userPasswordChangePath,
 			Params: rest.P{},
 		},
 	})
@@ -44,10 +44,15 @@ func (client *Client) Login(login model.Login) (model.Tokens, error) {
 	err := client.re.Post(rest.Rq{
 		Body:   login,
 		Result: &tokens,
-		Path: rest.URL{
-			Templ:  client.APIurl + userLoginPath,
+		URL: rest.URL{
+			Path:   client.APIurl + userLoginPath,
 			Params: rest.P{},
 		},
 	})
 	return tokens, err
+}
+
+// SetFingerprint -- sets fingerprint
+func (client *Client) SetFingerprint(fingerprint string) {
+	client.re.SetFingerprint(fingerprint)
 }

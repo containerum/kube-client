@@ -19,8 +19,8 @@ func (client *Client) CheckToken(token string) (model.CheckTokenResponse, error)
 	var tokenResponse model.CheckTokenResponse
 	err := client.re.Get(rest.Rq{
 		Result: &tokenResponse,
-		Path: rest.URL{
-			Templ: client.APIurl + getCheckToken,
+		URL: rest.URL{
+			Path: client.APIurl + getCheckToken,
 			Params: rest.P{
 				"access_token": token,
 			},
@@ -36,12 +36,17 @@ func (client *Client) ExtendToken(refreshToken string) (model.Tokens, error) {
 	var tokens model.Tokens
 	err := client.re.Put(rest.Rq{
 		Result: &tokens,
-		Path: rest.URL{
-			Templ: client.APIurl + getExtendToken,
+		URL: rest.URL{
+			Path: client.APIurl + getExtendToken,
 			Params: rest.P{
 				"refresh_token": refreshToken,
 			},
 		},
 	})
 	return tokens, err
+}
+
+// SetToken -- sets access token
+func (client *Client) SetToken(token string) {
+	client.re.SetToken(token)
 }

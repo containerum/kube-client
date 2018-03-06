@@ -10,33 +10,35 @@ import (
 	"testing"
 	"time"
 
+	"git.containerum.net/ch/kube-client/pkg/rest/re"
+
 	kubeClient "git.containerum.net/ch/kube-client/pkg/client"
 	"git.containerum.net/ch/kube-client/pkg/model"
+	"git.containerum.net/ch/kube-client/pkg/rest/remock"
 )
 
 const (
-	resourceAddr = "http://192.168.88.200:1213"
-	kubeAPIaddr  = "http://192.168.88.200:1214"
+	testAPIurl = "http://192.168.88.200"
 )
 
-func newClient(test *testing.T) *kubeClient.Client {
-	client, err := kubeClient.NewClient(
-		kubeClient.Config{
-			APIurl: kubeAPIaddr,
-			User: kubeClient.User{
-				Role: "user",
-			},
-		})
+func newMockClient(test *testing.T) *kubeClient.Client {
+	client, err := kubeClient.NewClient(kubeClient.Config{
+		APIurl:  "http://192.168.88.200",
+		RestAPI: remock.NewMock(),
+		User: kubeClient.User{
+			Role: "user",
+		},
+	})
 	if err != nil {
-		test.Fatalf("error while creating client: %v", err)
+		test.Fatalf("error while client initialisation: %v", err)
 	}
 	return client
 }
-
-func newCubeAPIClient(test *testing.T) *kubeClient.Client {
+func newClient(test *testing.T) *kubeClient.Client {
 	client, err := kubeClient.NewClient(
 		kubeClient.Config{
-			APIurl: kubeAPIaddr,
+			RestAPI: re.NewResty(),
+			APIurl:  "http://192.168.88.200",
 			User: kubeClient.User{
 				Role: "user",
 			},
