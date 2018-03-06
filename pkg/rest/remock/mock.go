@@ -1,7 +1,6 @@
 package remock
 
 import (
-	"fmt"
 	"math/rand"
 	"net/url"
 	"time"
@@ -37,7 +36,7 @@ func NewMock() *Mock {
 func (mock *Mock) Get(req rest.Rq) error {
 	mock.log.Infof("GET %q", req.URL.Build())
 	validator := RqValidator{req}
-	if err := validator.ValidateURL(); err != nil {
+	if err := validator.Validate(); err != nil {
 		return err
 	}
 	return nil
@@ -46,23 +45,16 @@ func (mock *Mock) Get(req rest.Rq) error {
 func (mock *Mock) Put(req rest.Rq) error {
 	mock.log.Infof("PUT %q", req.URL.Build())
 	validator := RqValidator{req}
-	if err := validator.ValidateURL(); err != nil {
+	if err := validator.Validate(); err != nil {
 		return err
 	}
-	switch body := req.Body.(type) {
-	case model.Deployment:
-		return ValidateDeployment(body)
-	case nil:
-		return fmt.Errorf("nil body in PUT request: %q", req.URL.Build())
-	default:
-		return nil
-	}
+	return nil
 }
 
 func (mock *Mock) Post(req rest.Rq) error {
 	mock.log.Infof("POST %q", req.URL.Build())
 	validator := RqValidator{req}
-	if err := validator.ValidateURL(); err != nil {
+	if err := validator.Validate(); err != nil {
 		return err
 	}
 	return nil
@@ -71,7 +63,7 @@ func (mock *Mock) Post(req rest.Rq) error {
 func (mock *Mock) Delete(req rest.Rq) error {
 	mock.log.Infof("DELETE %q", req.URL.Build())
 	validator := RqValidator{req}
-	if err := validator.ValidateURL(); err != nil {
+	if err := validator.Validate(); err != nil {
 		return err
 	}
 	return nil
@@ -85,7 +77,29 @@ type RqValidator struct {
 	rest.Rq
 }
 
+func (rqv *RqValidator) Validate() error {
+	if err := rqv.ValidateURL(); err != nil {
+		return err
+	}
+	if err := rqv.ValidateBody(); err != nil {
+		return err
+	}
+	return nil
+}
 func (rqv *RqValidator) ValidateURL() error {
 	_, err := url.ParseRequestURI(rqv.URL.Build())
 	return err
+}
+
+func (rqv *RqValidator) ValidateBody() error {
+	switch body := rqv.Body.(type) {
+	case model.Deployment:
+		return ValidateDeployment(body)
+	case model.Container:
+		return ValidateContainer(body)
+	case nil:
+		return nil
+	default:
+		return nil
+	}
 }
