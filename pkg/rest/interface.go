@@ -38,6 +38,7 @@ type Rq struct {
 // REST -- rest client interface
 type REST interface {
 	SetToken(string)
+	SetFingerprint(string)
 	Get(Rq) error
 	Put(Rq) error
 	Post(Rq) error
