@@ -76,8 +76,8 @@ func (client *Client) RenameVolume(volumeName, newName string) error {
 	})
 }
 
-// SetAccess -- sets User Volume access
-func (client *Client) SetAccess(volumeName string, accessData model.ResourceUpdateUserAccess) error {
+// SetVolumeAccess -- sets User Volume access
+func (client *Client) SetVolumeAccess(volumeName string, accessData model.ResourceUpdateUserAccess) error {
 	return client.re.Post(rest.Rq{
 		Body: accessData,
 		URL: rest.URL{
