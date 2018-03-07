@@ -1,9 +1,5 @@
 package model
 
-type DeploymentsList struct {
-	Deployments []Deployment `json:"deployments"`
-}
-
 // DeploymentStatus -- represents deployment status
 // CreatedAt and UpdatedAt -- Unix timestamps
 type DeploymentStatus struct {
