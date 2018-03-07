@@ -11,9 +11,7 @@ import (
 
 //Client - rest client
 type Client struct {
-	RestAPI rest.REST
 	Config
-	User User
 }
 
 //User -
@@ -43,9 +41,7 @@ func NewClient(config Config) (*Client, error) {
 		config.RestAPI = re.NewResty()
 	}
 	client := &Client{
-		RestAPI: config.RestAPI,
-		Config:  config,
-		User:    config.User,
+		config,
 	}
 	return client, nil
 }
