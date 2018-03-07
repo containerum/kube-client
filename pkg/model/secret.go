@@ -1,9 +1,5 @@
 package model
 
-type SecretsList struct {
-	Secrets []Secret `json:"secrets"`
-}
-
 // Secret --
 type Secret struct {
 	Name      string            `json:"name"`
