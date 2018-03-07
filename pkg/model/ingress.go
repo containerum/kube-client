@@ -1,5 +1,9 @@
 package model
 
+type IngressesList struct {
+	Ingresses []Ingress `json:"ingresses"`
+}
+
 // Ingress --
 type Ingress struct {
 	Name      string `json:"name"`

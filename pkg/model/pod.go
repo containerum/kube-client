@@ -1,5 +1,9 @@
 package model
 
+type PodsList struct {
+	Pods []Pod `json:"pods"`
+}
+
 // Pod --
 type Pod struct {
 	Name            string             `json:"name"`

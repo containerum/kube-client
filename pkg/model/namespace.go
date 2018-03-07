@@ -1,5 +1,9 @@
 package model
 
+type NamespacesList struct {
+	Namespaces []Namespace `json:"namespaces"`
+}
+
 // Resources -- represents  namespace resources,
 // Hard --  resource limits
 type Resources struct {
