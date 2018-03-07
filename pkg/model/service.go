@@ -13,6 +13,10 @@ const (
 	TCP Protocol = "TCP"
 )
 
+type ServicesList struct {
+	Services []Service `json:"services"`
+}
+
 // Service --
 type Service struct {
 	Name      string        `json:"name"`

@@ -1,5 +1,9 @@
 package model
 
+type ConfigMapsList struct {
+	ConfigMaps []ConfigMap `json:"configmaps"`
+}
+
 // ConfigMap --
 type ConfigMap struct {
 	Name      string            `json:"name"`
