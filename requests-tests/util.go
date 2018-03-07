@@ -10,10 +10,9 @@ import (
 	"testing"
 	"time"
 
-	"git.containerum.net/ch/kube-client/pkg/rest/re"
-
 	kubeClient "git.containerum.net/ch/kube-client/pkg/client"
 	"git.containerum.net/ch/kube-client/pkg/model"
+	"git.containerum.net/ch/kube-client/pkg/rest/re"
 	"git.containerum.net/ch/kube-client/pkg/rest/remock"
 )
 
