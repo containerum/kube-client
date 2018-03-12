@@ -12,7 +12,7 @@ func TestTokenMethods(test *testing.T) {
 	password := "12345678"
 	recaptcha := "03AHhf_52156hcrzZpAgJse24k1JVDN4nGjujmnlYW7KTjV-JuxmNE13SUfJNfxEC1Rj4"
 	login := model.Login{
-		Username:  username,
+		Login:     username,
 		Password:  password,
 		Recaptcha: &recaptcha,
 	}

@@ -11,7 +11,7 @@ func TestDeployment(test *testing.T) {
 	client := newClient(test)
 	client.SetFingerprint("514c67239bcd3f2b7837eb9a3edc30bc")
 	tokens, err := client.Login(model.Login{
-		Username: "helpik94@yandex.ru",
+		Login:    "helpik94@yandex.ru",
 		Password: "12345678",
 	})
 	if err != nil {
