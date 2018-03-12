@@ -7,8 +7,8 @@ func (constr ErrConstruct) Error() string {
 }
 
 func (constr ErrConstruct) AddDetails(details ...string) ErrConstruct {
-	err := constr().AddDetails(details...)
 	return func(options ...func(*Err)) *Err {
+		err := constr().AddDetails(details...)
 		for _, option := range options {
 			option(err)
 		}
@@ -17,8 +17,8 @@ func (constr ErrConstruct) AddDetails(details ...string) ErrConstruct {
 }
 
 func (constr ErrConstruct) AddDetailsErr(details ...error) ErrConstruct {
-	err := constr().AddDetailsErr(details...)
 	return func(options ...func(*Err)) *Err {
+		err := constr().AddDetailsErr(details...)
 		for _, option := range options {
 			option(err)
 		}
@@ -27,8 +27,8 @@ func (constr ErrConstruct) AddDetailsErr(details ...error) ErrConstruct {
 }
 
 func (constr ErrConstruct) AddDetailF(f string, vals ...interface{}) ErrConstruct {
-	err := constr().AddDetailF(f, vals...)
 	return func(options ...func(*Err)) *Err {
+		err := constr().AddDetailF(f, vals...)
 		for _, option := range options {
 			option(err)
 		}
