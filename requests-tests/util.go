@@ -51,7 +51,15 @@ func newClient(test *testing.T) *kubeClient.Client {
 func newFakeNamespaces(test *testing.T) []model.Namespace {
 	return []model.Namespace{
 		{
-			TariffID: "4563e8c1-fb41-416a-9798-e949a2616260",
+			Label: "piterPen",
+			Volumes: []model.Volume{
+				{
+					Label:      "penny",
+					CreateTime: time.Now(),
+					Replicas:   2,
+					Storage:    1,
+				},
+			},
 		},
 	}
 }
