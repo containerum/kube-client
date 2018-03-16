@@ -35,9 +35,9 @@ func TestService(test *testing.T) {
 			Domain: "",
 			Ports: []model.ServicePort{
 				{
-					Name:     "wasteland_entry",
-					Port:     11666,
-					Protocol: model.UDP,
+					Name:       "wasteland_entry",
+					TargetPort: 11666,
+					Protocol:   model.UDP,
 				},
 			},
 		}
