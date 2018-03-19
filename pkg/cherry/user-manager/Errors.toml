@@ -225,3 +225,15 @@ SID = 4
     StatusHTTP = 500
     Message = "Internal error"
     Kind = 35
+
+[[error]]
+    Name = "ErrAccountBlocked"
+    StatusHTTP = 403
+    Message = "Account is blocked"
+    Kind = 36
+
+[[error]]
+    Name = "ErrUserAlreadyActivated"
+    StatusHTTP = 400
+    Message = "User is already activated"
+    Kind = 37
