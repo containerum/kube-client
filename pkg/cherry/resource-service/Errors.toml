@@ -84,3 +84,9 @@ SID = 3
     StatusHTTP = 507
     Message = "Can`t allocate resources for volume"
     Kind = 14
+
+[[error]]
+    Name = "ErrPortsExhausted"
+    StatusHTTP = 507
+    Message = "Free ports pool for domain exhausted"
+    Kind = 15
