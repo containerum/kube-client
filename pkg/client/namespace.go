@@ -25,12 +25,12 @@ const (
 //GetNamespaceList return namespace list. Can use query filters: owner
 func (client *Client) GetNamespaceList(queries map[string]string) ([]model.Namespace, error) {
 	var namespaceList []model.Namespace
-	jsonAdapter := struct {
-		Namespaces *[]model.Namespace
+	jsonAdaptor := struct {
+		Namespaces *[]model.Namespace `json:"namespaces"`
 	}{&namespaceList}
 
 	err := client.RestAPI.Get(rest.Rq{
-		Result: &jsonAdapter,
+		Result: &jsonAdaptor,
 		Query:  queries,
 		URL: rest.URL{
 			Path:   client.APIurl + getNamespaceList,
