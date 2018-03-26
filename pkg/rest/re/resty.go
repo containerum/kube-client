@@ -25,7 +25,7 @@ func NewResty(configs ...func(*Resty)) *Resty {
 	re := &Resty{
 		client: resty.New().
 			SetRESTMode().
-			SetHeader("User-Agent", "Chrome"),
+			SetHeader("User-Agent", "kube-client"),
 	}
 	for _, config := range configs {
 		config(re)
