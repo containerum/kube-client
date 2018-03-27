@@ -1,6 +1,7 @@
 package client
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -25,24 +26,29 @@ const (
 	maxMessageSize = 1024
 )
 
-func (client *Client) GetPodLogs(namespace, pod, container string, previous, follow bool, tail int) (*io.PipeReader, error) {
-	logUrl, err := client.podLogUrl(namespace, pod, container, previous, follow, tail)
+type GetPodLogsParams struct {
+	Namespace, Pod, Container string
+	Previous, Follow          bool
+	Tail                      int
+}
+
+func (client *Client) GetPodLogs(ctx context.Context, params GetPodLogsParams, output io.Writer) error {
+	logUrl, err := client.podLogUrl(params)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	conn, err := client.newWebsocketConnection(logUrl)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	pipeRd, pipeWr := io.Pipe()
-	go client.logStream(conn, pipeWr)
+	go client.logStream(ctx, conn, output)
 
-	return pipeRd, nil
+	return nil
 }
 
-func (client *Client) podLogUrl(ns, pod, container string, previous, follow bool, tail int) (*url.URL, error) {
+func (client *Client) podLogUrl(params GetPodLogsParams) (*url.URL, error) {
 	queryUrl, err := url.Parse(client.APIurl)
 	if err != nil {
 		return nil, err
@@ -53,11 +59,11 @@ func (client *Client) podLogUrl(ns, pod, container string, previous, follow bool
 	case "https":
 		queryUrl.Scheme = "wss"
 	}
-	queryUrl.Path = fmt.Sprintf("/namespaces/%s/pods/%s/log", ns, pod)
-	queryUrl.Query().Set(followParam, strconv.FormatBool(follow))
-	queryUrl.Query().Set(previousParam, strconv.FormatBool(previous))
-	queryUrl.Query().Set(tailParam, strconv.Itoa(tail))
-	queryUrl.Query().Set(containerParam, container)
+	queryUrl.Path = fmt.Sprintf("/namespaces/%s/pods/%s/log", params.Namespace, params.Pod)
+	queryUrl.Query().Set(followParam, strconv.FormatBool(params.Follow))
+	queryUrl.Query().Set(previousParam, strconv.FormatBool(params.Previous))
+	queryUrl.Query().Set(tailParam, strconv.Itoa(params.Tail))
+	queryUrl.Query().Set(containerParam, params.Container)
 	return queryUrl, nil
 }
 
@@ -81,21 +87,34 @@ func (client *Client) newWebsocketConnection(url *url.URL) (*websocket.Conn, err
 	return conn, nil
 }
 
-func (client *Client) logStream(conn *websocket.Conn, wr *io.PipeWriter) {
+func (client *Client) logStream(ctx context.Context, conn *websocket.Conn, out io.Writer) {
 	defer conn.Close()
 	conn.SetReadLimit(maxMessageSize)
+	dataCh := make(chan []byte)
+
+	go func() {
+		defer close(dataCh)
+		for {
+			mtype, data, err := conn.ReadMessage()
+			if err != nil {
+				return
+			}
+			switch mtype {
+			case websocket.TextMessage, websocket.BinaryMessage:
+				dataCh <- data
+			default:
+				continue
+			}
+		}
+	}()
+
 	for {
-		mtype, data, err := conn.ReadMessage()
-		if err != nil {
-			wr.CloseWithError(err)
-			return
-		}
-		switch mtype {
-		case websocket.TextMessage, websocket.BinaryMessage:
-		default:
-			continue
-		}
-		if _, err := wr.Write(data); err != nil {
+		select {
+		case data := <-dataCh:
+			if _, err := out.Write(data); err != nil {
+				return
+			}
+		case <-ctx.Done():
 			return
 		}
 	}
