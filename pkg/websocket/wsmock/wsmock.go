@@ -4,10 +4,13 @@ package wsmock
 //go:generate noice -t errors.toml
 
 import (
+	"crypto/x509"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
 	"time"
+
+	"github.com/sirupsen/logrus"
 )
 
 type PeriodicServerConfig struct {
@@ -19,12 +22,18 @@ type PeriodicServer struct {
 	cfg PeriodicServerConfig
 
 	srv *httptest.Server
+	log *logrus.Entry
 }
 
-func NewPeriodicServer(cfg PeriodicServerConfig) *PeriodicServer {
+func NewPeriodicServer(cfg PeriodicServerConfig, log *logrus.Entry, tls bool) *PeriodicServer {
 	var ret PeriodicServer
 	ret.cfg = cfg
-	ret.srv = httptest.NewServer(http.HandlerFunc(ret.periodicHandler))
+	ret.log = log
+	if tls {
+		ret.srv = httptest.NewTLSServer(http.HandlerFunc(ret.periodicHandler))
+	} else {
+		ret.srv = httptest.NewServer(http.HandlerFunc(ret.periodicHandler))
+	}
 	return &ret
 }
 
@@ -34,13 +43,23 @@ func (p *PeriodicServer) URL() *url.URL {
 	return serverURL
 }
 
-type EchoServer struct {
-	srv *httptest.Server
+func (p *PeriodicServer) Certificate() *x509.Certificate {
+	return p.srv.Certificate()
 }
 
-func NewEchoServer() *EchoServer {
+type EchoServer struct {
+	srv *httptest.Server
+	log *logrus.Entry
+}
+
+func NewEchoServer(log *logrus.Entry, tls bool) *EchoServer {
 	var ret EchoServer
-	ret.srv = httptest.NewServer(http.HandlerFunc(ret.echoHandler))
+	ret.log = log
+	if tls {
+		ret.srv = httptest.NewTLSServer(http.HandlerFunc(ret.echoHandler))
+	} else {
+		ret.srv = httptest.NewServer(http.HandlerFunc(ret.echoHandler))
+	}
 	return &ret
 }
 
@@ -48,4 +67,8 @@ func (s *EchoServer) URL() *url.URL {
 	serverURL, _ := url.Parse(s.srv.URL)
 	serverURL.Scheme = "ws"
 	return serverURL
+}
+
+func (s *EchoServer) Certificate() *x509.Certificate {
+	return s.srv.Certificate()
 }

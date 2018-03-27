@@ -16,6 +16,7 @@ var upgrader = websocket.Upgrader{
 }
 
 func (s *EchoServer) echoHandler(w http.ResponseWriter, r *http.Request) {
+	s.log.Debugf("Request: %s %s", r.Method, r.URL.String())
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		retErr := errwsmock.ErrUpgradeFailed().AddDetailsErr(err)
@@ -30,7 +31,14 @@ func (s *EchoServer) echoHandler(w http.ResponseWriter, r *http.Request) {
 			conn.WriteMessage(msgType, []byte(fmt.Sprintf("read error: %v", err)))
 			return
 		}
-
+		switch msgType {
+		case websocket.TextMessage:
+			s.log.Debugf("received text message: %s", data)
+		case websocket.BinaryMessage:
+			s.log.Debugf("received binary message: %x", data)
+		default:
+			s.log.Debugf("received unknown message type %d: %x", msgType, data)
+		}
 		if err := conn.WriteMessage(msgType, data); err != nil {
 			return
 		}
@@ -38,6 +46,7 @@ func (s *EchoServer) echoHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (p *PeriodicServer) periodicHandler(w http.ResponseWriter, r *http.Request) {
+	p.log.Debugf("Request: %s %s", r.Method, r.URL.String())
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		retErr := errwsmock.ErrUpgradeFailed().AddDetailsErr(err)
@@ -50,6 +59,7 @@ func (p *PeriodicServer) periodicHandler(w http.ResponseWriter, r *http.Request)
 
 	for {
 		<-ticker.C
+		p.log.Debugf("sending message: %s", p.cfg.MsgText)
 		if err := conn.WriteMessage(websocket.TextMessage, []byte(p.cfg.MsgText)); err != nil {
 			ticker.Stop()
 			return
