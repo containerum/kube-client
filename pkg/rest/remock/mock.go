@@ -10,6 +10,8 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+//go:generate -t errors.toml
+
 var (
 	_ rest.REST = &Mock{}
 )
