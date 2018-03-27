@@ -16,7 +16,8 @@ var (
 // Resty -- resty client,
 // implements REST interface
 type Resty struct {
-	request *resty.Request
+	token, fingerprint string
+	request            *resty.Request
 }
 
 // NewResty -- Resty constuctor
@@ -92,11 +93,21 @@ func (re *Resty) Delete(reqconfig rest.Rq) error {
 }
 
 func (re *Resty) SetToken(token string) {
+	re.token = token
 	re.request.SetHeader(rest.HeaderUserToken, token)
 }
 
 func (re *Resty) SetFingerprint(fingerprint string) {
+	re.fingerprint = fingerprint
 	re.request.SetHeader(rest.HeaderUserFingerprint, fingerprint)
+}
+
+func (re *Resty) GetToken() string {
+	return re.token
+}
+
+func (re *Resty) GetFingerprint() string {
+	return re.fingerprint
 }
 
 // ToResty -- maps Rq data to resty request
