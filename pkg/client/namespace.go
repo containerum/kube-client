@@ -25,11 +25,15 @@ const (
 //GetNamespaceList return namespace list. Can use query filters: owner
 func (client *Client) GetNamespaceList(queries map[string]string) ([]model.Namespace, error) {
 	var namespaceList []model.Namespace
+	jsonAdaptor := struct {
+		Namespaces *[]model.Namespace `json:"namespaces"`
+	}{&namespaceList}
+
 	err := client.RestAPI.Get(rest.Rq{
-		Result: &namespaceList,
+		Result: &jsonAdaptor,
 		Query:  queries,
 		URL: rest.URL{
-			Path:   client.APIurl + getNamespaceList,
+			Path:   getNamespaceList,
 			Params: rest.P{},
 		},
 	})
@@ -42,7 +46,7 @@ func (client *Client) GetNamespace(ns string) (model.Namespace, error) {
 	err := client.RestAPI.Get(rest.Rq{
 		Result: &namespace,
 		URL: rest.URL{
-			Path: client.APIurl + getNamespace,
+			Path: getNamespace,
 			Params: rest.P{
 				"namespace": ns,
 			},
@@ -58,7 +62,7 @@ func (client *Client) ResourceGetNamespace(namespace string) (model.Namespace, e
 	err := client.RestAPI.Get(rest.Rq{
 		Result: &ns,
 		URL: rest.URL{
-			Path: client.APIurl + resourceNamespacePath,
+			Path: resourceNamespacePath,
 			Params: rest.P{
 				"namespace": namespace,
 			},
@@ -79,7 +83,7 @@ func (client *Client) ResourceGetNamespaceList(page, perPage uint64) ([]model.Na
 			"per_page": strconv.FormatUint(perPage, 10),
 		},
 		URL: rest.URL{
-			Path:   client.APIurl + resourceNamespacesPath,
+			Path:   resourceNamespacesPath,
 			Params: rest.P{},
 		},
 	})
@@ -94,7 +98,7 @@ func (client *Client) RenameNamespace(namespace, newName string) error {
 			Label: newName,
 		},
 		URL: rest.URL{
-			Path: client.APIurl + resourceNamespacePath,
+			Path: resourceNamespacePath,
 			Params: rest.P{
 				"namespace": namespace,
 			},
@@ -110,7 +114,7 @@ func (client *Client) SetNamespaceAccess(namespace, username, access string) err
 			Access:   access,
 		},
 		URL: rest.URL{
-			Path: client.APIurl + resourceNamespaceNamePath,
+			Path: resourceNamespaceNamePath,
 			Params: rest.P{
 				"namespace": namespace,
 			},
@@ -125,7 +129,7 @@ func (client *Client) DeleteNamespaceAccess(namespace, username string) error {
 			Username: username,
 		},
 		URL: rest.URL{
-			Path: client.APIurl + resourceNamespaceNamePath,
+			Path: resourceNamespaceNamePath,
 			Params: rest.P{
 				"namespace": namespace,
 			},
@@ -137,7 +141,7 @@ func (client *Client) DeleteNamespaceAccess(namespace, username string) error {
 func (client *Client) DeleteNamespace(namespace string) error {
 	return client.RestAPI.Delete(rest.Rq{
 		URL: rest.URL{
-			Path: client.APIurl + getNamespace,
+			Path: getNamespace,
 			Params: rest.P{
 				"namespace": namespace,
 			},

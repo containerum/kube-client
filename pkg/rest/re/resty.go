@@ -2,6 +2,7 @@ package re
 
 import (
 	"crypto/tls"
+	"io"
 	"net/http"
 
 	"git.containerum.net/ch/kube-client/pkg/cherry"
@@ -17,13 +18,15 @@ var (
 // implements REST interface
 type Resty struct {
 	token, fingerprint string
-	request            *resty.Request
+	client *resty.Client
 }
 
 // NewResty -- Resty constuctor
 func NewResty(configs ...func(*Resty)) *Resty {
 	re := &Resty{
-		request: resty.R(),
+		client: resty.New().
+			SetRESTMode().
+			SetHeader("User-Agent", "kube-client"),
 	}
 	for _, config := range configs {
 		config(re)
@@ -31,15 +34,27 @@ func NewResty(configs ...func(*Resty)) *Resty {
 	return re
 }
 
+func WithHost(addr string) func(re *Resty) {
+	return func(re *Resty) {
+		re.client.SetHostURL(addr)
+	}
+}
+
+func WithLogger(wr io.Writer) func(re *Resty) {
+	return func(re *Resty) {
+		re.client.SetDebug(true)
+		re.client.SetLogger(wr)
+		re.client.Log.Println("rest client in debug mode")
+	}
+}
+
 func SkipTLSVerify(re *Resty) {
-	re.request = resty.New().
-		SetTLSClientConfig(&tls.Config{InsecureSkipVerify: true}).
-		R()
+	re.client.SetTLSClientConfig(&tls.Config{InsecureSkipVerify: true})
 }
 
 // Get -- http get method
 func (re *Resty) Get(reqconfig rest.Rq) error {
-	resp, err := ToResty(reqconfig, re.request).
+	resp, err := ToResty(reqconfig, re.client.R()).
 		Get(reqconfig.URL.Build())
 	if err = rest.MapErrors(resp, err, http.StatusOK); err != nil {
 		return err
@@ -52,7 +67,7 @@ func (re *Resty) Get(reqconfig rest.Rq) error {
 
 // Put -- http put method
 func (re *Resty) Put(reqconfig rest.Rq) error {
-	resp, err := ToResty(reqconfig, re.request).
+	resp, err := ToResty(reqconfig, re.client.R()).
 		Put(reqconfig.URL.Build())
 	if err = rest.MapErrors(resp, err,
 		http.StatusOK,
@@ -68,7 +83,7 @@ func (re *Resty) Put(reqconfig rest.Rq) error {
 
 // Post -- http post method
 func (re *Resty) Post(reqconfig rest.Rq) error {
-	resp, err := ToResty(reqconfig, re.request).
+	resp, err := ToResty(reqconfig, re.client.R()).
 		Post(reqconfig.URL.Build())
 	if err = rest.MapErrors(resp, err,
 		http.StatusOK,
@@ -84,7 +99,7 @@ func (re *Resty) Post(reqconfig rest.Rq) error {
 
 // Delete -- http delete method
 func (re *Resty) Delete(reqconfig rest.Rq) error {
-	resp, err := ToResty(reqconfig, re.request).
+	resp, err := ToResty(reqconfig, re.client.R()).
 		Post(reqconfig.URL.Build())
 	return rest.MapErrors(resp, err,
 		http.StatusOK,
@@ -93,13 +108,13 @@ func (re *Resty) Delete(reqconfig rest.Rq) error {
 }
 
 func (re *Resty) SetToken(token string) {
+	re.client.SetHeader(rest.HeaderUserToken, token)
 	re.token = token
-	re.request.SetHeader(rest.HeaderUserToken, token)
 }
 
 func (re *Resty) SetFingerprint(fingerprint string) {
+	re.client.SetHeader(rest.HeaderUserFingerprint, fingerprint)
 	re.fingerprint = fingerprint
-	re.request.SetHeader(rest.HeaderUserFingerprint, fingerprint)
 }
 
 func (re *Resty) GetToken() string {
