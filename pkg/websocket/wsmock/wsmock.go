@@ -39,7 +39,12 @@ func NewPeriodicServer(cfg PeriodicServerConfig, log *logrus.Entry, tls bool) *P
 
 func (p *PeriodicServer) URL() *url.URL {
 	serverURL, _ := url.Parse(p.srv.URL)
-	serverURL.Scheme = "ws"
+	switch serverURL.Scheme {
+	case "http":
+		serverURL.Scheme = "ws"
+	case "https":
+		serverURL.Scheme = "wss"
+	}
 	return serverURL
 }
 
@@ -65,7 +70,13 @@ func NewEchoServer(log *logrus.Entry, tls bool) *EchoServer {
 
 func (s *EchoServer) URL() *url.URL {
 	serverURL, _ := url.Parse(s.srv.URL)
-	serverURL.Scheme = "ws"
+	switch serverURL.Scheme {
+	case "http":
+		serverURL.Scheme = "ws"
+	case "https":
+		serverURL.Scheme = "wss"
+	}
+
 	return serverURL
 }
 
