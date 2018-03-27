@@ -47,6 +47,12 @@ func (client *Client) podLogUrl(ns, pod, container string, previous, follow bool
 	if err != nil {
 		return nil, err
 	}
+	switch queryUrl.Scheme {
+	case "http":
+		queryUrl.Scheme = "ws"
+	case "https":
+		queryUrl.Scheme = "wss"
+	}
 	queryUrl.Path = fmt.Sprintf("/namespaces/%s/pods/%s/log", ns, pod)
 	queryUrl.Query().Set(followParam, strconv.FormatBool(follow))
 	queryUrl.Query().Set(previousParam, strconv.FormatBool(previous))

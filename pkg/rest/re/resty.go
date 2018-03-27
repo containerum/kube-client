@@ -18,7 +18,7 @@ var (
 // implements REST interface
 type Resty struct {
 	token, fingerprint string
-	client *resty.Client
+	client             *resty.Client
 }
 
 // NewResty -- Resty constuctor
