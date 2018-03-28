@@ -1,7 +1,7 @@
 package client
 
 import (
-	"context"
+	"bufio"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -26,26 +26,42 @@ const (
 	maxMessageSize = 1024
 )
 
+type LogReader struct {
+	stop chan struct{}
+	*bufio.Scanner
+}
+
+func (logre *LogReader) Close() error {
+	close(logre.stop)
+	return logre.Err()
+}
+func NewLogReader(re io.Reader) (*LogReader, <-chan struct{}) {
+	stop := make(chan struct{})
+	return &LogReader{
+		stop,
+		bufio.NewScanner(re),
+	}, stop
+}
+
 type GetPodLogsParams struct {
 	Namespace, Pod, Container string
 	Previous, Follow          bool
 	Tail                      int
 }
 
-func (client *Client) GetPodLogs(ctx context.Context, params GetPodLogsParams, output io.Writer) error {
+func (client *Client) GetPodLogs(params GetPodLogsParams) (*LogReader, error) {
 	logUrl, err := client.podLogUrl(params)
 	if err != nil {
-		return err
+		return nil, err
 	}
-
 	conn, err := client.newWebsocketConnection(logUrl)
 	if err != nil {
-		return err
+		return nil, err
 	}
-
-	go client.logStream(ctx, conn, output)
-
-	return nil
+	re, wr := io.Pipe()
+	logReader, stop := NewLogReader(re)
+	go client.logStream(stop, conn, wr)
+	return logReader, nil
 }
 
 func (client *Client) podLogUrl(params GetPodLogsParams) (*url.URL, error) {
@@ -87,35 +103,28 @@ func (client *Client) newWebsocketConnection(url *url.URL) (*websocket.Conn, err
 	return conn, nil
 }
 
-func (client *Client) logStream(ctx context.Context, conn *websocket.Conn, out io.Writer) {
+func (client *Client) logStream(stop <-chan struct{}, conn *websocket.Conn, out *io.PipeWriter) {
 	defer conn.Close()
 	conn.SetReadLimit(maxMessageSize)
-	dataCh := make(chan []byte)
-
-	go func() {
-		defer close(dataCh)
-		for {
+	for {
+		select {
+		case <-stop:
+			out.Close()
+			return
+		default:
 			mtype, data, err := conn.ReadMessage()
 			if err != nil {
-				return
+				out.CloseWithError(err)
 			}
 			switch mtype {
 			case websocket.TextMessage, websocket.BinaryMessage:
-				dataCh <- data
+				_, err := out.Write(data)
+				if err != nil {
+					out.CloseWithError(err)
+				}
 			default:
 				continue
 			}
-		}
-	}()
-
-	for {
-		select {
-		case data := <-dataCh:
-			if _, err := out.Write(data); err != nil {
-				return
-			}
-		case <-ctx.Done():
-			return
 		}
 	}
 }
