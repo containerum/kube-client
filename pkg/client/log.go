@@ -97,6 +97,8 @@ func (client *Client) logStream(conn *websocket.Conn, out *io.PipeWriter) {
 			_, err := out.Write(data)
 			if err != nil && err != io.ErrClosedPipe {
 				out.CloseWithError(err)
+			} else if err == io.ErrClosedPipe {
+				return
 			}
 		default:
 			continue
