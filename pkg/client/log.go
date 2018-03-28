@@ -1,7 +1,6 @@
 package client
 
 import (
-	"bufio"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -26,30 +25,13 @@ const (
 	maxMessageSize = 1024
 )
 
-type LogReader struct {
-	stop chan struct{}
-	*bufio.Scanner
-}
-
-func (logre *LogReader) Close() error {
-	close(logre.stop)
-	return logre.Err()
-}
-func NewLogReader(re io.Reader) (*LogReader, <-chan struct{}) {
-	stop := make(chan struct{})
-	return &LogReader{
-		stop,
-		bufio.NewScanner(re),
-	}, stop
-}
-
 type GetPodLogsParams struct {
 	Namespace, Pod, Container string
 	Previous, Follow          bool
 	Tail                      int
 }
 
-func (client *Client) GetPodLogs(params GetPodLogsParams) (*LogReader, error) {
+func (client *Client) GetPodLogs(params GetPodLogsParams) (*io.PipeReader, error) {
 	logUrl, err := client.podLogUrl(params)
 	if err != nil {
 		return nil, err
@@ -59,9 +41,8 @@ func (client *Client) GetPodLogs(params GetPodLogsParams) (*LogReader, error) {
 		return nil, err
 	}
 	re, wr := io.Pipe()
-	logReader, stop := NewLogReader(re)
-	go client.logStream(stop, conn, wr)
-	return logReader, nil
+	go client.logStream(conn, wr)
+	return re, nil
 }
 
 func (client *Client) podLogUrl(params GetPodLogsParams) (*url.URL, error) {
@@ -103,28 +84,22 @@ func (client *Client) newWebsocketConnection(url *url.URL) (*websocket.Conn, err
 	return conn, nil
 }
 
-func (client *Client) logStream(stop <-chan struct{}, conn *websocket.Conn, out *io.PipeWriter) {
+func (client *Client) logStream(conn *websocket.Conn, out *io.PipeWriter) {
 	defer conn.Close()
 	conn.SetReadLimit(maxMessageSize)
 	for {
-		select {
-		case <-stop:
-			out.Close()
-			return
-		default:
-			mtype, data, err := conn.ReadMessage()
-			if err != nil {
+		mtype, data, err := conn.ReadMessage()
+		if err != nil {
+			out.CloseWithError(err)
+		}
+		switch mtype {
+		case websocket.TextMessage, websocket.BinaryMessage:
+			_, err := out.Write(data)
+			if err != nil && err != io.ErrClosedPipe {
 				out.CloseWithError(err)
 			}
-			switch mtype {
-			case websocket.TextMessage, websocket.BinaryMessage:
-				_, err := out.Write(data)
-				if err != nil {
-					out.CloseWithError(err)
-				}
-			default:
-				continue
-			}
+		default:
+			continue
 		}
 	}
 }
