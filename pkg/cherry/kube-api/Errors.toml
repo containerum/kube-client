@@ -85,3 +85,9 @@ SID = 2
     StatusHTTP = 500
     Message = "Internal error"
     Kind = 13
+
+[[error]]
+    Name = "ErrUnableGetPodLogs"
+    StatusHTTP = 500
+    Message = "Unable to read logs from the pod"
+    Kind = 14
