@@ -90,3 +90,15 @@ SID = 3
     StatusHTTP = 507
     Message = "Free ports pool for domain exhausted"
     Kind = 15
+
+[[error]]
+    Name = "ErrDownResizeNotAllowed"
+    StatusHTTP = 400
+    Message = "Resize with decreasing quota not allowed"
+    Kind = 16
+
+[[error]]
+    Name = "ErrQuotaExceeded"
+    StatusHTTP = 400
+    Message = "Resource quota exceeded"
+    Kind = 17
