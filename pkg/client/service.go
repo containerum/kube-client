@@ -7,8 +7,9 @@ import (
 )
 
 const (
-	servicePath          = "/namespaces/{namespace}/services/{service}"
-	servicesPath         = "/namespaces/{namespace}/services"
+	servicePath  = "/namespaces/{namespace}/services/{service}"
+	servicesPath = "/namespaces/{namespace}/services"
+
 	serviceResourcePath  = "/namespace/{namespace}/service"
 	servicesResourcePath = serviceResourcePath + "/{service}"
 )
