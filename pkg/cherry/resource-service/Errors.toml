@@ -10,7 +10,7 @@ SID = 3
 [[error]]
     Name = "ErrResourceNotExists"
     StatusHTTP = 404
-    Message = "Resource is not exists"
+    Message = "Resource doesn't exist"
     Kind = 2
 
 [[error]]
