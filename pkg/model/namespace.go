@@ -9,8 +9,8 @@ type Resources struct {
 
 // Resource -- represents computation resources
 type Resource struct {
-	CPU    string `json:"cpu"`
-	Memory string `json:"memory"`
+	CPU    int `json:"cpu"`
+	Memory int `json:"memory"`
 }
 
 // UpdateNamespaceName -- containes new namespace name
