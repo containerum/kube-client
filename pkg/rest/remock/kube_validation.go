@@ -55,13 +55,13 @@ func ValidateDeployment(deployment model.Deployment) error {
 
 func ValidateContainer(container model.Container) error {
 	errs := []error{}
-	if  container.Limits.CPU < 1 || container.Limits.CPU > 12000 {
+	if  container.Limits.CPU < 10 || container.Limits.CPU > 12000 {
 		return ermockerr.ErrInvalidContainer().
-			AddDetailsErr(fmt.Errorf("invalid CPU limit %d: must be in 1..12000 mCPU", container.Limits.CPU))
+			AddDetailsErr(fmt.Errorf("invalid CPU limit %d: must be in 10..12000 mCPU", container.Limits.CPU))
 	}
-	if container.Limits.Memory < 1 || container.Limits.Memory > 16000 {
+	if container.Limits.Memory < 10 || container.Limits.Memory > 16000 {
 		return ermockerr.ErrInvalidContainer().
-			AddDetailsErr(fmt.Errorf("invalid memoty limit %d: must be in 1..16000 Mb", container.Limits.Memory))
+			AddDetailsErr(fmt.Errorf("invalid memoty limit %d: must be in 10..16000 Mb", container.Limits.Memory))
 	}
 
 	for _, v := range container.Ports {
