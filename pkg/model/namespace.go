@@ -1,26 +1,42 @@
 package model
 
-// Resources -- represents  namespace resources,
-// Hard --  resource limits
+// represents namespace limits and user resources,
+//
+// swagger:model
 type Resources struct {
+	// Hard resource limits
+	//
+	// required: true
 	Hard Resource  `json:"hard"`
 	Used *Resource `json:"used,omitempty"`
 }
 
-// Resource -- represents computation resources
+// represents namespace CPU and RAM
+//
+// swagger:model
 type Resource struct {
-	CPU    uint `json:"cpu"`
+	// CPU in m
+	//
+	// required: true
+	CPU uint `json:"cpu"`
+	// RAM in Mi
+	//
+	// required: true
 	Memory uint `json:"memory"`
 }
 
-// UpdateNamespaceName -- containes new namespace name
+// contains new namespace name
+//
+// swagger:model
 type UpdateNamespaceName struct {
+	// required: true
 	Label string `json:"label"`
 }
 
-// Namespace -- namespace representation
-// provided by resource-service
+// namespace representation provided by resource-service
 // https://ch.pages.containerum.net/api-docs/modules/resource-service/index.html#get-namespace
+//
+// swagger:model
 type Namespace struct {
 	CreatedAt     *string   `json:"created_at,omitempty"`
 	Label         string    `json:"label,omitempty"`

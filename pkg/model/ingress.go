@@ -1,22 +1,36 @@
 package model
 
-// Ingress --
+// Ingress
+//
+// swagger:model
 type Ingress struct {
-	Name      string  `json:"name"`
+	// required: true
+	Name string `json:"name"`
+	//creation date in RFC3339 format
 	CreatedAt *string `json:"created_at,omitempty"`
-	Rules     []Rule  `json:"rules"`
+	// required: true
+	Rules []Rule `json:"rules"`
 }
 
 // Rule --
+//
+// swagger:model
 type Rule struct {
+	// required: true
 	Host      string  `json:"host"`
 	TLSSecret *string `json:"tls_secret,omitempty"`
-	Path      []Path  `json:"path"`
+	// required: true
+	Path []Path `json:"path"`
 }
 
 // Path --
+//
+// swagger:model
 type Path struct {
-	Path        string `json:"path"`
+	// required: true
+	Path string `json:"path"`
+	// required: true
 	ServiceName string `json:"service_name"`
-	ServicePort int    `json:"service_port"`
+	// required: true
+	ServicePort int `json:"service_port"`
 }
