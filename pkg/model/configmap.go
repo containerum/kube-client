@@ -2,7 +2,7 @@ package model
 
 //go:generate swagger generate spec -m -o ../../kube-client-swagger.json
 
-// model for config map
+// ConfigMap -- model for config map
 //
 // swagger:model
 type ConfigMap struct {

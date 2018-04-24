@@ -1,6 +1,8 @@
 package model
 
-// Pod --
+// Pod -- model for pod
+//
+// swagger:model
 type Pod struct {
 	Name            string             `json:"name"`
 	Containers      []Container        `json:"containers"`
@@ -16,15 +18,22 @@ type Pod struct {
 	CreatedAt *string `json:"created_at,omitempty"`
 }
 
-// PodStatus --
+// PodStatus -- kubernetes status of pod
+//
+// swagger:model
 type PodStatus struct {
 	Phase        string `json:"phase"`
 	RestartCount int    `json:"restart_count"`
-	StartAt      string `json:"start_at"`
+	//pod start date in RFC3339 format
+	StartAt string `json:"start_at"`
 }
 
-// UpdateImage --
+// UpdateImage -- model for update container image request
+//
+// swagger:model
 type UpdateImage struct {
+	// required: true
 	Container string `json:"container_name"`
-	Image     string `json:"image"`
+	// required: true
+	Image string `json:"image"`
 }

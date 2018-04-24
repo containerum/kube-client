@@ -1,6 +1,6 @@
 package model
 
-// Ingress
+// Ingress -- model for ingress
 //
 // swagger:model
 type Ingress struct {
@@ -12,7 +12,7 @@ type Ingress struct {
 	Rules []Rule `json:"rules"`
 }
 
-// Rule --
+// Rule -- ingress rule
 //
 // swagger:model
 type Rule struct {
@@ -23,7 +23,7 @@ type Rule struct {
 	Path []Path `json:"path"`
 }
 
-// Path --
+// Path -- ingress path
 //
 // swagger:model
 type Path struct {

@@ -3,7 +3,7 @@
   "paths": {},
   "definitions": {
     "ConfigMap": {
-      "description": "model for config map",
+      "description": "ConfigMap -- model for config map",
       "type": "object",
       "required": [
         "name",
@@ -31,7 +31,7 @@
       "x-go-package": "git.containerum.net/ch/kube-client/pkg/model"
     },
     "Container": {
-      "description": "model for container in deployment",
+      "description": "Container -- model for container in deployment",
       "type": "object",
       "required": [
         "image",
@@ -89,7 +89,7 @@
       "x-go-package": "git.containerum.net/ch/kube-client/pkg/model"
     },
     "ContainerPort": {
-      "description": "model for port in container",
+      "description": "ContainerPort -- model for port in container",
       "type": "object",
       "required": [
         "name",
@@ -113,7 +113,7 @@
       "x-go-package": "git.containerum.net/ch/kube-client/pkg/model"
     },
     "ContainerVolume": {
-      "description": "volume (or config map) mounted in container",
+      "description": "ContainerVolume -- volume (or config map) mounted in container",
       "type": "object",
       "required": [
         "name",
@@ -140,7 +140,7 @@
       "x-go-package": "git.containerum.net/ch/kube-client/pkg/model"
     },
     "Deployment": {
-      "description": "model for deployments",
+      "description": "Deployment -- model for deployments",
       "type": "object",
       "required": [
         "containers",
@@ -190,7 +190,7 @@
       "x-go-package": "git.containerum.net/ch/kube-client/pkg/model"
     },
     "DeploymentStatus": {
-      "description": "kubernetes status of deployment",
+      "description": "DeploymentStatus -- kubernetes status of deployment",
       "type": "object",
       "properties": {
         "available_replicas": {
@@ -232,7 +232,7 @@
       "x-go-package": "git.containerum.net/ch/kube-client/pkg/model"
     },
     "Env": {
-      "description": "key-value pair of enviroment variables",
+      "description": "Env -- key-value pair of enviroment variables",
       "type": "object",
       "required": [
         "value",
@@ -251,7 +251,7 @@
       "x-go-package": "git.containerum.net/ch/kube-client/pkg/model"
     },
     "Ingress": {
-      "description": "Ingress",
+      "description": "Ingress -- model for ingress",
       "type": "object",
       "required": [
         "name",
@@ -278,18 +278,23 @@
       "x-go-package": "git.containerum.net/ch/kube-client/pkg/model"
     },
     "Namespace": {
-      "description": "namespace representation provided by resource-service\nhttps://ch.pages.containerum.net/api-docs/modules/resource-service/index.html#get-namespace",
+      "description": "Namespace -- namespace representation provided by resource-service\nhttps://ch.pages.containerum.net/api-docs/modules/resource-service/index.html#get-namespace",
       "type": "object",
+      "required": [
+        "resources"
+      ],
       "properties": {
         "access": {
           "type": "string",
           "x-go-name": "Access"
         },
         "created_at": {
+          "description": "creation date in RFC3339 format",
           "type": "string",
           "x-go-name": "CreatedAt"
         },
         "label": {
+          "description": "user-visible label for the namespace",
           "type": "string",
           "x-go-name": "Label"
         },
@@ -322,7 +327,7 @@
       "x-go-package": "git.containerum.net/ch/kube-client/pkg/model"
     },
     "Path": {
-      "description": "Path --",
+      "description": "Path -- ingress path",
       "type": "object",
       "required": [
         "path",
@@ -346,13 +351,87 @@
       },
       "x-go-package": "git.containerum.net/ch/kube-client/pkg/model"
     },
+    "Pod": {
+      "description": "Pod -- model for pod",
+      "type": "object",
+      "properties": {
+        "containers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Container"
+          },
+          "x-go-name": "Containers"
+        },
+        "created_at": {
+          "description": "creation date in RFC3339 format",
+          "type": "string",
+          "x-go-name": "CreatedAt"
+        },
+        "deploy": {
+          "type": "string",
+          "x-go-name": "Deploy"
+        },
+        "hostname": {
+          "type": "string",
+          "x-go-name": "Hostname"
+        },
+        "image_pull_secret": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "x-go-name": "ImagePullSecret"
+        },
+        "name": {
+          "type": "string",
+          "x-go-name": "Name"
+        },
+        "status": {
+          "$ref": "#/definitions/PodStatus"
+        },
+        "total_cpu": {
+          "description": "total CPU usage by all containers in this pod",
+          "type": "integer",
+          "format": "uint64",
+          "x-go-name": "TotalCPU"
+        },
+        "total_memory": {
+          "description": "total RAM usage by all containers in this pod",
+          "type": "integer",
+          "format": "uint64",
+          "x-go-name": "TotalMemory"
+        }
+      },
+      "x-go-package": "git.containerum.net/ch/kube-client/pkg/model"
+    },
+    "PodStatus": {
+      "description": "PodStatus -- kubernetes status of pod",
+      "type": "object",
+      "properties": {
+        "phase": {
+          "type": "string",
+          "x-go-name": "Phase"
+        },
+        "restart_count": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "RestartCount"
+        },
+        "start_at": {
+          "description": "pod start date in RFC3339 format",
+          "type": "string",
+          "x-go-name": "StartAt"
+        }
+      },
+      "x-go-package": "git.containerum.net/ch/kube-client/pkg/model"
+    },
     "Protocol": {
       "description": "represents port protocol type (TCP or UDP)",
       "type": "string",
       "x-go-package": "git.containerum.net/ch/kube-client/pkg/model"
     },
     "Resource": {
-      "description": "represents namespace CPU and RAM",
+      "description": "Resource -- represents namespace CPU and RAM",
       "type": "object",
       "required": [
         "cpu",
@@ -376,7 +455,7 @@
     },
     "Resources": {
       "type": "object",
-      "title": "represents namespace limits and user resources,",
+      "title": "Resources -- represents namespace limits and user resources,",
       "required": [
         "hard"
       ],
@@ -391,7 +470,7 @@
       "x-go-package": "git.containerum.net/ch/kube-client/pkg/model"
     },
     "Rule": {
-      "description": "Rule --",
+      "description": "Rule -- ingress rule",
       "type": "object",
       "required": [
         "host",
@@ -519,8 +598,27 @@
       "type": "string",
       "x-go-package": "git.containerum.net/ch/kube-client/pkg/model"
     },
+    "UpdateImage": {
+      "description": "UpdateImage -- model for update container image request",
+      "type": "object",
+      "required": [
+        "container_name",
+        "image"
+      ],
+      "properties": {
+        "container_name": {
+          "type": "string",
+          "x-go-name": "Container"
+        },
+        "image": {
+          "type": "string",
+          "x-go-name": "Image"
+        }
+      },
+      "x-go-package": "git.containerum.net/ch/kube-client/pkg/model"
+    },
     "UpdateNamespaceName": {
-      "description": "contains new namespace name",
+      "description": "UpdateNamespaceName -- contains new namespace label",
       "type": "object",
       "required": [
         "label"
@@ -534,7 +632,7 @@
       "x-go-package": "git.containerum.net/ch/kube-client/pkg/model"
     },
     "UpdateReplicas": {
-      "description": "contains new number of replicas",
+      "description": "UpdateReplicas -- contains new number of replicas",
       "type": "object",
       "required": [
         "replicas"

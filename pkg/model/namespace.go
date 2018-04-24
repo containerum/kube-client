@@ -1,6 +1,6 @@
 package model
 
-// represents namespace limits and user resources,
+// Resources -- represents namespace limits and user resources,
 //
 // swagger:model
 type Resources struct {
@@ -11,7 +11,7 @@ type Resources struct {
 	Used *Resource `json:"used,omitempty"`
 }
 
-// represents namespace CPU and RAM
+// Resource -- represents namespace CPU and RAM
 //
 // swagger:model
 type Resource struct {
@@ -25,7 +25,7 @@ type Resource struct {
 	Memory uint `json:"memory"`
 }
 
-// contains new namespace name
+// UpdateNamespaceName -- contains new namespace label
 //
 // swagger:model
 type UpdateNamespaceName struct {
@@ -33,17 +33,20 @@ type UpdateNamespaceName struct {
 	Label string `json:"label"`
 }
 
-// namespace representation provided by resource-service
+// Namespace -- namespace representation provided by resource-service
 // https://ch.pages.containerum.net/api-docs/modules/resource-service/index.html#get-namespace
 //
 // swagger:model
 type Namespace struct {
-	CreatedAt     *string   `json:"created_at,omitempty"`
-	Label         string    `json:"label,omitempty"`
-	Access        string    `json:"access,omitempty"`
-	MaxExtService *uint     `json:"max_ext_service,omitempty"`
-	MaxIntService *uint     `json:"max_int_service,omitempty"`
-	MaxTraffic    *uint     `json:"max_traffic,omitempty"`
-	Volumes       []Volume  `json:"volumes,omitempty"`
-	Resources     Resources `json:"resources"`
+	//creation date in RFC3339 format
+	CreatedAt *string `json:"created_at,omitempty"`
+	// user-visible label for the namespace
+	Label         string   `json:"label,omitempty"`
+	Access        string   `json:"access,omitempty"`
+	MaxExtService *uint    `json:"max_ext_service,omitempty"`
+	MaxIntService *uint    `json:"max_int_service,omitempty"`
+	MaxTraffic    *uint    `json:"max_traffic,omitempty"`
+	Volumes       []Volume `json:"volumes,omitempty"`
+	// required: true
+	Resources Resources `json:"resources"`
 }

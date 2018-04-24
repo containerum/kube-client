@@ -1,6 +1,6 @@
 package model
 
-// kubernetes status of deployment
+// DeploymentStatus -- kubernetes status of deployment
 //
 // swagger:model
 type DeploymentStatus struct {
@@ -15,7 +15,7 @@ type DeploymentStatus struct {
 	UpdatedReplicas     int    `json:"updated_replicas"`
 }
 
-// contains new number of replicas
+// UpdateReplicas -- contains new number of replicas
 //
 // swagger:model
 type UpdateReplicas struct {
@@ -23,14 +23,13 @@ type UpdateReplicas struct {
 	Replicas int `json:"replicas"`
 }
 
-// model for deployments
+// Deployment -- model for deployments
 //
 // swagger:model
 type Deployment struct {
 	Status *DeploymentStatus `json:"status,omitempty"`
 	// required: true
-	Containers []Container       `json:"containers"`
-	Labels     map[string]string `json:"labels,omitempty"`
+	Containers []Container `json:"containers"`
 	// required: true
 	Name string `json:"name"`
 	// required: true
@@ -41,7 +40,7 @@ type Deployment struct {
 	TotalMemory uint `json:"total_memory,omitempty"`
 }
 
-// model for container in deployment
+// Container -- model for container in deployment
 //
 // swagger:model
 type Container struct {
@@ -58,7 +57,7 @@ type Container struct {
 	ConfigMaps   []ContainerVolume `json:"config_maps,omitempty"`
 }
 
-// key-value pair of enviroment variables
+// Env -- key-value pair of enviroment variables
 //
 // swagger:model
 type Env struct {
@@ -68,7 +67,7 @@ type Env struct {
 	Name string `json:"name"`
 }
 
-// model for port in container
+// ContainerPort -- model for port in container
 //
 // swagger:model
 type ContainerPort struct {
@@ -80,7 +79,7 @@ type ContainerPort struct {
 	Protocol Protocol `json:"protocol"`
 }
 
-// volume (or config map) mounted in container
+// ContainerVolume -- volume (or config map) mounted in container
 //
 // swagger:model
 type ContainerVolume struct {
