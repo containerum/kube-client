@@ -1,0 +1,8 @@
+Name = "errwsmock"
+SID = 999
+
+[[error]]
+    Name = "UpgradeFailed"
+    Message = "upgrade failed"
+    StatusHTTP = 500
+    Kind = 1
