@@ -8,8 +8,8 @@ import (
 	"net/http"
 	"net/url"
 
-	"git.containerum.net/ch/kube-client/pkg/cherry"
 	"git.containerum.net/ch/kube-client/pkg/identity"
+	"github.com/containerum/cherry"
 	"github.com/gorilla/websocket"
 )
 
