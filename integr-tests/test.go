@@ -4,7 +4,7 @@ import (
 	"log"
 	"testing"
 
-	"git.containerum.net/ch/kube-client/pkg/model"
+	"github.com/containerum/kube-client/pkg/model"
 )
 
 func TestDeployment(test *testing.T) {

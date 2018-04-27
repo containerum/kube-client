@@ -10,10 +10,10 @@ import (
 	"testing"
 	"time"
 
-	kubeClient "git.containerum.net/ch/kube-client/pkg/client"
-	"git.containerum.net/ch/kube-client/pkg/model"
-	"git.containerum.net/ch/kube-client/pkg/rest/re"
-	"git.containerum.net/ch/kube-client/pkg/rest/remock"
+	kubeClient "github.com/containerum/kube-client/pkg/client"
+	"github.com/containerum/kube-client/pkg/model"
+	"github.com/containerum/kube-client/pkg/rest/re"
+	"github.com/containerum/kube-client/pkg/rest/remock"
 )
 
 const (

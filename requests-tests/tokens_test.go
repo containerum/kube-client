@@ -3,7 +3,7 @@ package reqtests
 import (
 	"testing"
 
-	"git.containerum.net/ch/kube-client/pkg/model"
+	"github.com/containerum/kube-client/pkg/model"
 )
 
 func TestTokenMethods(test *testing.T) {
