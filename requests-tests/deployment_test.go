@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"git.containerum.net/ch/kube-client/pkg/model"
+	"github.com/containerum/kube-client/pkg/model"
 	. "github.com/smartystreets/goconvey/convey"
 )
 
@@ -31,7 +31,9 @@ func TestDeployment(test *testing.T) {
 			err := client.SetContainerImage(namespace,
 				deployment.Name, updateImage)
 			So(err, ShouldBeNil)
-			deployment.Labels["color"] = "blue"
+
+			deployment.Containers[0].Image = "redis"
+
 			err = client.ReplaceDeployment(namespace, deployment)
 			So(err, ShouldBeNil)
 

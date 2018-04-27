@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"time"
 
-	"git.containerum.net/ch/kube-client/pkg/websocket/wsmock/errwsmock"
+	"github.com/containerum/kube-client/pkg/websocket/wsmock/errwsmock"
 	"github.com/gorilla/websocket"
 )
 

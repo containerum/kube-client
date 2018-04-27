@@ -3,14 +3,14 @@ package ermockerr
 
 import (
 	bytes "bytes"
-	cherry "git.containerum.net/ch/kube-client/pkg/cherry"
+	cherry "github.com/containerum/cherry"
 	template "text/template"
 )
 
 const ()
 
 func ErrInvalidDeployment(params ...func(*cherry.Err)) *cherry.Err {
-	err := &cherry.Err{Message: "invalid deployment", StatusHTTP: 418, ID: cherry.ErrID{SID: 0x378, Kind: 0x1}, Details: []string(nil)}
+	err := &cherry.Err{Message: "invalid deployment", StatusHTTP: 418, ID: cherry.ErrID{SID: "remock", Kind: 0x1}, Details: []string(nil), Fields: cherry.Fields(nil)}
 	for _, param := range params {
 		param(err)
 	}
@@ -22,7 +22,7 @@ func ErrInvalidDeployment(params ...func(*cherry.Err)) *cherry.Err {
 }
 
 func ErrInvalidContainer(params ...func(*cherry.Err)) *cherry.Err {
-	err := &cherry.Err{Message: "invalid container", StatusHTTP: 418, ID: cherry.ErrID{SID: 0x378, Kind: 0x2}, Details: []string(nil)}
+	err := &cherry.Err{Message: "invalid container", StatusHTTP: 418, ID: cherry.ErrID{SID: "remock", Kind: 0x2}, Details: []string(nil), Fields: cherry.Fields(nil)}
 	for _, param := range params {
 		param(err)
 	}

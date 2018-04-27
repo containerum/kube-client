@@ -1,8 +1,8 @@
 package client
 
 import (
-	"git.containerum.net/ch/kube-client/pkg/rest"
-	"git.containerum.net/ch/kube-client/pkg/websocket/gorilla"
+	"github.com/containerum/kube-client/pkg/rest"
+	"github.com/containerum/kube-client/pkg/websocket/gorilla"
 )
 
 //TODO: Make Interface

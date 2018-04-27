@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"reflect"
 
-	"git.containerum.net/ch/kube-client/pkg/cherry"
+	"github.com/containerum/cherry"
 	"github.com/go-resty/resty"
 )
 

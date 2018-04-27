@@ -10,10 +10,10 @@ import (
 	"testing"
 	"time"
 
-	kubeClient "git.containerum.net/ch/kube-client/pkg/client"
-	"git.containerum.net/ch/kube-client/pkg/model"
-	"git.containerum.net/ch/kube-client/pkg/rest/re"
-	"git.containerum.net/ch/kube-client/pkg/rest/remock"
+	kubeClient "github.com/containerum/kube-client/pkg/client"
+	"github.com/containerum/kube-client/pkg/model"
+	"github.com/containerum/kube-client/pkg/rest/re"
+	"github.com/containerum/kube-client/pkg/rest/remock"
 )
 
 const (
@@ -22,7 +22,6 @@ const (
 
 func newMockClient(test *testing.T) *kubeClient.Client {
 	client, err := kubeClient.NewClient(kubeClient.Config{
-		APIurl:  "http://192.168.88.200",
 		RestAPI: remock.NewMock(),
 		User: kubeClient.User{
 			Role: "user",
@@ -36,8 +35,7 @@ func newMockClient(test *testing.T) *kubeClient.Client {
 func newClient(test *testing.T) *kubeClient.Client {
 	client, err := kubeClient.NewClient(
 		kubeClient.Config{
-			RestAPI: re.NewResty(),
-			APIurl:  "http://192.168.88.200",
+			RestAPI: re.NewResty(re.WithHost("http://192.168.88.200")),
 			User: kubeClient.User{
 				Role: "user",
 			},
@@ -68,11 +66,10 @@ func newFakeDeployment(test *testing.T) model.Deployment {
 	deployment := model.Deployment{
 		Name:     "gateway",
 		Replicas: 4,
-		Labels:   map[string]string{},
 		Containers: []model.Container{
 			{
 				Name: "proxy", Image: "nginx",
-				Limits: model.Resource{CPU: "1", Memory: "256"},
+				Limits: model.Resource{CPU: 1000, Memory: 256},
 				Ports: []model.ContainerPort{
 					{Name: "Gate", Port: 1080, Protocol: model.TCP},
 				},

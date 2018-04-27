@@ -1,9 +1,9 @@
 package client
 
 import (
-	"git.containerum.net/ch/kube-client/pkg/rest"
+	"github.com/containerum/kube-client/pkg/rest"
 
-	"git.containerum.net/ch/kube-client/pkg/model"
+	"github.com/containerum/kube-client/pkg/model"
 )
 
 const (
@@ -17,7 +17,7 @@ func (client *Client) DeletePod(namespace, pod string) error {
 		URL: rest.URL{
 			Path: kubeAPIpodPath,
 			Params: rest.P{
-				"pod": pod,
+				"pod":       pod,
 				"namespace": namespace,
 			},
 		},

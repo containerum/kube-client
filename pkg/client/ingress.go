@@ -1,8 +1,8 @@
 package client
 
 import (
-	"git.containerum.net/ch/kube-client/pkg/model"
-	"git.containerum.net/ch/kube-client/pkg/rest"
+	"github.com/containerum/kube-client/pkg/model"
+	"github.com/containerum/kube-client/pkg/rest"
 )
 
 const (
@@ -44,7 +44,7 @@ func (client *Client) GetIngressList(namespace string) ([]model.Ingress, error) 
 }
 
 // GetIngressList -- returns ingress with specified domain.
-func(client *Client) GetIngress(namespace, domain string) (model.Ingress, error) {
+func (client *Client) GetIngress(namespace, domain string) (model.Ingress, error) {
 	var ingress model.Ingress
 	err := client.RestAPI.Get(rest.Rq{
 		Result: &ingress,
@@ -52,7 +52,7 @@ func(client *Client) GetIngress(namespace, domain string) (model.Ingress, error)
 			Path: kubeAPIIngressPath,
 			Params: rest.P{
 				"namespace": namespace,
-				"domain": domain,
+				"domain":    domain,
 			},
 		},
 	})

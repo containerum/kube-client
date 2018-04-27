@@ -1,7 +1,7 @@
 # File for noice errors generation
 
 Name = "mcErrors"
-SID = 12
+SID = "model-converter"
 
 # errors
 [[error]]

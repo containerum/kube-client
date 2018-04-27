@@ -5,9 +5,9 @@ import (
 	"io"
 	"net/http"
 
-	"git.containerum.net/ch/kube-client/pkg/cherry"
-	"git.containerum.net/ch/kube-client/pkg/identity"
-	"git.containerum.net/ch/kube-client/pkg/rest"
+	"github.com/containerum/cherry"
+	"github.com/containerum/kube-client/pkg/identity"
+	"github.com/containerum/kube-client/pkg/rest"
 	"github.com/go-resty/resty"
 )
 
