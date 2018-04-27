@@ -155,13 +155,6 @@
           },
           "x-go-name": "Containers"
         },
-        "labels": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "string"
-          },
-          "x-go-name": "Labels"
-        },
         "name": {
           "type": "string",
           "x-go-name": "Name"
