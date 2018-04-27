@@ -3,7 +3,7 @@ package rest
 import (
 	"strings"
 
-	"git.containerum.net/ch/kube-client/pkg/identity"
+	"github.com/containerum/kube-client/pkg/identity"
 )
 
 // P -- URL path params

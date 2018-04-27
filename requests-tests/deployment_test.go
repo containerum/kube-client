@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"git.containerum.net/ch/kube-client/pkg/model"
+	"github.com/containerum/kube-client/pkg/model"
 	. "github.com/smartystreets/goconvey/convey"
 )
 

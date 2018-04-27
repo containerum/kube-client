@@ -1,7 +1,7 @@
 # File for noice errors generation
 
 Name = "gatewayErrors"
-SID = 8
+SID = "api-gateway"
 
 # errors
 [[error]]

@@ -1,7 +1,7 @@
 # File for noice errors generation
 
 Name = "umErrors"
-SID = 4
+SID = "user-manager"
 
 # errors
 [[error]]

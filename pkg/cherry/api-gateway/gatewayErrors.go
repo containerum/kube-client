@@ -3,14 +3,14 @@ package gatewayErrors
 
 import (
 	bytes "bytes"
-	cherry "git.containerum.net/ch/kube-client/pkg/cherry"
+	cherry "github.com/containerum/cherry"
 	template "text/template"
 )
 
 const ()
 
 func ErrUserPermissionDenied(params ...func(*cherry.Err)) *cherry.Err {
-	err := &cherry.Err{Message: "user permission denied", StatusHTTP: 401, ID: cherry.ErrID{SID: 0x8, Kind: 0x1}, Details: []string(nil)}
+	err := &cherry.Err{Message: "user permission denied", StatusHTTP: 401, ID: cherry.ErrID{SID: "api-gateway", Kind: 0x1}, Details: []string(nil), Fields: cherry.Fields(nil)}
 	for _, param := range params {
 		param(err)
 	}
@@ -22,7 +22,7 @@ func ErrUserPermissionDenied(params ...func(*cherry.Err)) *cherry.Err {
 }
 
 func ErrInternal(params ...func(*cherry.Err)) *cherry.Err {
-	err := &cherry.Err{Message: "internal error", StatusHTTP: 500, ID: cherry.ErrID{SID: 0x8, Kind: 0x2}, Details: []string(nil)}
+	err := &cherry.Err{Message: "internal error", StatusHTTP: 500, ID: cherry.ErrID{SID: "api-gateway", Kind: 0x2}, Details: []string(nil), Fields: cherry.Fields(nil)}
 	for _, param := range params {
 		param(err)
 	}
@@ -34,7 +34,7 @@ func ErrInternal(params ...func(*cherry.Err)) *cherry.Err {
 }
 
 func ErrTooManyRequests(params ...func(*cherry.Err)) *cherry.Err {
-	err := &cherry.Err{Message: "too many requests", StatusHTTP: 429, ID: cherry.ErrID{SID: 0x8, Kind: 0x3}, Details: []string(nil)}
+	err := &cherry.Err{Message: "too many requests", StatusHTTP: 429, ID: cherry.ErrID{SID: "api-gateway", Kind: 0x3}, Details: []string(nil), Fields: cherry.Fields(nil)}
 	for _, param := range params {
 		param(err)
 	}
@@ -46,7 +46,7 @@ func ErrTooManyRequests(params ...func(*cherry.Err)) *cherry.Err {
 }
 
 func ErrHeaderNotProvided(params ...func(*cherry.Err)) *cherry.Err {
-	err := &cherry.Err{Message: "header not provided", StatusHTTP: 400, ID: cherry.ErrID{SID: 0x8, Kind: 0x4}, Details: []string(nil)}
+	err := &cherry.Err{Message: "header not provided", StatusHTTP: 400, ID: cherry.ErrID{SID: "api-gateway", Kind: 0x4}, Details: []string(nil), Fields: cherry.Fields(nil)}
 	for _, param := range params {
 		param(err)
 	}
@@ -58,7 +58,7 @@ func ErrHeaderNotProvided(params ...func(*cherry.Err)) *cherry.Err {
 }
 
 func ErrInvalidformat(params ...func(*cherry.Err)) *cherry.Err {
-	err := &cherry.Err{Message: "invalid request body format", StatusHTTP: 400, ID: cherry.ErrID{SID: 0x8, Kind: 0x5}, Details: []string(nil)}
+	err := &cherry.Err{Message: "invalid request body format", StatusHTTP: 400, ID: cherry.ErrID{SID: "api-gateway", Kind: 0x5}, Details: []string(nil), Fields: cherry.Fields(nil)}
 	for _, param := range params {
 		param(err)
 	}

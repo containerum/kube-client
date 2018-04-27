@@ -3,14 +3,14 @@ package errwsmock
 
 import (
 	bytes "bytes"
-	cherry "git.containerum.net/ch/kube-client/pkg/cherry"
+	cherry "github.com/containerum/cherry"
 	template "text/template"
 )
 
 const ()
 
 func ErrUpgradeFailed(params ...func(*cherry.Err)) *cherry.Err {
-	err := &cherry.Err{Message: "upgrade failed", StatusHTTP: 500, ID: cherry.ErrID{SID: 0x3e7, Kind: 0x1}, Details: []string(nil)}
+	err := &cherry.Err{Message: "upgrade failed", StatusHTTP: 500, ID: cherry.ErrID{SID: "wsmock", Kind: 0x1}, Details: []string(nil), Fields: cherry.Fields(nil)}
 	for _, param := range params {
 		param(err)
 	}

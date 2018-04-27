@@ -1,5 +1,5 @@
 Name = "ermockerr"
-SID = 888
+SID = "remock"
 
 [[error]]
     Name = "InvalidDeployment"

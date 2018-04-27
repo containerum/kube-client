@@ -3,8 +3,8 @@ package remock
 import (
 	"fmt"
 
-	"git.containerum.net/ch/kube-client/pkg/model"
-	"git.containerum.net/ch/kube-client/pkg/rest/remock/ermockerr"
+	"github.com/containerum/kube-client/pkg/model"
+	"github.com/containerum/kube-client/pkg/rest/remock/ermockerr"
 	api_validation "k8s.io/apimachinery/pkg/util/validation"
 )
 
@@ -55,7 +55,7 @@ func ValidateDeployment(deployment model.Deployment) error {
 
 func ValidateContainer(container model.Container) error {
 	errs := []error{}
-	if  container.Limits.CPU < 10 || container.Limits.CPU > 12000 {
+	if container.Limits.CPU < 10 || container.Limits.CPU > 12000 {
 		return ermockerr.ErrInvalidContainer().
 			AddDetailsErr(fmt.Errorf("invalid CPU limit %d: must be in 10..12000 mCPU", container.Limits.CPU))
 	}

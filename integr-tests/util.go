@@ -3,8 +3,8 @@ package test
 import (
 	"testing"
 
-	kubeClient "git.containerum.net/ch/kube-client/pkg/client"
-	"git.containerum.net/ch/kube-client/pkg/rest/re"
+	kubeClient "github.com/containerum/kube-client/pkg/client"
+	"github.com/containerum/kube-client/pkg/rest/re"
 )
 
 func newClient(test *testing.T) *kubeClient.Client {
