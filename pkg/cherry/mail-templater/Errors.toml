@@ -1,7 +1,7 @@
 # File for noice errors generation
 
 Name = "mtErrors"
-SID = 7
+SID = "mail-templater"
 
 # errors
 [[error]]

@@ -1,5 +1,5 @@
 Name = "rserrors"
-SID = 3
+SID = "resource-service"
 
 [[error]]
     Name = "ErrDatabase"

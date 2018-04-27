@@ -1,5 +1,5 @@
 Name = "errwsmock"
-SID = 999
+SID = "wsmock"
 
 [[error]]
     Name = "UpgradeFailed"

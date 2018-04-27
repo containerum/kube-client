@@ -1,5 +1,5 @@
 Name = "autherr"
-SID = 1
+SID = "auth"
 
 [[error]]
     Name = "ErrInvalidToken"
