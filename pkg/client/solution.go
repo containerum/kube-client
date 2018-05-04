@@ -12,8 +12,8 @@ const (
 )
 
 // GetSolutionList -- returns list of public solutions
-func (client *Client) GetSolutionList() ([]model.Solution, error) {
-	var solutionList []model.Solution
+func (client *Client) GetSolutionList() (model.AvailableSolutionsList, error) {
+	var solutionList model.AvailableSolutionsList
 	err := client.RestAPI.Get(rest.Rq{
 		Result: &solutionList,
 		URL: rest.URL{
