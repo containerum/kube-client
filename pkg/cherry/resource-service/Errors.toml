@@ -102,3 +102,9 @@ SID = "resource-service"
     StatusHTTP = 400
     Message = "Resource quota exceeded"
     Kind = 17
+
+[[error]]
+    Name = "ErrServiceHasIngresses"
+    StatusHTTP = 400
+    Message = "Can`t delete service with linked ingresses"
+    Kind = 18
