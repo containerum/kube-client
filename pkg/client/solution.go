@@ -6,10 +6,8 @@ import (
 )
 
 const (
-	solutionListPath      = "/solutions"
-	userSolutionsPath     = "/user_solutions"
-	solutionEnvPath       = solutionListPath + "/{solution}/env"
-	solutionResourcesPath = solutionListPath + "{solution}/resources"
+	solutionListPath  = "/solutions"
+	userSolutionsPath = "/user_solutions"
 )
 
 // GetSolutionList -- returns list of public solutions
