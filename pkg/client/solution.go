@@ -1,12 +1,13 @@
 package client
 
 import (
-	"github.com/containerum/kube-client/pkg/rest"
 	"github.com/containerum/kube-client/pkg/model"
+	"github.com/containerum/kube-client/pkg/rest"
 )
 
 const (
 	solutionListPath      = "/solutions"
+	userSolutionsPath     = "/user_solutions"
 	solutionEnvPath       = solutionListPath + "/{solution}/env"
 	solutionResourcesPath = solutionListPath + "{solution}/resources"
 )
@@ -21,4 +22,16 @@ func (client *Client) GetSolutionList() (model.AvailableSolutionsList, error) {
 		},
 	})
 	return solutionList, err
+}
+
+func (client *Client) RunSolution(solution model.UserSolution) (model.RunSolutionResponce, error) {
+	var resp model.RunSolutionResponce
+	err := client.RestAPI.Post(rest.Rq{
+		Result: &resp,
+		Body:   solution.Copy(),
+		URL: rest.URL{
+			Path: userSolutionsPath,
+		},
+	})
+	return resp, err
 }
