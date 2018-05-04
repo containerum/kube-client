@@ -7,6 +7,36 @@ type AvailableSolutionsList struct {
 	Solutions []AvailableSolution `json:"solutions"`
 }
 
+func (list AvailableSolutionsList) Len() int {
+	return len(list.Solutions)
+}
+
+func (list AvailableSolutionsList) Copy() AvailableSolutionsList {
+	var solutions = make([]AvailableSolution, 0, list.Len())
+	for _, sol := range solutions {
+		solutions = append(solutions, sol.Copy())
+	}
+	return AvailableSolutionsList{
+		Solutions: solutions,
+	}
+}
+
+func (list AvailableSolutionsList) Get(i int) AvailableSolution {
+	return list.Solutions[i]
+}
+
+func (list AvailableSolutionsList) Filter(pred func(AvailableSolution) bool) AvailableSolutionsList {
+	solutions := make([]AvailableSolution, 0, list.Len())
+	for _, sol := range list.Solutions {
+		if pred(sol.Copy()) {
+			solutions = append(solutions, sol.Copy())
+		}
+	}
+	return AvailableSolutionsList{
+		Solutions: solutions,
+	}
+}
+
 // AvailableSolution -- solution which user can run
 //
 // swagger:model
@@ -16,14 +46,6 @@ type AvailableSolution struct {
 	Images []string        `json:"images"`
 	URL    string          `json:"url"`
 	Active bool
-}
-
-// SolutionLimits -- solution resources limits
-//
-// swagger:model
-type SolutionLimits struct {
-	CPU string `json:"cpu"`
-	RAM string `json:"ram"`
 }
 
 func (solution AvailableSolution) Copy() AvailableSolution {
@@ -42,6 +64,14 @@ func (solution AvailableSolution) Copy() AvailableSolution {
 	}
 }
 
+// SolutionLimits -- solution resources limits
+//
+// swagger:model
+type SolutionLimits struct {
+	CPU string `json:"cpu"`
+	RAM string `json:"ram"`
+}
+
 // SolutionEnv -- solution environment variables
 //
 // swagger:model
@@ -56,6 +86,16 @@ type SolutionResources struct {
 	Resources map[string]int `json:"resources"`
 }
 
+func (res SolutionResources) Copy() SolutionResources {
+	r := make(map[string]int, len(res.Resources))
+	for k, v := range res.Resources {
+		r[k] = v
+	}
+	return SolutionResources{
+		Resources: r,
+	}
+}
+
 type ConfigFile struct {
 	Name string `json:"config_file"`
 	Type string `json:"type"`
@@ -66,6 +106,24 @@ type ConfigFile struct {
 // swagger:model
 type UserSolutionsList struct {
 	Solutions []UserSolution `json:"solutions"`
+}
+
+func (list UserSolutionsList) Copy() UserSolutionsList {
+	var solutions = make([]UserSolution, 0, list.Len())
+	for _, s := range solutions {
+		solutions = append(solutions, s.Copy())
+	}
+	return UserSolutionsList{
+		Solutions: solutions,
+	}
+}
+
+func (list UserSolutionsList) Len() int {
+	return len(list.Solutions)
+}
+
+func (list UserSolutionsList) Get(i int) UserSolution {
+	return list.Solutions[i]
 }
 
 // UserSolution -- running solution
@@ -80,6 +138,20 @@ type UserSolution struct {
 	Name string `json:"name"`
 	// required: true
 	Namespace string `json:"namespace"`
+}
+
+func (solution UserSolution) Copy() UserSolution {
+	env := make(map[string]string, len(solution.Env))
+	for k, v := range solution.Env {
+		env[k] = v
+	}
+	return UserSolution{
+		Branch:    solution.Branch,
+		Env:       env,
+		Template:  solution.Template,
+		Name:      solution.Name,
+		Namespace: solution.Namespace,
+	}
 }
 
 // RunSolutionResponce -- responce to run solution request
