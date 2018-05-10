@@ -59,7 +59,7 @@ func (client *Client) GetConfigMapList(namespace string) (ret []model.ConfigMap,
 }
 
 // UpdateConfigMap -- rewrites ConfigMap by name in provided namespace.
-func (client *Client) UpdateConfigMap(namespace, name string, configMap model.ConfigMap) error {
+func (client *Client) UpdateConfigMap(namespace, name string, data model.ConfigMapData) error {
 	return client.RestAPI.Put(rest.Rq{
 		URL: rest.URL{
 			Path: kubeAPIconfigMapsPath,
@@ -68,7 +68,9 @@ func (client *Client) UpdateConfigMap(namespace, name string, configMap model.Co
 				"configmap": name,
 			},
 		},
-		Body: configMap,
+		Body: model.ConfigMap{
+			Data: data,
+		},
 	})
 }
 
