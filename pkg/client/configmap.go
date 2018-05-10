@@ -4,7 +4,7 @@ import "github.com/containerum/kube-client/pkg/rest"
 
 const (
 	kubeAPIconfigMapsPath = "/namespaces/{namespace}/configmaps"
-	kubeAPIconfigMapPath = "/namespaces/{namespace}/configmaps/{configmap}"
+	kubeAPIconfigMapPath  = "/namespaces/{namespace}/configmaps/{configmap}"
 )
 
 // ConfigMap -- persistent container configuration data baked by kv storage
