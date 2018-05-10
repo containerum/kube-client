@@ -62,6 +62,7 @@ func (client *Client) UpdateConfigMap(namespace, name string, configMap ConfigMa
 			Path: kubeAPIconfigMapsPath,
 			Params: rest.P{
 				"namespace": namespace,
+				"configmap": name,
 			},
 		},
 		Body: configMap,
