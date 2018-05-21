@@ -32,6 +32,12 @@
   version = "v4.2.1"
 
 [[projects]]
+  branch = "master"
+  name = "github.com/ninedraft/boxofstuff"
+  packages = ["strset"]
+  revision = "402d25bcc03750de7fc34975a397beb9ea32d17e"
+
+[[projects]]
   name = "github.com/sirupsen/logrus"
   packages = ["."]
   revision = "c155da19408a8799da419ed3eeb0cb5db0ad5dbc"
@@ -116,6 +122,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "c0bdb570a194dd6401397769c3e8a169398292a547ef8616b3ddfd0d3f42cd44"
+  inputs-digest = "d455f3ac588e7a38947f0a4ede2cffca0ee03e622be4879a75c8b7be8d47c6b9"
   solver-name = "gps-cdcl"
   solver-version = 1
