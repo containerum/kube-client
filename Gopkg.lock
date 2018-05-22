@@ -8,7 +8,7 @@
     "pkg/errors",
     "pkg/model"
   ]
-  revision = "6d15b16cc0a61488eb0cfe877c22218f8b9f3437"
+  revision = "f9f444b6bb19ed6f7fcc251243f98d52d731b00a"
 
 [[projects]]
   name = "github.com/containerum/cherry"
@@ -148,6 +148,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "489fa661941420aefdc9f0d7d52a5efaa4b75373d2e26a8e2b4f946d589f7a69"
+  inputs-digest = "a19de35658d9fa203cdfabf6b0556e85d6c42f9c4f0754892af1347ddf0a19db"
   solver-name = "gps-cdcl"
   solver-version = 1
