@@ -10,6 +10,8 @@ import (
 	"testing"
 	"time"
 
+	"strings"
+
 	kubeClient "github.com/containerum/kube-client/pkg/client"
 	"github.com/containerum/kube-client/pkg/model"
 	"github.com/containerum/kube-client/pkg/rest/re"
@@ -50,6 +52,7 @@ func newFakeNamespaces(test *testing.T) []model.Namespace {
 	return []model.Namespace{
 		{
 			Label: "piterPen",
+			Name:  "5A83CD4D-F017-4C0C-96F5-49BDD22BA1FE",
 			Volumes: []model.Volume{
 				{
 					Label:      "penny",
@@ -116,7 +119,7 @@ func newRandomName(size int64) string {
 	encoder := base64.NewEncoder(base64.RawURLEncoding, buf)
 	rnd := rand.New(rand.NewSource(time.Now().UnixNano()))
 	io.CopyN(encoder, rnd, (3*size)/4)
-	return buf.String()
+	return strings.ToLower(buf.String())
 }
 
 func newUpdateDeployment(test *testing.T) model.Deployment {
