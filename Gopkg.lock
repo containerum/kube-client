@@ -2,10 +2,30 @@
 
 
 [[projects]]
+  branch = "develop"
+  name = "git.containerum.net/ch/permissions"
+  packages = [
+    "pkg/errors",
+    "pkg/model"
+  ]
+  revision = "6d15b16cc0a61488eb0cfe877c22218f8b9f3437"
+
+[[projects]]
   name = "github.com/containerum/cherry"
   packages = ["."]
-  revision = "3076e36aee79538b125d060e5b671649cbb2db4e"
-  version = "v1.0.1-rc2"
+  revision = "34f7a2a139b36c20a34b93738dda33476efad47d"
+  version = "v1.0.1"
+
+[[projects]]
+  name = "github.com/go-pg/pg"
+  packages = [
+    "internal",
+    "internal/parser",
+    "orm",
+    "types"
+  ]
+  revision = "5b73ce88484575f3480edf393237f6bf79d5f166"
+  version = "v6.11.2"
 
 [[projects]]
   name = "github.com/go-resty/resty"
@@ -24,6 +44,12 @@
   packages = ["."]
   revision = "ea4d1f681babbce9545c9c5f3d5194a789c89f5b"
   version = "v1.2.0"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/jinzhu/inflection"
+  packages = ["."]
+  revision = "04140366298a54a039076d798123ffa108fff46c"
 
 [[projects]]
   name = "github.com/jtolds/gls"
@@ -122,6 +148,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "d455f3ac588e7a38947f0a4ede2cffca0ee03e622be4879a75c8b7be8d47c6b9"
+  inputs-digest = "489fa661941420aefdc9f0d7d52a5efaa4b75373d2e26a8e2b4f946d589f7a69"
   solver-name = "gps-cdcl"
   solver-version = 1

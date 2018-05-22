@@ -1,24 +1,24 @@
 package client
 
 import (
-	"github.com/containerum/kube-client/pkg/model"
+	permModel "git.containerum.net/ch/permissions/pkg/model"
 	"github.com/containerum/kube-client/pkg/rest"
 )
 
 const (
-	permissionPath = "/namespaces/{namespace}/access"
+	accessesPath = "/namespaces/{namespace}/accesses"
 )
 
-func (client *Client) GetPermission(namespace string) (model.Permission, error) {
-	var perm model.Permission
+func (client *Client) GetNamespaceAccesses(namespace string) (permModel.NamespaceWithPermissionsJSON, error) {
+	var access permModel.NamespaceWithPermissionsJSON
 	err := client.RestAPI.Get(rest.Rq{
-		Result: &perm,
+		Result: &access,
 		URL: rest.URL{
-			Path: kubeAPIIngressRootPath,
+			Path: accessesPath,
 			Params: rest.P{
 				"namespace": namespace,
 			},
 		},
 	})
-	return perm, err
+	return access, err
 }
