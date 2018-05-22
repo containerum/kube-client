@@ -41,22 +41,22 @@ func TestService(test *testing.T) {
 				},
 			},
 		}
-		createdService, err := client.CreateService(namespace.Label, testService)
+		createdService, err := client.CreateService(namespace.Name, testService)
 		So(err, ShouldBeNil)
 		So(createdService, ShouldResemble, testService)
 
-		serviceList, err := client.GetServiceList(namespace.Label)
+		serviceList, err := client.GetServiceList(namespace.Name)
 		So(err, ShouldBeNil)
 		So(len(serviceList), ShouldBeGreaterThan, 0)
 
-		gainedService, err := client.GetService(namespace.Label, createdService.Name)
+		gainedService, err := client.GetService(namespace.Name, createdService.Name)
 		So(err, ShouldBeNil)
 		So(gainedService, ShouldResemble, createdService)
 
-		updatedService, err := client.UpdateService(namespace.Label, testService)
+		updatedService, err := client.UpdateService(namespace.Name, testService)
 		So(err, ShouldBeNil)
 		So(updatedService, ShouldResemble, testService)
 
-		So(client.DeleteService(namespace.Label, testService.Name), ShouldBeNil)
+		So(client.DeleteService(namespace.Name, testService.Name), ShouldBeNil)
 	})
 }
