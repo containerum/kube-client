@@ -1,6 +1,6 @@
 package model
 
-// Resources -- represents namespace limits and user resources,
+// Resources -- represents namespace limits and user resources.
 //
 // swagger:model
 type Resources struct {
