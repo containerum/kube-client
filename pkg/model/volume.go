@@ -44,8 +44,14 @@ const (
 //
 //swagger:model
 type PersistentVolumeClaim struct {
-	Name         string                     `json:"label"`
-	StorageClass string                     `json:"storage_class"`
-	AccessMode   PersistentVolumeAccessMode `json:"access_mode"`
-	Size         uint                       `json:"size"`
+	// required: true
+	Name string `json:"name"`
+	//creation date in RFC3339 format
+	CreatedAt *string `json:"created_at,omitempty"`
+	// required: true
+	StorageClass string `json:"storage_class"`
+	// required: true
+	AccessMode PersistentVolumeAccessMode `json:"access_mode"`
+	// required: true
+	Size uint `json:"size"`
 }
