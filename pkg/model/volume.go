@@ -28,3 +28,24 @@ type CreateVolume struct {
 type ResourceUpdateName struct {
 	Label string `json:"label"`
 }
+
+type PersistentVolumeAccessMode string
+
+const (
+	// can be mounted read/write mode to exactly 1 host
+	ReadWriteOnce PersistentVolumeAccessMode = "ReadWriteOnce"
+	// can be mounted in read-only mode to many hosts
+	ReadOnlyMany PersistentVolumeAccessMode = "ReadOnlyMany"
+	// can be mounted in read/write mode to many hosts
+	ReadWriteMany PersistentVolumeAccessMode = "ReadWriteMany"
+)
+
+// PersistentVolumeClaim -- persistent volume claim representation
+//
+//swagger:model
+type PersistentVolumeClaim struct {
+	Name         string                     `json:"label"`
+	StorageClass string                     `json:"storage_class"`
+	AccessMode   PersistentVolumeAccessMode `json:"access_mode"`
+	Size         uint                       `json:"size"`
+}
