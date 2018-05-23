@@ -47,5 +47,5 @@ type PersistentVolumeClaim struct {
 	Name         string                     `json:"label"`
 	StorageClass string                     `json:"storage_class"`
 	AccessMode   PersistentVolumeAccessMode `json:"access_mode"`
-	Size         uint                       `json:"storage_class"`
+	Size         uint                       `json:"size"`
 }
