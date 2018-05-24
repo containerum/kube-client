@@ -23,7 +23,7 @@ type CreateVolume struct {
 	Label    string `json:"label"`
 }
 
-// ResourceUpdateName -- containes new resource name
+// ResourceUpdateName -- contains new resource name
 //swagger:ignore
 type ResourceUpdateName struct {
 	Label string `json:"label"`
