@@ -38,7 +38,7 @@ func (client *Client) GetNamespaceList(queries map[string]string) ([]model.Names
 	return namespaceList, err
 }
 
-//GetNamespace return namespace by Name
+//GetNamespace return namespace by ID
 func (client *Client) GetNamespace(ns string) (model.Namespace, error) {
 	var namespace model.Namespace
 	err := client.RestAPI.Get(rest.Rq{

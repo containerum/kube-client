@@ -21,7 +21,7 @@ func TestNamespace(test *testing.T) {
 	})
 	Convey("Test resource service methods", test, func() {
 		Convey("get namespace", func() {
-			gainedNamespace, err := client.ResourceGetNamespace(fakeNamespaces[0].Name)
+			gainedNamespace, err := client.ResourceGetNamespace(fakeNamespaces[0].ID)
 			So(err, ShouldBeNil)
 			So(gainedNamespace, ShouldResemble, fakeNamespaces[0])
 		})
@@ -30,17 +30,17 @@ func TestNamespace(test *testing.T) {
 			So(err, ShouldBeNil)
 		})
 		Convey("rename namespace", func() {
-			err := client.RenameNamespace(fakeNamespaces[0].Name, "electron")
+			err := client.RenameNamespace(fakeNamespaces[0].ID, "electron")
 			So(err, ShouldBeNil)
-			err = client.RenameNamespace("electron", fakeNamespaces[0].Name)
+			err = client.RenameNamespace("electron", fakeNamespaces[0].ID)
 			So(err, ShouldBeNil)
 		})
 		Convey("set access", func() {
-			err := client.SetNamespaceAccess(fakeNamespaces[0].Name, "fermi@da.com", "read")
+			err := client.SetNamespaceAccess(fakeNamespaces[0].ID, "fermi@da.com", "read")
 			So(err, ShouldBeNil)
 		})
 		Convey("delete access", func() {
-			err := client.DeleteNamespaceAccess(fakeNamespaces[0].Name, "fermi@da.com")
+			err := client.DeleteNamespaceAccess(fakeNamespaces[0].ID, "fermi@da.com")
 			So(err, ShouldBeNil)
 		})
 	})
