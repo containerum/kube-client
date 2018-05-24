@@ -52,5 +52,5 @@ type PersistentVolumeClaim struct {
 	// required: true
 	AccessMode PersistentVolumeAccessMode `json:"access_mode"`
 	// required: true
-	Size uint `json:"size"`
+	Capacity uint `json:"capacity"`
 }
