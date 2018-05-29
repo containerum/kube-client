@@ -19,3 +19,8 @@ type Secret struct {
 	Data  map[string]string `json:"data"`
 	Owner string            `json:"owner,omitempty"`
 }
+
+// Mask removes information not interesting for users
+func (secret *Secret) Mask() {
+	secret.Owner = ""
+}

@@ -31,3 +31,8 @@ type SelectedConfigMapsList map[string]ConfigMapsList
 type ConfigMapsList struct {
 	ConfigMaps []ConfigMap `json:"configmaps"`
 }
+
+// Mask removes information not interesting for users
+func (cm *ConfigMap) Mask() {
+	cm.Owner = ""
+}

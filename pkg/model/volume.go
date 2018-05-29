@@ -6,13 +6,15 @@ import "time"
 //
 //swagger:model
 type Volume struct {
-	ID               string    `json:"id"`
-	CreateTime       time.Time `json:"create_time"`
-	Label            string    `json:"label"`
-	Access           string    `json:"access"`
-	AccessChangeTime time.Time `json:"access_change_time"`
-	Capacity         int       `json:"capacity"`
-	Replicas         int       `json:"replicas"`
+	ID          string                     `json:"id,omitempty"`
+	OwnerLogin  string                     `json:"owner_login,omitempty,omitempty"`
+	Label       string                     `json:"label,omitempty"`
+	Access      string                     `json:"access,omitempty,omitempty"`
+	Capacity    uint                       `json:"capacity,omitempty"`
+	StorageName string                     `json:"storage_name,omitempty"` //AKA StorageClass
+	AccessMode  PersistentVolumeAccessMode `json:"access_mode,omitempty"`
+	CreateTime  time.Time                  `json:"create_time,omitempty"`
+	Owner       string                     `json:"owner,omitempty"`
 }
 
 // CreateVolume --
@@ -39,18 +41,7 @@ const (
 	ReadWriteMany PersistentVolumeAccessMode = "ReadWriteMany"
 )
 
-// PersistentVolumeClaim -- persistent volume claim representation
-//
-//swagger:model
-type PersistentVolumeClaim struct {
-	// required: true
-	Name string `json:"name"`
-	//creation date in RFC3339 format
-	CreatedAt *string `json:"created_at,omitempty"`
-	// required: true
-	StorageClass string `json:"storage_class"`
-	// required: true
-	AccessMode PersistentVolumeAccessMode `json:"access_mode"`
-	// required: true
-	Capacity uint `json:"capacity"`
+// Mask removes information not interesting for users
+func (vol *Volume) Mask() {
+	vol.Owner = ""
 }

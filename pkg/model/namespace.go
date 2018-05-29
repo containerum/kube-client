@@ -55,6 +55,11 @@ type Namespace struct {
 	MaxIntService uint   `json:"max_int_service,omitempty"`
 	MaxTraffic    uint   `json:"max_traffic,omitempty"`
 	// required: true
-	Resources Resources `json:"resources"`
+	Resources Resources `json:"resources,omitempty"`
 	Owner     string    `json:"owner,omitempty"`
+}
+
+// Mask removes information not interesting for users
+func (ns *Namespace) Mask() {
+	ns.Owner = ""
 }

@@ -47,3 +47,8 @@ type Path struct {
 	// required: true
 	ServicePort int `json:"service_port"`
 }
+
+// Mask removes information not interesting for users
+func (ingress *Ingress) Mask() {
+	ingress.Owner = ""
+}

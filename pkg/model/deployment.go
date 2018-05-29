@@ -99,3 +99,8 @@ type ContainerVolume struct {
 	SubPath                   *string `json:"sub_path,omitempty"`
 	PersistentVolumeClaimName *string `json:"pvc_name,omitempty"`
 }
+
+// Mask removes information not interesting for users
+func (deploy *Deployment) Mask() {
+	deploy.Owner = ""
+}

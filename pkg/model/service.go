@@ -52,3 +52,8 @@ type ServicePort struct {
 	// required: true
 	Protocol Protocol `json:"protocol"`
 }
+
+// Mask removes information not interesting for users
+func (svc *Service) Mask() {
+	svc.Owner = ""
+}
