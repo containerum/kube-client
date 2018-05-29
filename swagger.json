@@ -493,40 +493,6 @@
       "type": "string",
       "x-go-package": "github.com/containerum/kube-client/pkg/model"
     },
-    "PersistentVolumeClaim": {
-      "description": "PersistentVolumeClaim -- persistent volume claim representation",
-      "type": "object",
-      "required": [
-        "name",
-        "storage_class",
-        "access_mode",
-        "capacity"
-      ],
-      "properties": {
-        "access_mode": {
-          "$ref": "#/definitions/PersistentVolumeAccessMode"
-        },
-        "capacity": {
-          "type": "integer",
-          "format": "uint64",
-          "x-go-name": "Capacity"
-        },
-        "created_at": {
-          "description": "creation date in RFC3339 format",
-          "type": "string",
-          "x-go-name": "CreatedAt"
-        },
-        "name": {
-          "type": "string",
-          "x-go-name": "Name"
-        },
-        "storage_class": {
-          "type": "string",
-          "x-go-name": "StorageClass"
-        }
-      },
-      "x-go-package": "github.com/containerum/kube-client/pkg/model"
-    },
     "Pod": {
       "description": "Pod -- model for pod",
       "type": "object",
@@ -1046,14 +1012,12 @@
           "type": "string",
           "x-go-name": "Access"
         },
-        "access_change_time": {
-          "type": "string",
-          "format": "date-time",
-          "x-go-name": "AccessChangeTime"
+        "access_mode": {
+          "$ref": "#/definitions/PersistentVolumeAccessMode"
         },
         "capacity": {
           "type": "integer",
-          "format": "int64",
+          "format": "uint64",
           "x-go-name": "Capacity"
         },
         "create_time": {
@@ -1069,10 +1033,17 @@
           "type": "string",
           "x-go-name": "Label"
         },
-        "replicas": {
-          "type": "integer",
-          "format": "int64",
-          "x-go-name": "Replicas"
+        "owner": {
+          "type": "string",
+          "x-go-name": "Owner"
+        },
+        "owner_login": {
+          "type": "string",
+          "x-go-name": "OwnerLogin"
+        },
+        "storage_name": {
+          "type": "string",
+          "x-go-name": "StorageName"
         }
       },
       "x-go-package": "github.com/containerum/kube-client/pkg/model"
