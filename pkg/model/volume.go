@@ -1,7 +1,5 @@
 package model
 
-import "time"
-
 // Volume -- volume representation
 //
 //swagger:model
@@ -13,7 +11,7 @@ type Volume struct {
 	Capacity    uint                       `json:"capacity,omitempty"`
 	StorageName string                     `json:"storage_name,omitempty"` //AKA StorageClass
 	AccessMode  PersistentVolumeAccessMode `json:"access_mode,omitempty"`
-	CreateTime  time.Time                  `json:"create_time,omitempty"`
+	CreatedAt   *string                    `json:"created_at,omitempty"`
 	Owner       string                     `json:"owner,omitempty"`
 }
 
