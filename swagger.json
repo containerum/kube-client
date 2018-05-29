@@ -528,10 +528,6 @@
           "type": "string",
           "x-go-name": "Name"
         },
-        "owner": {
-          "type": "string",
-          "x-go-name": "Owner"
-        },
         "status": {
           "$ref": "#/definitions/PodStatus"
         },
@@ -1020,10 +1016,9 @@
           "format": "uint64",
           "x-go-name": "Capacity"
         },
-        "create_time": {
+        "created_at": {
           "type": "string",
-          "format": "date-time",
-          "x-go-name": "CreateTime"
+          "x-go-name": "CreatedAt"
         },
         "id": {
           "type": "string",
