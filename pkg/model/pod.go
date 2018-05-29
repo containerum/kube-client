@@ -23,7 +23,6 @@ type Pod struct {
 	TotalMemory uint `json:"total_memory,omitempty"`
 	//creation date in RFC3339 format
 	CreatedAt *string `json:"created_at,omitempty"`
-	Owner     string  `json:"owner,omitempty"`
 }
 
 // PodStatus -- kubernetes status of pod
@@ -44,9 +43,4 @@ type UpdateImage struct {
 	Container string `json:"container_name"`
 	// required: true
 	Image string `json:"image"`
-}
-
-// Mask removes information not interesting for users
-func (pod *Pod) Mask() {
-	pod.Owner = ""
 }
