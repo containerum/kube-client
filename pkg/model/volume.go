@@ -4,7 +4,7 @@ package model
 //
 //swagger:model
 type Volume struct {
-	ID          string                     `json:"id,omitempty"`
+	Name        string                     `json:"name,omitempty"`
 	CreatedAt   *string                    `json:"created_at,omitempty"`
 	Owner       string                     `json:"owner,omitempty"`
 	OwnerLogin  string                     `json:"owner_login,omitempty"`
