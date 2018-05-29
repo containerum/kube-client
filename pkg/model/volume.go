@@ -16,6 +16,13 @@ type Volume struct {
 	Users       []UserAccess               `json:"users,omitempty"`
 }
 
+// VolumesList -- model for volumes list
+//
+// swagger:model
+type VolumesList struct {
+	Volumes []Volume `json:"volumes"`
+}
+
 // CreateVolume --
 //swagger:ignore
 type CreateVolume struct {
