@@ -1,5 +1,12 @@
 package model
 
+// PodsList -- model for pods list
+//
+// swagger:model
+type PodsList struct {
+	Pods []Pod `json:"pods"`
+}
+
 // Pod -- model for pod
 //
 // swagger:model
@@ -16,6 +23,7 @@ type Pod struct {
 	TotalMemory uint `json:"total_memory,omitempty"`
 	//creation date in RFC3339 format
 	CreatedAt *string `json:"created_at,omitempty"`
+	Owner     string  `json:"owner,omitempty"`
 }
 
 // PodStatus -- kubernetes status of pod

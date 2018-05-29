@@ -23,6 +23,13 @@ type UpdateReplicas struct {
 	Replicas int `json:"replicas"`
 }
 
+// DeploymentsList -- model for deployments list
+//
+// swagger:model
+type DeploymentsList struct {
+	Deployments []Deployment `json:"deployments"`
+}
+
 // Deployment -- model for deployments
 //
 // swagger:model
@@ -37,7 +44,8 @@ type Deployment struct {
 	//total CPU usage by all containers in this deployment
 	TotalCPU uint `json:"total_cpu,omitempty"`
 	//total RAM usage by all containers in this deployment
-	TotalMemory uint `json:"total_memory,omitempty"`
+	TotalMemory uint   `json:"total_memory,omitempty"`
+	Owner       string `json:"owner,omitempty"`
 }
 
 // Container -- model for container in deployment

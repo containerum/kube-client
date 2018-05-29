@@ -1,5 +1,17 @@
 package model
 
+// SelectedIngressesList -- model for ingresses list from all namespaces
+//
+// swagger:model
+type SelectedIngressesList map[string]IngressesList
+
+// IngressesList -- model for ingresses list
+//
+// swagger:model
+type IngressesList struct {
+	Ingress []Ingress `json:"ingresses"`
+}
+
 // Ingress -- model for ingress
 //
 // swagger:model
@@ -10,6 +22,7 @@ type Ingress struct {
 	CreatedAt *string `json:"created_at,omitempty"`
 	// required: true
 	Rules []Rule `json:"rules"`
+	Owner string `json:"owner,omitempty"`
 }
 
 // Rule -- ingress rule

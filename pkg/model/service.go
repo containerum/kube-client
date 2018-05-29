@@ -17,6 +17,13 @@ const (
 	TCP Protocol = "TCP"
 )
 
+// ServicesList -- model for services list
+//
+// swagger:model
+type ServicesList struct {
+	Services []Service `json:"services"`
+}
+
 // represents service
 //
 // swagger:model
@@ -30,6 +37,7 @@ type Service struct {
 	Domain    string   `json:"domain,omitempty"`
 	// required: true
 	Ports []ServicePort `json:"ports"`
+	Owner string        `json:"owner,omitempty"`
 }
 
 // represent service port
