@@ -5,9 +5,9 @@ package model
 //swagger:model
 type Volume struct {
 	ID          string                     `json:"id,omitempty"`
-	OwnerLogin  string                     `json:"owner_login,omitempty,omitempty"`
+	OwnerLogin  string                     `json:"owner_login,omitempty"`
 	Label       string                     `json:"label,omitempty"`
-	Access      string                     `json:"access,omitempty,omitempty"`
+	Access      string                     `json:"access,omitempty"`
 	Capacity    uint                       `json:"capacity,omitempty"`
 	StorageName string                     `json:"storage_name,omitempty"` //AKA StorageClass
 	AccessMode  PersistentVolumeAccessMode `json:"access_mode,omitempty"`
