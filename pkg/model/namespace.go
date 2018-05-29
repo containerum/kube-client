@@ -44,9 +44,10 @@ type NamespacesList struct {
 //
 // swagger:model
 type Namespace struct {
+	ID string `json:"id,omitempty"`
 	//creation date in RFC3339 format
 	CreatedAt  *string `json:"created_at,omitempty"`
-	ID         string  `json:"id,omitempty"`
+	Owner      string  `json:"owner,omitempty"`
 	OwnerLogin string  `json:"owner_login,omitempty"`
 	// user-visible label for the namespace
 	Label         string `json:"label,omitempty"`
@@ -55,8 +56,8 @@ type Namespace struct {
 	MaxIntService uint   `json:"max_int_service,omitempty"`
 	MaxTraffic    uint   `json:"max_traffic,omitempty"`
 	// required: true
-	Resources Resources `json:"resources,omitempty"`
-	Owner     string    `json:"owner,omitempty"`
+	Resources Resources    `json:"resources,omitempty"`
+	Users     []UserAccess `json:"users,omitempty"`
 }
 
 // Mask removes information not interesting for users

@@ -446,6 +446,13 @@
         },
         "resources": {
           "$ref": "#/definitions/Resources"
+        },
+        "users": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/UserAccess"
+          },
+          "x-go-name": "Users"
         }
       },
       "x-go-package": "github.com/containerum/kube-client/pkg/model"
@@ -527,6 +534,10 @@
         "name": {
           "type": "string",
           "x-go-name": "Name"
+        },
+        "owner": {
+          "type": "string",
+          "x-go-name": "Owner"
         },
         "status": {
           "$ref": "#/definitions/PodStatus"
@@ -922,6 +933,19 @@
       },
       "x-go-package": "github.com/containerum/kube-client/pkg/model"
     },
+    "UserAccess": {
+      "type": "object",
+      "properties": {
+        "access_level": {
+          "$ref": "#/definitions/AccessLevel"
+        },
+        "username": {
+          "type": "string",
+          "x-go-name": "Username"
+        }
+      },
+      "x-go-package": "github.com/containerum/kube-client/pkg/model"
+    },
     "UserHeaderData": {
       "description": "represents header data for X-User-Namespace and X-User-Volume headers (encoded in base64)",
       "type": "object",
@@ -1039,6 +1063,13 @@
         "storage_name": {
           "type": "string",
           "x-go-name": "StorageName"
+        },
+        "users": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/UserAccess"
+          },
+          "x-go-name": "Users"
         }
       },
       "x-go-package": "github.com/containerum/kube-client/pkg/model"
