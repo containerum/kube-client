@@ -3,9 +3,8 @@ package errwsmock
 
 import (
 	bytes "bytes"
-	template "text/template"
-
 	cherry "github.com/containerum/cherry"
+	template "text/template"
 )
 
 const ()
