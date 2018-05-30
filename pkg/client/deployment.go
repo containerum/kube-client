@@ -31,13 +31,10 @@ func (client *Client) GetDeployment(namespace, deployment string) (model.Deploym
 
 // GetDeploymentList -- consumes a namespace and a deployment names,
 // returns a list of Deployments OR nil slice AND an error
-func (client *Client) GetDeploymentList(namespace string) ([]model.Deployment, error) {
-	var depls []model.Deployment
-	jsonAdaptor := struct {
-		Deployments *[]model.Deployment `json:"deployments"`
-	}{&depls}
+func (client *Client) GetDeploymentList(namespace string) (model.DeploymentsList, error) {
+	var depls model.DeploymentsList
 	err := client.RestAPI.Get(rest.Rq{
-		Result: &jsonAdaptor,
+		Result: &depls,
 		URL: rest.URL{
 			Path: deploymentsPath,
 			Params: rest.P{

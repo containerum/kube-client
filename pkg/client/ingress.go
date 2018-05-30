@@ -24,13 +24,10 @@ func (client *Client) AddIngress(namespace string, ingress model.Ingress) error 
 }
 
 // GetIngressList -- returns list of ingresses.
-func (client *Client) GetIngressList(namespace string) ([]model.Ingress, error) {
-	var ingressList []model.Ingress
-	jsonAdaptor := struct {
-		Ingresses *[]model.Ingress `json:"ingresses"`
-	}{&ingressList}
+func (client *Client) GetIngressList(namespace string) (model.IngressesList, error) {
+	var ingressList model.IngressesList
 	err := client.RestAPI.Get(rest.Rq{
-		Result: &jsonAdaptor,
+		Result: &ingressList,
 		URL: rest.URL{
 			Path: ingressesPath,
 			Params: rest.P{

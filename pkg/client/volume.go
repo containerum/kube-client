@@ -44,13 +44,8 @@ func (client *Client) GetVolume(volumeName string) (model.Volume, error) {
 // GetVolumeList -- get list of volumes,
 // consumes optional user ID and filter parameters.
 // Returns new_access_level as access if user role = user.
-// Should have filters: not deleted, limited, not limited, owner, not owner.
-func (client *Client) GetVolumeList(filter *string) ([]model.Volume, error) {
-	var volumeList []model.Volume
-	var query = rest.P{}
-	if filter != nil {
-		query["filter"] = *filter
-	}
+func (client *Client) GetVolumeList() (model.VolumesList, error) {
+	var volumeList model.VolumesList
 	err := client.RestAPI.Get(rest.Rq{
 		Result: &volumeList,
 		URL: rest.URL{
