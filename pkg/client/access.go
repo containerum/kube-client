@@ -1,7 +1,7 @@
 package client
 
 import (
-	permModel "git.containerum.net/ch/permissions/pkg/model"
+	"github.com/containerum/kube-client/pkg/model"
 	"github.com/containerum/kube-client/pkg/rest"
 )
 
@@ -9,8 +9,8 @@ const (
 	accessesPath = "/namespaces/{namespace}/access"
 )
 
-func (client *Client) GetNamespaceAccesses(namespace string) (permModel.NamespaceWithPermissionsJSON, error) {
-	var access permModel.NamespaceWithPermissionsJSON
+func (client *Client) GetNamespaceAccesses(namespace string) (model.Namespace, error) {
+	var access model.Namespace
 	err := client.RestAPI.Get(rest.Rq{
 		Result: &access,
 		URL: rest.URL{
