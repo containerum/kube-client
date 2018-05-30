@@ -9,7 +9,7 @@ const (
 	accessesPath = "/namespaces/{namespace}/access"
 )
 
-func (client *Client) GetNamespaceAccesses(namespace string) (model.Namespace, error) {
+func (client *Client) GetNamespaceAccesses(namespace string) ([]model.UserAccess, error) {
 	var access model.Namespace
 	err := client.RestAPI.Get(rest.Rq{
 		Result: &access,
@@ -20,5 +20,5 @@ func (client *Client) GetNamespaceAccesses(namespace string) (model.Namespace, e
 			},
 		},
 	})
-	return access, err
+	return access.Users, err
 }
