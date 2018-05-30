@@ -8,11 +8,6 @@ import (
 	"github.com/containerum/kube-client/pkg/model"
 )
 
-//ListOptions -
-type ListOptions struct {
-	Owner string
-}
-
 const (
 	namespacesPath      = "/namespaces"
 	namespacePath       = "/namespaces/{namespace}"
@@ -21,15 +16,10 @@ const (
 )
 
 //GetNamespaceList return namespace list. Can use query filters: owner
-func (client *Client) GetNamespaceList(queries map[string]string) ([]model.Namespace, error) {
-	var namespaceList []model.Namespace
-	jsonAdaptor := struct {
-		Namespaces *[]model.Namespace `json:"namespaces"`
-	}{&namespaceList}
-
+func (client *Client) GetNamespaceList() (model.NamespacesList, error) {
+	var namespaceList model.NamespacesList
 	err := client.RestAPI.Get(rest.Rq{
-		Result: &jsonAdaptor,
-		Query:  queries,
+		Result: &namespaceList,
 		URL: rest.URL{
 			Path:   namespacesPath,
 			Params: rest.P{},
@@ -72,8 +62,8 @@ func (client *Client) ResourceGetNamespace(namespace string) (model.Namespace, e
 // ResourceGetNamespaceList -- consumes a page number parameter,
 // amount of namespaces per page and optional userID,
 // returns a slice of Namespaces OR a nil slice AND an error
-func (client *Client) ResourceGetNamespaceList(page, perPage uint64) ([]model.Namespace, error) {
-	var namespaceList []model.Namespace
+func (client *Client) ResourceGetNamespaceList(page, perPage uint64) (model.NamespacesList, error) {
+	var namespaceList model.NamespacesList
 	err := client.RestAPI.Get(rest.Rq{
 		Result: &namespaceList,
 		Query: rest.Q{
@@ -96,7 +86,7 @@ func (client *Client) RenameNamespace(namespace, newName string) error {
 			Label: newName,
 		},
 		URL: rest.URL{
-			Path: namespacePath,
+			Path: namespaceNamePath,
 			Params: rest.P{
 				"namespace": namespace,
 			},
@@ -105,7 +95,7 @@ func (client *Client) RenameNamespace(namespace, newName string) error {
 }
 
 // SetNamespaceAccess -- sets/changes access to namespace for provided user
-func (client *Client) SetNamespaceAccess(namespace, username, access string) error {
+func (client *Client) SetNamespaceAccess(namespace, username string, access model.AccessLevel) error {
 	return client.RestAPI.Post(rest.Rq{
 		Body: model.ResourceUpdateUserAccess{
 			Username: username,

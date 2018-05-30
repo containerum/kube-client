@@ -41,13 +41,10 @@ func (client *Client) GetPod(namespace, pod string) (model.Pod, error) {
 }
 
 // GetPodList -- returns list of pods in provided namespace
-func (client *Client) GetPodList(namespace string) ([]model.Pod, error) {
-	var podList []model.Pod
-	jsonAdaptor := struct {
-		Pods *[]model.Pod `json:"pods"`
-	}{&podList}
+func (client *Client) GetPodList(namespace string) (model.PodsList, error) {
+	var podList model.PodsList
 	err := client.RestAPI.Get(rest.Rq{
-		Result: &jsonAdaptor,
+		Result: &podList,
 		URL: rest.URL{
 			Path: podsPath,
 			Params: rest.P{
