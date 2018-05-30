@@ -19,7 +19,7 @@ type UserGroup struct {
 	OwnerID      string           `json:"owner_user_id,omitempty"`
 	Members      UserGroupMembers `json:"members,omitempty"`
 	MembersCount uint             `json:"members_count,omitempty"`
-	UserAccess   UserGroupAccess  `json:"access"`
+	UserAccess   UserGroupAccess  `json:"access,omitempty"`
 	//creation date in RFC3339 format
 	CreatedAt string `json:"created_at,omitempty"`
 }
