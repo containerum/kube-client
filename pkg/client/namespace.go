@@ -11,7 +11,7 @@ const (
 	namespacesPath      = "/namespaces"
 	namespacePath       = "/namespaces/{namespace}"
 	namespaceNamePath   = "/namespaces/{namespace}/name"
-	namespaceAccessPath = "/namespaces/{namespace}/access"
+	namespaceAccessPath = "/namespaces/{namespace}/accesses"
 )
 
 //GetNamespaceList return namespace list. Can use query filters: owner
