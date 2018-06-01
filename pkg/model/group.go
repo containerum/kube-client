@@ -3,6 +3,7 @@ package model
 type UserGroupAccess string
 
 const (
+	OwnerAccess  UserGroupAccess = "owner"
 	AdminAccess  UserGroupAccess = "admin"
 	MasterAccess UserGroupAccess = "master"
 	MemberAccess UserGroupAccess = "member"
