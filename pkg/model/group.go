@@ -22,9 +22,10 @@ type UserGroups struct {
 //
 // swagger:model
 type UserGroup struct {
-	ID      string `json:"id,omitempty"`
-	Label   string `json:"label"`
-	OwnerID string `json:"owner_user_id,omitempty"`
+	ID         string `json:"id,omitempty"`
+	Label      string `json:"label"`
+	OwnerID    string `json:"owner_user_id,omitempty"`
+	OwnerLogin string `json:"owner_login,omitempty"`
 	*UserGroupMembers
 	MembersCount uint            `json:"members_count,omitempty"`
 	UserAccess   UserGroupAccess `json:"access,omitempty"`
