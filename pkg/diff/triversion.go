@@ -10,9 +10,9 @@ type TriVersion [3]uint64
 
 func (v TriVersion) String() string {
 	return "v" +
-		strconv.FormatUint(v[0], 64) + "." +
-		strconv.FormatUint(v[1], 64) + "." +
-		strconv.FormatUint(v[2], 64)
+		strconv.FormatUint(v[0], 10) + "." +
+		strconv.FormatUint(v[1], 10) + "." +
+		strconv.FormatUint(v[2], 10)
 }
 
 func FromVersion(v semver.Version) TriVersion {
