@@ -28,7 +28,7 @@ func (v TriVersion) Minor() uint64 {
 }
 
 func (v TriVersion) Patch() uint64 {
-	return v[3]
+	return v[2]
 }
 
 func (v TriVersion) Less(x TriVersion) bool {
