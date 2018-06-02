@@ -74,7 +74,7 @@ func NewVersion(oldDepl, newDepl model.Deployment) semver.Version {
 	if len(newContainersNames.Sub(oldContainersNames)) > 0 {
 		// only new containers have been added
 		var newVersion = oldDepl.Version
-		newVersion.Minor++
+		newVersion.Major++
 		return newVersion
 	}
 	// nothing ever changes
