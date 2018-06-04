@@ -10,7 +10,7 @@ import (
 const (
 	namespacesPath      = "/namespaces"
 	namespacePath       = "/namespaces/{namespace}"
-	namespaceNamePath   = "/namespaces/{namespace}/name"
+	namespaceNamePath   = "/namespaces/{namespace}/rename"
 	namespaceAccessPath = "/namespaces/{namespace}/accesses"
 )
 
