@@ -10,8 +10,8 @@ import (
 const (
 	namespacesPath      = "/namespaces"
 	namespacePath       = "/namespaces/{namespace}"
-	namespaceNamePath   = "/namespaces/{namespace}/name"
-	namespaceAccessPath = "/namespaces/{namespace}/access"
+	namespaceNamePath   = "/namespaces/{namespace}/rename"
+	namespaceAccessPath = "/namespaces/{namespace}/accesses"
 )
 
 //GetNamespaceList return namespace list. Can use query filters: owner

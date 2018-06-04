@@ -16,6 +16,13 @@ type Volume struct {
 	Users       []UserAccess               `json:"users,omitempty"`
 }
 
+// DeploymentVersion -- model for deployment version update
+//
+// swagger:model
+type DeploymentVersion struct {
+	Version string `json:"version"`
+}
+
 // VolumesList -- model for volumes list
 //
 // swagger:model
@@ -24,14 +31,14 @@ type VolumesList struct {
 }
 
 // CreateVolume --
-//swagger:ignore
+//swagger:model
 type CreateVolume struct {
 	TariffID string `json:"tariff_id"`
 	Label    string `json:"label"`
 }
 
 // ResourceUpdateName -- contains new resource name
-//swagger:ignore
+//swagger:model
 type ResourceUpdateName struct {
 	Label string `json:"label"`
 }
