@@ -57,6 +57,8 @@ type Deployment struct {
 	Replicas int `json:"replicas"`
 	//total CPU usage by all containers in this deployment
 	TotalCPU uint `json:"total_cpu,omitempty"`
+	//Solution ID (only if deployment is part of solution)
+	SolutionID string `json:"solution_id,omitempty"`
 	//total RAM usage by all containers in this deployment
 	TotalMemory uint           `json:"total_memory,omitempty"`
 	Owner       string         `json:"owner,omitempty"`
