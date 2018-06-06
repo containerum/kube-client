@@ -129,6 +129,33 @@ func (container Container) Version() string {
 	return ""
 }
 
+func (container *Container) AddEnv(env Env) {
+	for i, cont := range container.Env {
+		if cont.Name == env.Name {
+			container.Env[i].Value = env.Value
+			return
+		}
+	}
+	container.Env = append(container.Env, env)
+}
+
+func (container *Container) GetEnv(name string) (Env, bool) {
+	for _, env := range container.Env {
+		if env.Name == name {
+			return env, true
+		}
+	}
+	return Env{}, false
+}
+
+func (container *Container) GetEnvMap() map[string]string {
+	var envs = make(map[string]string, len(container.Env))
+	for _, env := range container.Env {
+		envs[env.Name] = env.Value
+	}
+	return envs
+}
+
 type Image struct {
 	Name string
 	Tag  string
