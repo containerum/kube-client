@@ -156,6 +156,15 @@ func (container *Container) GetEnvMap() map[string]string {
 	return envs
 }
 
+func (container *Container) PutEnvMap(envs map[string]string) {
+	for k, v := range envs {
+		container.AddEnv(Env{
+			Name:  k,
+			Value: v,
+		})
+	}
+}
+
 type Image struct {
 	Name string
 	Tag  string
