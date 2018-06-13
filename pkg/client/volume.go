@@ -7,10 +7,8 @@ import (
 )
 
 const (
-	volumesPath      = "/namespaces/{namespace}/volumes"
-	volumePath       = "/namespaces/{namespace}/volumes/{volume}"
-	volumeNamePath   = "/namespaces/{namespace}/volumes/{volume}/name"
-	volumeAccessPath = "/namespaces/{namespace}/volumes/{volume}/access"
+	volumesPath = "/namespaces/{namespace}/volumes"
+	volumePath  = "/namespaces/{namespace}/volumes/{volume}"
 )
 
 // DeleteVolume -- deletes Volume with provided volume name
@@ -58,48 +56,4 @@ func (client *Client) GetVolumeList(namespace string) (model.VolumesList, error)
 		},
 	})
 	return volumeList, err
-}
-
-//RenameVolume -- change volume name
-func (client *Client) RenameVolume(namespace, volumeName, newName string) error {
-	return client.RestAPI.Put(rest.Rq{
-		Body: model.ResourceUpdateName{
-			Label: newName,
-		},
-		URL: rest.URL{
-			Path: volumeNamePath,
-			Params: rest.P{
-				"volume":    volumeName,
-				"namespace": namespace,
-			},
-		},
-	})
-}
-
-// SetVolumeAccess -- sets User Volume access
-func (client *Client) SetVolumeAccess(volumeName string, accessData model.ResourceUpdateUserAccess) error {
-	return client.RestAPI.Post(rest.Rq{
-		Body: accessData,
-		URL: rest.URL{
-			Path: volumeAccessPath,
-			Params: rest.P{
-				"volume": volumeName,
-			},
-		},
-	})
-}
-
-// DeleteAccess -- deletes user Volume access
-func (client *Client) DeleteAccess(volumeName, username string) error {
-	return client.RestAPI.Delete(rest.Rq{
-		Body: model.ResourceUpdateUserAccess{
-			Username: username,
-		},
-		URL: rest.URL{
-			Path: volumeAccessPath,
-			Params: rest.P{
-				"volume": volumeName,
-			},
-		},
-	})
 }
