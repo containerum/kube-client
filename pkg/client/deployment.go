@@ -121,6 +121,7 @@ func (client *Client) SetReplicas(namespace, deployment string, replicas int) er
 	})
 }
 
+// Returns list of defferent deployment versions
 func (client *Client) GetDeploymentVersions(namespace, deplName string) (model.DeploymentsList, error) {
 	var list model.DeploymentsList
 	return list, client.RestAPI.Get(rest.Rq{
@@ -135,6 +136,7 @@ func (client *Client) GetDeploymentVersions(namespace, deplName string) (model.D
 	})
 }
 
+// Create pods from deployment with specific version
 func (client *Client) RunDeploymentVersion(namespace, deplName string, version semver.Version) error {
 	return client.RestAPI.Post(rest.Rq{
 		URL: rest.URL{
