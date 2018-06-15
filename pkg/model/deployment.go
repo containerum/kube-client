@@ -219,9 +219,8 @@ type ContainerVolume struct {
 	Name string  `json:"name"`
 	Mode *string `json:"mode,omitempty"`
 	// required: true
-	MountPath                 string  `json:"mount_path"`
-	SubPath                   *string `json:"sub_path,omitempty"`
-	PersistentVolumeClaimName *string `json:"pvc_name,omitempty"`
+	MountPath string  `json:"mount_path"`
+	SubPath   *string `json:"sub_path,omitempty"`
 }
 
 // Mask removes information not interesting for users
