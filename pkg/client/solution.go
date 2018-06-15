@@ -6,11 +6,13 @@ import (
 )
 
 const (
-	templatesPath   = "/templates"
-	templateEnvPath = "/templates/{template}/env"
-	templateResPath = "/templates/{template}/resources"
-	solutionsPath   = "/solutions"
-	solutionPath    = "/solutions/{solution}"
+	templatesPath           = "/templates"
+	templateEnvPath         = "/templates/{template}/env"
+	templateResPath         = "/templates/{template}/resources"
+	solutionsPath           = "/solutions"
+	solutionPath            = "/solutions/{solution}"
+	solutionDeploymentsPath = "/solutions/{solution}/deployments"
+	solutionServicesPath    = "/solutions/{solution}/services"
 )
 
 // GetSolutionsTemplatesList -- returns list of public solutions templates
@@ -81,8 +83,8 @@ func (client *Client) GetSolutionsList() (model.UserSolutionsList, error) {
 }
 
 // GetSolution -- returns user running solutions
-func (client *Client) GetSolution(solutionName string) (model.UserSolutionsList, error) {
-	var solutionList model.UserSolutionsList
+func (client *Client) GetSolution(solutionName string) (model.UserSolution, error) {
+	var solutionList model.UserSolution
 	err := client.RestAPI.Get(rest.Rq{
 		Result: &solutionList,
 		URL: rest.URL{
@@ -93,4 +95,49 @@ func (client *Client) GetSolution(solutionName string) (model.UserSolutionsList,
 		},
 	})
 	return solutionList, err
+}
+
+// GetSolutionDeployments -- returns user solution deployments
+func (client *Client) GetSolutionDeployments(solutionName string) (model.DeploymentsList, error) {
+	var deployList model.DeploymentsList
+	err := client.RestAPI.Get(rest.Rq{
+		Result: &deployList,
+		URL: rest.URL{
+			Path: solutionDeploymentsPath,
+			Params: rest.P{
+				"solution": solutionName,
+			},
+		},
+	})
+	return deployList, err
+}
+
+// GetSolutionServices -- returns user solution deployments
+func (client *Client) GetSolutionServices(solutionName string) (model.ServicesList, error) {
+	var svcList model.ServicesList
+	err := client.RestAPI.Get(rest.Rq{
+		Result: &svcList,
+		URL: rest.URL{
+			Path: solutionServicesPath,
+			Params: rest.P{
+				"solution": solutionName,
+			},
+		},
+	})
+	return svcList, err
+}
+
+// GetSolution -- returns user running solutions
+func (client *Client) DeleteSolution(solutionName string) error {
+	var solutionList model.UserSolution
+	err := client.RestAPI.Delete(rest.Rq{
+		Result: &solutionList,
+		URL: rest.URL{
+			Path: solutionPath,
+			Params: rest.P{
+				"solution": solutionName,
+			},
+		},
+	})
+	return err
 }
