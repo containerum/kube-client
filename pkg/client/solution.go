@@ -129,9 +129,7 @@ func (client *Client) GetSolutionServices(solutionName string) (model.ServicesLi
 
 // GetSolution -- returns user running solutions
 func (client *Client) DeleteSolution(solutionName string) error {
-	var solutionList model.UserSolution
 	err := client.RestAPI.Delete(rest.Rq{
-		Result: &solutionList,
 		URL: rest.URL{
 			Path: solutionPath,
 			Params: rest.P{
