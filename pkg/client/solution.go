@@ -13,7 +13,7 @@ const (
 	solutionPath    = "/solutions/{solution}"
 )
 
-// GetSolutionList -- returns list of public solutions templates
+// GetSolutionsTemplatesList -- returns list of public solutions templates
 func (client *Client) GetSolutionsTemplatesList() (model.AvailableSolutionsList, error) {
 	var solutionList model.AvailableSolutionsList
 	err := client.RestAPI.Get(rest.Rq{
@@ -25,6 +25,7 @@ func (client *Client) GetSolutionsTemplatesList() (model.AvailableSolutionsList,
 	return solutionList, err
 }
 
+// GetSolutionsTemplateEnv -- returns list of public solution template envs
 func (client *Client) GetSolutionsTemplateEnv(templateName string) (model.SolutionEnv, error) {
 	var solutionEnv model.SolutionEnv
 	err := client.RestAPI.Get(rest.Rq{
@@ -39,6 +40,7 @@ func (client *Client) GetSolutionsTemplateEnv(templateName string) (model.Soluti
 	return solutionEnv, err
 }
 
+// GetSolutionsTemplateResources -- returns count of public solution template resources
 func (client *Client) GetSolutionsTemplateResources(templateName string) (model.SolutionResources, error) {
 	var solutionRes model.SolutionResources
 	err := client.RestAPI.Get(rest.Rq{
@@ -53,6 +55,7 @@ func (client *Client) GetSolutionsTemplateResources(templateName string) (model.
 	return solutionRes, err
 }
 
+// RunSolution -- creates new solution
 func (client *Client) RunSolution(solution model.UserSolution) (model.RunSolutionResponse, error) {
 	var resp model.RunSolutionResponse
 	err := client.RestAPI.Post(rest.Rq{
@@ -65,6 +68,7 @@ func (client *Client) RunSolution(solution model.UserSolution) (model.RunSolutio
 	return resp, err
 }
 
+// GetSolutionsList -- returns list of users running solutions
 func (client *Client) GetSolutionsList() (model.UserSolutionsList, error) {
 	var solutionList model.UserSolutionsList
 	err := client.RestAPI.Get(rest.Rq{
@@ -76,6 +80,7 @@ func (client *Client) GetSolutionsList() (model.UserSolutionsList, error) {
 	return solutionList, err
 }
 
+// GetSolution -- returns user running solutions
 func (client *Client) GetSolution(solutionName string) (model.UserSolutionsList, error) {
 	var solutionList model.UserSolutionsList
 	err := client.RestAPI.Get(rest.Rq{
