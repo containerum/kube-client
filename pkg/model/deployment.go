@@ -216,7 +216,6 @@ type ContainerPort struct {
 //
 // swagger:model
 type ContainerVolume struct {
-	// required: true
 	Name string  `json:"name"`
 	Mode *string `json:"mode,omitempty"`
 	// required: true
