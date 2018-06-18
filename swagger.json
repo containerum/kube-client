@@ -702,6 +702,20 @@
       },
       "x-go-package": "github.com/containerum/kube-client/pkg/model"
     },
+    "ResourceUpdateUserAccess": {
+      "description": "ResourceUpdateUserAccess -- contains user access data",
+      "type": "object",
+      "properties": {
+        "access": {
+          "$ref": "#/definitions/AccessLevel"
+        },
+        "username": {
+          "type": "string",
+          "x-go-name": "Username"
+        }
+      },
+      "x-go-package": "github.com/containerum/kube-client/pkg/model"
+    },
     "Resources": {
       "type": "object",
       "title": "Resources -- represents namespace limits and user resources.",
