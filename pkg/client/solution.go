@@ -74,7 +74,7 @@ func (client *Client) RunSolution(solution model.UserSolution, namespace, branch
 }
 
 // GetSolutionsList -- returns list of users running solutions in namespace
-func (client *Client) GetSolutionsNamespaceList(namespace, branch string) (model.UserSolutionsList, error) {
+func (client *Client) GetSolutionsNamespaceList(namespace string) (model.UserSolutionsList, error) {
 	var solutionList model.UserSolutionsList
 	err := client.RestAPI.Get(rest.Rq{
 		Result: &solutionList,
