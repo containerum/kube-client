@@ -58,7 +58,7 @@ func (client *Client) GetSolutionsTemplateResources(templateName string) (model.
 }
 
 // RunSolution -- creates new solution
-func (client *Client) RunSolution(project, solution model.UserSolution, namespace, branch string) (model.RunSolutionResponse, error) {
+func (client *Client) RunSolution(solution model.UserSolution, project, namespace, branch string) (model.RunSolutionResponse, error) {
 	var resp model.RunSolutionResponse
 	err := client.RestAPI.Post(rest.Rq{
 		Result: &resp,

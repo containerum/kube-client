@@ -65,7 +65,7 @@ func (client *Client) ResourceGetNamespace(project, namespace string) (model.Nam
 // ResourceGetNamespaceList -- consumes a page number parameter,
 // amount of namespaces per page and optional userID,
 // returns a slice of Namespaces OR a nil slice AND an error
-func (client *Client) ResourceGetNamespaceList(project, page, perPage uint64) (model.NamespacesList, error) {
+func (client *Client) ResourceGetNamespaceList(project string, page, perPage uint64) (model.NamespacesList, error) {
 	var namespaceList model.NamespacesList
 	err := client.RestAPI.Get(rest.Rq{
 		Result: &namespaceList,
