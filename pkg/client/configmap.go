@@ -6,17 +6,18 @@ import (
 )
 
 const (
-	configMapsPath = "/namespaces/{namespace}/configmaps"
-	configMapPath  = "/namespaces/{namespace}/configmaps/{configmap}"
+	configMapsPath = "/projects/{project}/namespaces/{namespace}/configmaps"
+	configMapPath  = "/projects/{project}/namespaces/{namespace}/configmaps/{configmap}"
 )
 
 // CreateConfigMap -- creates a ConfigMap in provided namespace.
-func (client *Client) CreateConfigMap(namespace, name string, data model.ConfigMapData) error {
+func (client *Client) CreateConfigMap(project, namespace, name string, data model.ConfigMapData) error {
 	return client.RestAPI.Post(rest.Rq{
 		URL: rest.URL{
 			Path: configMapsPath,
 			Params: rest.P{
 				"namespace": namespace,
+				"project":   project,
 			},
 		},
 		Body: model.ConfigMap{
@@ -27,7 +28,7 @@ func (client *Client) CreateConfigMap(namespace, name string, data model.ConfigM
 }
 
 // GetConfigMap -- retrieves ConfigMap by name from provided namespace.
-func (client *Client) GetConfigMap(namespace, name string) (ret model.ConfigMap, err error) {
+func (client *Client) GetConfigMap(project, namespace, name string) (ret model.ConfigMap, err error) {
 	err = client.RestAPI.Get(rest.Rq{
 		Result: &ret,
 		URL: rest.URL{
@@ -35,6 +36,7 @@ func (client *Client) GetConfigMap(namespace, name string) (ret model.ConfigMap,
 			Params: rest.P{
 				"namespace": namespace,
 				"configmap": name,
+				"project":   project,
 			},
 		},
 	})
@@ -42,7 +44,7 @@ func (client *Client) GetConfigMap(namespace, name string) (ret model.ConfigMap,
 }
 
 // GetConfigMapList -- returns all ConfigMap`s in namespace.
-func (client *Client) GetConfigMapList(namespace string) (ret []model.ConfigMap, err error) {
+func (client *Client) GetConfigMapList(project, namespace string) (ret []model.ConfigMap, err error) {
 	jsonAdaptor := struct {
 		ConfigMaps *[]model.ConfigMap `json:"configmaps"`
 	}{&ret}
@@ -52,6 +54,7 @@ func (client *Client) GetConfigMapList(namespace string) (ret []model.ConfigMap,
 			Path: configMapsPath,
 			Params: rest.P{
 				"namespace": namespace,
+				"project":   project,
 			},
 		},
 	})
@@ -59,13 +62,14 @@ func (client *Client) GetConfigMapList(namespace string) (ret []model.ConfigMap,
 }
 
 // UpdateConfigMap -- rewrites ConfigMap by name in provided namespace.
-func (client *Client) UpdateConfigMap(namespace, name string, data model.ConfigMapData) error {
+func (client *Client) UpdateConfigMap(project, namespace, name string, data model.ConfigMapData) error {
 	return client.RestAPI.Put(rest.Rq{
 		URL: rest.URL{
 			Path: configMapPath,
 			Params: rest.P{
 				"namespace": namespace,
 				"configmap": name,
+				"project":   project,
 			},
 		},
 		Body: model.ConfigMap{
@@ -75,13 +79,14 @@ func (client *Client) UpdateConfigMap(namespace, name string, data model.ConfigM
 }
 
 // DeleteConfigMap -- deletes ConfigMap by name in provided namespace
-func (client *Client) DeleteConfigMap(namespace, name string) error {
+func (client *Client) DeleteConfigMap(project, namespace, name string) error {
 	return client.RestAPI.Delete(rest.Rq{
 		URL: rest.URL{
 			Path: configMapPath,
 			Params: rest.P{
 				"namespace": namespace,
 				"configmap": name,
+				"project":   project,
 			},
 		},
 	})

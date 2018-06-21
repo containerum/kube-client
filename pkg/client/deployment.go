@@ -7,17 +7,17 @@ import (
 )
 
 const (
-	deploymentsPath        = "/namespaces/{namespace}/deployments"
-	deploymentPath         = "/namespaces/{namespace}/deployments/{deployment}"
-	deploymentVersionsPath = "/namespaces/{namespace}/deployments/{deployment}/versions"
-	deploymentVersionPath  = "/namespaces/{namespace}/deployments/{deployment}/versions/{version}"
-	imagePath              = "/namespaces/{namespace}/deployments/{deployment}/image"
-	replicasPath           = "/namespaces/{namespace}/deployments/{deployment}/replicas"
+	deploymentsPath        = "/projects/{project}/namespaces/{namespace}/deployments"
+	deploymentPath         = "/projects/{project}/namespaces/{namespace}/deployments/{deployment}"
+	deploymentVersionsPath = "/projects/{project}/namespaces/{namespace}/deployments/{deployment}/versions"
+	deploymentVersionPath  = "/projects/{project}/namespaces/{namespace}/deployments/{deployment}/versions/{version}"
+	imagePath              = "/projects/{project}/namespaces/{namespace}/deployments/{deployment}/image"
+	replicasPath           = "/projects/{project}/namespaces/{namespace}/deployments/{deployment}/replicas"
 )
 
 // GetDeployment -- consumes a namespace and a deployment names,
 // returns a Deployment data OR uninitialized struct AND an error
-func (client *Client) GetDeployment(namespace, deployment string) (model.Deployment, error) {
+func (client *Client) GetDeployment(project, namespace, deployment string) (model.Deployment, error) {
 	var depl model.Deployment
 	err := client.RestAPI.Get(rest.Rq{
 		Result: &depl,
@@ -26,6 +26,7 @@ func (client *Client) GetDeployment(namespace, deployment string) (model.Deploym
 			Params: rest.P{
 				"namespace":  namespace,
 				"deployment": deployment,
+				"project":    project,
 			},
 		},
 	})
@@ -34,7 +35,7 @@ func (client *Client) GetDeployment(namespace, deployment string) (model.Deploym
 
 // GetDeploymentList -- consumes a namespace and a deployment names,
 // returns a list of Deployments OR nil slice AND an error
-func (client *Client) GetDeploymentList(namespace string) (model.DeploymentsList, error) {
+func (client *Client) GetDeploymentList(project, namespace string) (model.DeploymentsList, error) {
 	var depls model.DeploymentsList
 	err := client.RestAPI.Get(rest.Rq{
 		Result: &depls,
@@ -42,6 +43,7 @@ func (client *Client) GetDeploymentList(namespace string) (model.DeploymentsList
 			Path: deploymentsPath,
 			Params: rest.P{
 				"namespace": namespace,
+				"project":   project,
 			},
 		},
 	})
@@ -50,13 +52,14 @@ func (client *Client) GetDeploymentList(namespace string) (model.DeploymentsList
 
 // DeleteDeployment -- consumes a namespace, a deployment,
 // an user role and an ID
-func (client *Client) DeleteDeployment(namespace, deployment string) error {
+func (client *Client) DeleteDeployment(project, namespace, deployment string) error {
 	return client.RestAPI.Delete(rest.Rq{
 		URL: rest.URL{
 			Path: deploymentPath,
 			Params: rest.P{
 				"namespace":  namespace,
 				"deployment": deployment,
+				"project":    project,
 			},
 		},
 	})
@@ -64,13 +67,14 @@ func (client *Client) DeleteDeployment(namespace, deployment string) error {
 
 // CreateDeployment -- consumes a namespace, an user ID and a Role,
 // returns nil if OK
-func (client *Client) CreateDeployment(namespace string, deployment model.Deployment) error {
+func (client *Client) CreateDeployment(project, namespace string, deployment model.Deployment) error {
 	return client.RestAPI.Post(rest.Rq{
 		Body: deployment,
 		URL: rest.URL{
 			Path: deploymentsPath,
 			Params: rest.P{
 				"namespace": namespace,
+				"project":   project,
 			},
 		},
 	})
@@ -78,7 +82,7 @@ func (client *Client) CreateDeployment(namespace string, deployment model.Deploy
 
 // SetContainerImage -- set or changes deployment container image
 // Consumes namespace, deployment and container data
-func (client *Client) SetContainerImage(namespace, deployment string, updateImage model.UpdateImage) error {
+func (client *Client) SetContainerImage(project, namespace, deployment string, updateImage model.UpdateImage) error {
 	return client.RestAPI.Put(rest.Rq{
 		Body: updateImage,
 		URL: rest.URL{
@@ -86,13 +90,14 @@ func (client *Client) SetContainerImage(namespace, deployment string, updateImag
 			Params: rest.P{
 				"namespace":  namespace,
 				"deployment": deployment,
+				"project":    project,
 			},
 		},
 	})
 }
 
 // ReplaceDeployment -- replaces deployment in provided namespace with new one
-func (client *Client) ReplaceDeployment(namespace string, deployment model.Deployment) error {
+func (client *Client) ReplaceDeployment(project, namespace string, deployment model.Deployment) error {
 	return client.RestAPI.Put(rest.Rq{
 		Body: deployment,
 		URL: rest.URL{
@@ -100,6 +105,7 @@ func (client *Client) ReplaceDeployment(namespace string, deployment model.Deplo
 			Params: rest.P{
 				"namespace":  namespace,
 				"deployment": deployment.Name,
+				"project":    project,
 			},
 		},
 	})
@@ -116,6 +122,7 @@ func (client *Client) SetReplicas(namespace, deployment string, replicas int) er
 			Params: rest.P{
 				"namespace":  namespace,
 				"deployment": deployment,
+				"project":    project,
 			},
 		},
 	})
@@ -131,6 +138,7 @@ func (client *Client) GetDeploymentVersions(namespace, deplName string) (model.D
 			Params: rest.P{
 				"namespace":  namespace,
 				"deployment": deplName,
+				"project":    project,
 			},
 		},
 	})
@@ -145,6 +153,7 @@ func (client *Client) RunDeploymentVersion(namespace, deplName string, version s
 				"namespace":  namespace,
 				"deployment": deplName,
 				"version":    version.String(),
+				"project":    project,
 			},
 		},
 	})

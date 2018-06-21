@@ -9,10 +9,10 @@ const (
 	templatesPath           = "/templates"
 	templateEnvPath         = "/templates/{template}/env"
 	templateResPath         = "/templates/{template}/resources"
-	solutionsPath           = "/namespaces/{namespace}/solutions"
-	solutionPath            = "/namespaces/{namespace}/solutions/{solution}"
-	solutionDeploymentsPath = "/namespaces/{namespace}/solutions/{solution}/deployments"
-	solutionServicesPath    = "/namespaces/{namespace}/solutions/{solution}/services"
+	solutionsPath           = "/projects/{project}/namespaces/{namespace}/solutions"
+	solutionPath            = "/projects/{project}/namespaces/{namespace}/solutions/{solution}"
+	solutionDeploymentsPath = "/projects/{project}/namespaces/{namespace}/solutions/{solution}/deployments"
+	solutionServicesPath    = "/projects/{project}/namespaces/{namespace}/solutions/{solution}/services"
 )
 
 // GetSolutionsTemplatesList -- returns list of public solutions templates
@@ -58,7 +58,7 @@ func (client *Client) GetSolutionsTemplateResources(templateName string) (model.
 }
 
 // RunSolution -- creates new solution
-func (client *Client) RunSolution(solution model.UserSolution, namespace, branch string) (model.RunSolutionResponse, error) {
+func (client *Client) RunSolution(project, solution model.UserSolution, namespace, branch string) (model.RunSolutionResponse, error) {
 	var resp model.RunSolutionResponse
 	err := client.RestAPI.Post(rest.Rq{
 		Result: &resp,
@@ -67,6 +67,7 @@ func (client *Client) RunSolution(solution model.UserSolution, namespace, branch
 			Path: solutionsPath + "?branch=" + branch,
 			Params: rest.P{
 				"namespace": namespace,
+				"project":   project,
 			},
 		},
 	})
@@ -74,7 +75,7 @@ func (client *Client) RunSolution(solution model.UserSolution, namespace, branch
 }
 
 // GetSolutionsList -- returns list of users running solutions in namespace
-func (client *Client) GetSolutionsNamespaceList(namespace string) (model.UserSolutionsList, error) {
+func (client *Client) GetSolutionsNamespaceList(project, namespace string) (model.UserSolutionsList, error) {
 	var solutionList model.UserSolutionsList
 	err := client.RestAPI.Get(rest.Rq{
 		Result: &solutionList,
@@ -82,6 +83,7 @@ func (client *Client) GetSolutionsNamespaceList(namespace string) (model.UserSol
 			Path: solutionsPath,
 			Params: rest.P{
 				"namespace": namespace,
+				"project":   project,
 			},
 		},
 	})
@@ -89,7 +91,7 @@ func (client *Client) GetSolutionsNamespaceList(namespace string) (model.UserSol
 }
 
 // GetSolution -- returns user running solutions
-func (client *Client) GetSolution(namespace, solutionName string) (model.UserSolution, error) {
+func (client *Client) GetSolution(project, namespace, solutionName string) (model.UserSolution, error) {
 	var solutionList model.UserSolution
 	err := client.RestAPI.Get(rest.Rq{
 		Result: &solutionList,
@@ -98,6 +100,7 @@ func (client *Client) GetSolution(namespace, solutionName string) (model.UserSol
 			Params: rest.P{
 				"solution":  solutionName,
 				"namespace": namespace,
+				"project":   project,
 			},
 		},
 	})
@@ -105,7 +108,7 @@ func (client *Client) GetSolution(namespace, solutionName string) (model.UserSol
 }
 
 // GetSolutionDeployments -- returns user solution deployments
-func (client *Client) GetSolutionDeployments(namespace, solutionName string) (model.DeploymentsList, error) {
+func (client *Client) GetSolutionDeployments(project, namespace, solutionName string) (model.DeploymentsList, error) {
 	var deployList model.DeploymentsList
 	err := client.RestAPI.Get(rest.Rq{
 		Result: &deployList,
@@ -114,6 +117,7 @@ func (client *Client) GetSolutionDeployments(namespace, solutionName string) (mo
 			Params: rest.P{
 				"solution":  solutionName,
 				"namespace": namespace,
+				"project":   project,
 			},
 		},
 	})
@@ -121,7 +125,7 @@ func (client *Client) GetSolutionDeployments(namespace, solutionName string) (mo
 }
 
 // GetSolutionServices -- returns user solution deployments
-func (client *Client) GetSolutionServices(namespace, solutionName string) (model.ServicesList, error) {
+func (client *Client) GetSolutionServices(project, namespace, solutionName string) (model.ServicesList, error) {
 	var svcList model.ServicesList
 	err := client.RestAPI.Get(rest.Rq{
 		Result: &svcList,
@@ -130,6 +134,7 @@ func (client *Client) GetSolutionServices(namespace, solutionName string) (model
 			Params: rest.P{
 				"solution":  solutionName,
 				"namespace": namespace,
+				"project":   project,
 			},
 		},
 	})
@@ -137,13 +142,14 @@ func (client *Client) GetSolutionServices(namespace, solutionName string) (model
 }
 
 // GetSolution -- returns user running solutions
-func (client *Client) DeleteSolution(namespace, solutionName string) error {
+func (client *Client) DeleteSolution(project, namespace, solutionName string) error {
 	err := client.RestAPI.Delete(rest.Rq{
 		URL: rest.URL{
 			Path: solutionPath,
 			Params: rest.P{
 				"solution":  solutionName,
 				"namespace": namespace,
+				"project":   project,
 			},
 		},
 	})
