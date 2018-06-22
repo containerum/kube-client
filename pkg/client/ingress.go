@@ -6,25 +6,26 @@ import (
 )
 
 const (
-	ingressesPath = "/namespaces/{namespace}/ingresses"
-	ingressPath   = "/namespaces/{namespace}/ingresses/{domain}"
+	ingressesPath = "/projects/{project}/namespaces/{namespace}/ingresses"
+	ingressPath   = "/projects/{project}/namespaces/{namespace}/ingresses/{domain}"
 )
 
 // AddIngress -- adds ingress to provided namespace
-func (client *Client) AddIngress(namespace string, ingress model.Ingress) error {
+func (client *Client) AddIngress(project, namespace string, ingress model.Ingress) error {
 	return client.RestAPI.Post(rest.Rq{
 		Body: ingress,
 		URL: rest.URL{
 			Path: ingressesPath,
 			Params: rest.P{
 				"namespace": namespace,
+				"project":   project,
 			},
 		},
 	})
 }
 
 // GetIngressList -- returns list of ingresses.
-func (client *Client) GetIngressList(namespace string) (model.IngressesList, error) {
+func (client *Client) GetIngressList(project, namespace string) (model.IngressesList, error) {
 	var ingressList model.IngressesList
 	err := client.RestAPI.Get(rest.Rq{
 		Result: &ingressList,
@@ -32,6 +33,7 @@ func (client *Client) GetIngressList(namespace string) (model.IngressesList, err
 			Path: ingressesPath,
 			Params: rest.P{
 				"namespace": namespace,
+				"project":   project,
 			},
 		},
 	})
@@ -39,7 +41,7 @@ func (client *Client) GetIngressList(namespace string) (model.IngressesList, err
 }
 
 // GetIngressList -- returns ingress with specified domain.
-func (client *Client) GetIngress(namespace, domain string) (model.Ingress, error) {
+func (client *Client) GetIngress(project, namespace, domain string) (model.Ingress, error) {
 	var ingress model.Ingress
 	err := client.RestAPI.Get(rest.Rq{
 		Result: &ingress,
@@ -48,6 +50,7 @@ func (client *Client) GetIngress(namespace, domain string) (model.Ingress, error
 			Params: rest.P{
 				"namespace": namespace,
 				"domain":    domain,
+				"project":   project,
 			},
 		},
 	})
@@ -55,7 +58,7 @@ func (client *Client) GetIngress(namespace, domain string) (model.Ingress, error
 }
 
 // UpdateIngress -- updates ingress on provided domain with new one
-func (client *Client) UpdateIngress(namespace, domain string, ingress model.Ingress) error {
+func (client *Client) UpdateIngress(project, namespace, domain string, ingress model.Ingress) error {
 	return client.RestAPI.Put(rest.Rq{
 		Body: ingress,
 		URL: rest.URL{
@@ -63,19 +66,21 @@ func (client *Client) UpdateIngress(namespace, domain string, ingress model.Ingr
 			Params: rest.P{
 				"namespace": namespace,
 				"domain":    domain,
+				"project":   project,
 			},
 		},
 	})
 }
 
 // DeleteIngress -- deletes ingress on provided domain
-func (client *Client) DeleteIngress(namespace, domain string) error {
+func (client *Client) DeleteIngress(project, namespace, domain string) error {
 	return client.RestAPI.Delete(rest.Rq{
 		URL: rest.URL{
 			Path: ingressPath,
 			Params: rest.P{
 				"namespace": namespace,
 				"domain":    domain,
+				"project":   project,
 			},
 		},
 	})

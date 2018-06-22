@@ -7,18 +7,19 @@ import (
 )
 
 const (
-	volumesPath = "/namespaces/{namespace}/volumes"
-	volumePath  = "/namespaces/{namespace}/volumes/{volume}"
+	volumesPath = "/projects/{project}/namespaces/{namespace}/volumes"
+	volumePath  = "/projects/{project}/namespaces/{namespace}/volumes/{volume}"
 )
 
 // DeleteVolume -- deletes Volume with provided volume name
-func (client *Client) DeleteVolume(namespace, volumeName string) error {
+func (client *Client) DeleteVolume(project, namespace, volumeName string) error {
 	return client.RestAPI.Delete(rest.Rq{
 		URL: rest.URL{
 			Path: volumePath,
 			Params: rest.P{
 				"namespace": namespace,
 				"volume":    volumeName,
+				"project":   project,
 			},
 		},
 	})
@@ -26,7 +27,7 @@ func (client *Client) DeleteVolume(namespace, volumeName string) error {
 
 // GetVolume -- return User Volume by name,
 // consumes optional userID param
-func (client *Client) GetVolume(namespace, volumeName string) (model.Volume, error) {
+func (client *Client) GetVolume(project, namespace, volumeName string) (model.Volume, error) {
 	var volume model.Volume
 	err := client.RestAPI.Get(rest.Rq{
 		Result: &volume,
@@ -35,6 +36,7 @@ func (client *Client) GetVolume(namespace, volumeName string) (model.Volume, err
 			Params: rest.P{
 				"namespace": namespace,
 				"volume":    volumeName,
+				"project":   project,
 			},
 		},
 	})
@@ -44,7 +46,7 @@ func (client *Client) GetVolume(namespace, volumeName string) (model.Volume, err
 // GetVolumeList -- get list of volumes,
 // consumes optional user ID and filter parameters.
 // Returns new_access_level as access if user role = user.
-func (client *Client) GetVolumeList(namespace string) (model.VolumesList, error) {
+func (client *Client) GetVolumeList(project, namespace string) (model.VolumesList, error) {
 	var volumeList model.VolumesList
 	err := client.RestAPI.Get(rest.Rq{
 		Result: &volumeList,
@@ -52,6 +54,7 @@ func (client *Client) GetVolumeList(namespace string) (model.VolumesList, error)
 			Path: volumesPath,
 			Params: rest.P{
 				"namespace": namespace,
+				"project":   project,
 			},
 		},
 	})
