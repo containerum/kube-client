@@ -59,7 +59,7 @@ func SkipTLSVerify(re *Resty) {
 
 func (re *Resty) SetToken(token string) {
 	// token can be changed from different goroutines
-	re.fingerprint.Store(token)
+	re.token.Store(token)
 }
 
 func (re *Resty) SetFingerprint(fingerprint string) {
