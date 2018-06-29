@@ -13,8 +13,8 @@ const (
 	deploymentVersionPath             = "/projects/{project}/namespaces/{namespace}/deployments/{deployment}/versions/{version}"
 	imagePath                         = "/projects/{project}/namespaces/{namespace}/deployments/{deployment}/image"
 	replicasPath                      = "/projects/{project}/namespaces/{namespace}/deployments/{deployment}/replicas"
-	deploymentDiffWithPreviousVersion = "/namespaces/{namespace}/deployments/{deployment}/versions/{version}/diff"
-	deploymentDiffBetweenVersions     = "/namespaces/{namespace}/deployments/{deployment}/versions/{left-version}/diff/{right-version}"
+	deploymentDiffWithPreviousVersion = "/projects/{project}/namespaces/{namespace}/deployments/{deployment}/versions/{version}/diff"
+	deploymentDiffBetweenVersions     = "/projects/{project}/namespaces/{namespace}/deployments/{deployment}/versions/{left-version}/diff/{right-version}"
 )
 
 // GetDeployment -- consumes a namespace and a deployment names,
