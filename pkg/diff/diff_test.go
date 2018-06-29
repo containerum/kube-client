@@ -3,19 +3,21 @@ package diff
 import (
 	"testing"
 
+	"github.com/blang/semver"
 	"github.com/containerum/kube-client/pkg/model"
 )
 
 func TestDiff(t *testing.T) {
 	var oldDepl = model.Deployment{
+		Version: semver.MustParse("1.0.0"),
 		Containers: []model.Container{
 			{
 				Name:  "gateway",
-				Image: "nginx",
+				Image: "nginx:1.1",
 			},
 			{
 				Name:  "feed",
-				Image: "wordpress",
+				Image: "wordpress:2.9.2",
 			},
 		},
 	}
@@ -23,15 +25,15 @@ func TestDiff(t *testing.T) {
 		Containers: []model.Container{
 			{
 				Name:  "gateway",
-				Image: "caddy",
+				Image: "caddy:1.5",
 			},
 			{
 				Name:  "storage",
-				Image: "mongo",
+				Image: "mongo:45.0.9",
 			},
 			{
 				Name:  "ai",
-				Image: "pytnon",
+				Image: "pytnon:1.1.4",
 			},
 			{
 				Name:  "blog",
