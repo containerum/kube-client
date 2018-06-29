@@ -7,12 +7,14 @@ import (
 )
 
 const (
-	deploymentsPath        = "/projects/{project}/namespaces/{namespace}/deployments"
-	deploymentPath         = "/projects/{project}/namespaces/{namespace}/deployments/{deployment}"
-	deploymentVersionsPath = "/projects/{project}/namespaces/{namespace}/deployments/{deployment}/versions"
-	deploymentVersionPath  = "/projects/{project}/namespaces/{namespace}/deployments/{deployment}/versions/{version}"
-	imagePath              = "/projects/{project}/namespaces/{namespace}/deployments/{deployment}/image"
-	replicasPath           = "/projects/{project}/namespaces/{namespace}/deployments/{deployment}/replicas"
+	deploymentsPath                   = "/projects/{project}/namespaces/{namespace}/deployments"
+	deploymentPath                    = "/projects/{project}/namespaces/{namespace}/deployments/{deployment}"
+	deploymentVersionsPath            = "/projects/{project}/namespaces/{namespace}/deployments/{deployment}/versions"
+	deploymentVersionPath             = "/projects/{project}/namespaces/{namespace}/deployments/{deployment}/versions/{version}"
+	imagePath                         = "/projects/{project}/namespaces/{namespace}/deployments/{deployment}/image"
+	replicasPath                      = "/projects/{project}/namespaces/{namespace}/deployments/{deployment}/replicas"
+	deploymentDiffWithPreviousVersion = "/namespaces/{namespace}/deployments/{deployment}/versions/{version}/diff"
+	deploymentDiffBetweenVersions     = "/namespaces/{namespace}/deployments/{deployment}/versions/{left-version}/diff/{right-version}"
 )
 
 // GetDeployment -- consumes a namespace and a deployment names,
@@ -154,6 +156,37 @@ func (client *Client) RunDeploymentVersion(project, namespace, deplName string, 
 				"deployment": deplName,
 				"version":    version.String(),
 				"project":    project,
+			},
+		},
+	})
+}
+
+func (client *Client) GetDeploymentDiffWithPreviousVersion(namespace, deployment string, version semver.Version) (string, error) {
+	var diff model.DeploymentDiff
+	return diff.Diff, client.RestAPI.Get(rest.Rq{
+		Result: &diff,
+		URL: rest.URL{
+			Path: deploymentDiffWithPreviousVersion,
+			Params: rest.P{
+				"namespace":  namespace,
+				"deployment": deployment,
+				"version":    version.String(),
+			},
+		},
+	})
+}
+
+func (client *Client) GetDeloymentVersionBetweenVersions(namespace, deployment string, leftVersion, rightVersion semver.Version) (string, error) {
+	var diff model.DeploymentDiff
+	return diff.Diff, client.RestAPI.Get(rest.Rq{
+		Result: &diff,
+		URL: rest.URL{
+			Path: deploymentDiffBetweenVersions,
+			Params: rest.P{
+				"namespace":     namespace,
+				"deployment":    deployment,
+				"left-version":  leftVersion.String(),
+				"right-version": rightVersion.String(),
 			},
 		},
 	})
