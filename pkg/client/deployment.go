@@ -189,7 +189,7 @@ func (client *Client) DeleteDeploymentVersion(namespace, deployment string, vers
 			Path: deploymentVersionPath,
 			Params: rest.P{
 				"namespace":  namespace,
-				"deployment": deploymentVersionPath,
+				"deployment": deployment,
 				"version":    version.String(),
 			},
 		},
