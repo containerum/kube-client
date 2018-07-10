@@ -19,10 +19,17 @@ func (v TriVersion) Tags() []string {
 }
 
 func (v TriVersion) String() string {
-	return "v" +
-		strconv.FormatUint(v.Index[0], 10) + "." +
-		strconv.FormatUint(v.Index[1], 10) + "." +
-		strconv.FormatUint(v.Index[2], 10)
+	var vstr string
+	if v.Index != (TriVersion{}).Index {
+		vstr = "v" +
+			strconv.FormatUint(v.Index[0], 10) + "." +
+			strconv.FormatUint(v.Index[1], 10) + "." +
+			strconv.FormatUint(v.Index[2], 10)
+	}
+	if v.TagString != "" {
+		vstr += v.TagString
+	}
+	return vstr
 }
 
 func FromVersion(v semver.Version) TriVersion {
