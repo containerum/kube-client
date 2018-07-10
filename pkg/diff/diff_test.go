@@ -13,11 +13,7 @@ func TestDiff(t *testing.T) {
 		Containers: []model.Container{
 			{
 				Name:  "gateway",
-				Image: "nginx:1.1",
-			},
-			{
-				Name:  "feed",
-				Image: "wordpress:2.9.2",
+				Image: "nginx",
 			},
 		},
 	}
@@ -25,21 +21,9 @@ func TestDiff(t *testing.T) {
 		Containers: []model.Container{
 			{
 				Name:  "gateway",
-				Image: "caddy:1.5",
-			},
-			{
-				Name:  "storage",
-				Image: "mongo:45.0.9",
-			},
-			{
-				Name:  "ai",
-				Image: "pytnon:1.1.4",
-			},
-			{
-				Name:  "blog",
-				Image: "box",
+				Image: "nginx:latest",
 			},
 		},
 	}
-	t.Log("\n", Diff(newDepl, oldDepl))
+	t.Log("\n", NewVersion(oldDepl, newDepl))
 }
