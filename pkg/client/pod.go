@@ -7,8 +7,9 @@ import (
 )
 
 const (
-	podsPath = "/projects/{project}/namespaces/{namespace}/pods"
-	podPath  = "/projects/{project}/namespaces/{namespace}/pods/{pod}"
+	deploymentPodsPath = "/projects/{project}/namespaces/{namespace}/deployments/{deployment}/pods"
+	podsPath           = "/projects/{project}/namespaces/{namespace}/pods"
+	podPath            = "/projects/{project}/namespaces/{namespace}/pods/{pod}"
 )
 
 // DeletePod -- deletes pod in provided namespace
@@ -52,6 +53,23 @@ func (client *Client) GetPodList(project, namespace string) (model.PodsList, err
 			Params: rest.P{
 				"namespace": namespace,
 				"project":   project,
+			},
+		},
+	})
+	return podList, err
+}
+
+// GetDeploymentPodList -- returns list of pods in provided namespace and deployment
+func (client *Client) GetDeploymentPodList(namespace, project, deployment string) (model.PodsList, error) {
+	var podList model.PodsList
+	err := client.RestAPI.Get(rest.Rq{
+		Result: &podList,
+		URL: rest.URL{
+			Path: deploymentPodsPath,
+			Params: rest.P{
+				"namespace":  namespace,
+				"project":   project,
+				"deployment": deployment,
 			},
 		},
 	})
