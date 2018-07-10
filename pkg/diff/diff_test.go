@@ -3,6 +3,8 @@ package diff
 import (
 	"testing"
 
+	"fmt"
+
 	"github.com/blang/semver"
 	"github.com/containerum/kube-client/pkg/model"
 )
@@ -13,7 +15,7 @@ func TestDiff(t *testing.T) {
 		Containers: []model.Container{
 			{
 				Name:  "gateway",
-				Image: "nginx",
+				Image: "nginx:454sd",
 			},
 		},
 	}
@@ -21,9 +23,10 @@ func TestDiff(t *testing.T) {
 		Containers: []model.Container{
 			{
 				Name:  "gateway",
-				Image: "nginx:latest",
+				Image: "nginx:aisdnja",
 			},
 		},
 	}
+	fmt.Println(FromContainer(oldDepl.Containers[0]).Version.String())
 	t.Log("\n", NewVersion(oldDepl, newDepl))
 }
