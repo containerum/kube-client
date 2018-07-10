@@ -56,7 +56,7 @@ func (client *Client) GetPodList(namespace string) (model.PodsList, error) {
 	return podList, err
 }
 
-// GetPodList -- returns list of pods in provided namespace
+// GetDeploymentPodList -- returns list of pods in provided namespace and deployment
 func (client *Client) GetDeploymentPodList(namespace, deployment string) (model.PodsList, error) {
 	var podList model.PodsList
 	err := client.RestAPI.Get(rest.Rq{
