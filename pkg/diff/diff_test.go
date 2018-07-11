@@ -15,7 +15,7 @@ func TestDiff(t *testing.T) {
 		Containers: []model.Container{
 			{
 				Name:  "gateway",
-				Image: "nginx:454sd",
+				Image: "nginx:1.0",
 			},
 		},
 	}
@@ -23,10 +23,10 @@ func TestDiff(t *testing.T) {
 		Containers: []model.Container{
 			{
 				Name:  "gateway",
-				Image: "nginx:aisdnja",
+				Image: "nginx:2.0",
 			},
 		},
 	}
-	fmt.Println(FromContainer(oldDepl.Containers[0]).Version.String())
+	fmt.Println(FromContainer(oldDepl.Containers[0]))
 	t.Log("\n", NewVersion(oldDepl, newDepl))
 }
