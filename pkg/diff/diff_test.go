@@ -15,15 +15,23 @@ func TestDiff(t *testing.T) {
 		Containers: []model.Container{
 			{
 				Name:  "gateway",
-				Image: "nginx:1.0",
+				Image: "redis",
+			},
+			{
+				Name:  "test",
+				Image: "redis",
 			},
 		},
 	}
 	var newDepl = model.Deployment{
 		Containers: []model.Container{
 			{
+				Name:  "test",
+				Image: "redis",
+			},
+			{
 				Name:  "gateway",
-				Image: "nginx:2.0",
+				Image: "nginx",
 			},
 		},
 	}
