@@ -16,8 +16,8 @@ const (
 )
 
 // GetSolutionsTemplatesList -- returns list of public solutions templates
-func (client *Client) GetSolutionsTemplatesList() (model.AvailableSolutionsList, error) {
-	var solutionList model.AvailableSolutionsList
+func (client *Client) GetSolutionsTemplatesList() (model.SolutionsTemplatesList, error) {
+	var solutionList model.SolutionsTemplatesList
 	err := client.RestAPI.Get(rest.Rq{
 		Result: &solutionList,
 		URL: rest.URL{
@@ -58,7 +58,7 @@ func (client *Client) GetSolutionsTemplateResources(templateName string) (model.
 }
 
 // RunSolution -- creates new solution
-func (client *Client) RunSolution(solution model.UserSolution, namespace, branch string) (model.RunSolutionResponse, error) {
+func (client *Client) RunSolution(solution model.Solution, namespace, branch string) (model.RunSolutionResponse, error) {
 	var resp model.RunSolutionResponse
 	err := client.RestAPI.Post(rest.Rq{
 		Result: &resp,
@@ -74,8 +74,8 @@ func (client *Client) RunSolution(solution model.UserSolution, namespace, branch
 }
 
 // GetSolutionsList -- returns list of users running solutions in namespace
-func (client *Client) GetSolutionsNamespaceList(namespace string) (model.UserSolutionsList, error) {
-	var solutionList model.UserSolutionsList
+func (client *Client) GetSolutionsNamespaceList(namespace string) (model.SolutionsList, error) {
+	var solutionList model.SolutionsList
 	err := client.RestAPI.Get(rest.Rq{
 		Result: &solutionList,
 		URL: rest.URL{
@@ -89,8 +89,8 @@ func (client *Client) GetSolutionsNamespaceList(namespace string) (model.UserSol
 }
 
 // GetSolution -- returns user running solutions
-func (client *Client) GetSolution(namespace, solutionName string) (model.UserSolution, error) {
-	var solutionList model.UserSolution
+func (client *Client) GetSolution(namespace, solutionName string) (model.Solution, error) {
+	var solutionList model.Solution
 	err := client.RestAPI.Get(rest.Rq{
 		Result: &solutionList,
 		URL: rest.URL{
