@@ -24,10 +24,10 @@ func TestService(test *testing.T) {
 		})
 	})
 	Convey("Test resource manager methods", test, func() {
-		nsList, err := client.GetNamespaceList(nil)
+		nsList, err := client.GetNamespaceList()
 		So(err, ShouldBeNil)
-		So(len(nsList), ShouldBeGreaterThan, 0)
-		namespace := nsList[0]
+		So(len(nsList.Namespaces), ShouldBeGreaterThan, 0)
+		namespace := nsList.Namespaces[0]
 		testService := model.Service{
 			Name:   "sophocles",
 			Deploy: "mappet",
@@ -47,7 +47,7 @@ func TestService(test *testing.T) {
 
 		serviceList, err := client.GetServiceList(namespace.ID)
 		So(err, ShouldBeNil)
-		So(len(serviceList), ShouldBeGreaterThan, 0)
+		So(len(serviceList.Services), ShouldBeGreaterThan, 0)
 
 		gainedService, err := client.GetService(namespace.ID, createdService.Name)
 		So(err, ShouldBeNil)

@@ -15,7 +15,7 @@ func TestNamespace(test *testing.T) {
 			So(err, ShouldBeNil)
 		})
 		Convey("get namespace list", func() {
-			_, err := client.GetNamespaceList(map[string]string{})
+			_, err := client.GetNamespaceList()
 			So(err, ShouldBeNil)
 		})
 	})
