@@ -19,7 +19,7 @@ func TestDeployment(test *testing.T) {
 	}
 	client.SetToken(tokens.AccessToken)
 
-	ns, err := client.GetNamespaceList(nil)
+	ns, err := client.GetNamespaceList()
 	if err != nil {
 		log.Fatalf("error while getting namespace: %v", err)
 	}

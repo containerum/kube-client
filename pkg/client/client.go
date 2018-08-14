@@ -29,7 +29,7 @@ type Config struct {
 //NewClient -
 func NewClient(config Config) (*Client, error) {
 	client := &Client{
-		config,
+		Config: config,
 	}
 	return client, nil
 }

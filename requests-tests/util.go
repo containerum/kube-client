@@ -53,14 +53,6 @@ func newFakeNamespaces(test *testing.T) []model.Namespace {
 		{
 			Label: "piterPen",
 			ID:    "5A83CD4D-F017-4C0C-96F5-49BDD22BA1FE",
-			Volumes: []model.Volume{
-				{
-					Label:      "penny",
-					CreateTime: time.Now(),
-					Replicas:   2,
-					Capacity:   1,
-				},
-			},
 		},
 	}
 }
