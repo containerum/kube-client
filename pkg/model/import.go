@@ -11,8 +11,8 @@ type ImportResponseTotal map[string]ImportResponse
 //
 // swagger:model
 type ImportResponse struct {
-	Imported []ImportResult `json:"" yaml:"name"`
-	Failed   []ImportResult `json:"name" yaml:"name"`
+	Imported []ImportResult `json:"imported" yaml:"imported"`
+	Failed   []ImportResult `json:"failed" yaml:"failed"`
 }
 
 // ImportResult -- import result for one resource
