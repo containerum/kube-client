@@ -39,11 +39,12 @@ type EventsList struct {
 //
 // swagger:model
 type Event struct {
-	Kind              EventKind    `json:"event_kind" yaml:"event_kind" bson:"eventkind"`
-	Time              string       `json:"event_time" yaml:"event_time" bson:"eventtime"`
-	Name              string       `json:"event_name" yaml:"event_name" bson:"eventname"`
-	ResourceType      ResourceType `json:"resource_type" yaml:"resource_type" bson:"resourcetype"`
-	ResourceName      string       `json:"resource_name" yaml:"resource_name" bson:"resourcename"`
-	ResourceNamespace string       `json:"resource_namespace,omitempty" yaml:"resource_namespace,omitempty" bson:"resourcenamespace,omitempty"`
-	Message           string       `json:"message,omitempty" yaml:"message,omitempty" bson:"message,omitempty"`
+	Kind              EventKind         `json:"event_kind" yaml:"event_kind" bson:"eventkind"`
+	Time              string            `json:"event_time" yaml:"event_time" bson:"eventtime"`
+	Name              string            `json:"event_name" yaml:"event_name" bson:"eventname"`
+	ResourceType      ResourceType      `json:"resource_type" yaml:"resource_type" bson:"resourcetype"`
+	ResourceName      string            `json:"resource_name" yaml:"resource_name" bson:"resourcename"`
+	ResourceNamespace string            `json:"resource_namespace,omitempty" yaml:"resource_namespace,omitempty" bson:"resourcenamespace,omitempty"`
+	Message           string            `json:"message,omitempty" yaml:"message,omitempty" bson:"message,omitempty"`
+	Details           map[string]string `json:"details,omitempty" yaml:"details,omitempty" bson:"details,omitempty"`
 }
