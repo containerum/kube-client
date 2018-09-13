@@ -48,8 +48,10 @@ const (
 	UserRemovedFromGroup string = "UserRemovedFromGroup"
 
 	//Other
-	ExternalIPAdded   string = "ExternalIPAdded"
-	StorageClassAdded string = "StorageClassAdded"
+	ExternalIPAdded     string = "ExternalIPAdded"
+	ExternalIPDeleted   string = "ExternalIPDeleted"
+	StorageClassAdded   string = "StorageClassAdded"
+	StorageClassDeleted string = "StorageClassDeleted"
 )
 
 type EventsList struct {
